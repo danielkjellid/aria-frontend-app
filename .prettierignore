@@ -1,0 +1,7 @@
+node_modules
+.nuxt
+package.json
+.eslintrc.js
+.eslintignore
+@types/generated
+schema.json

@@ -1,0 +1,9 @@
+node_modules
+.gitignore
+.prettierignore
+.prettierrc.js
+package.json
+package-lock.json
+tsconfig.json
+@types/generated
+schema.json
