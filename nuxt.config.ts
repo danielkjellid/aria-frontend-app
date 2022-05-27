@@ -60,7 +60,10 @@ export default defineNuxtConfig({
 
   buildModules: ['@pinia/nuxt'],
 
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    ['aria-ui-nuxt', { defaultLinkTag: 'router-link', defaultHomePath: '/' }],
+  ],
 
   // modules: [
   //   // @ts-ignore
