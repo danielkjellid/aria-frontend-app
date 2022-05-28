@@ -10,13 +10,7 @@
       <Navbar />
       <slot class="relative" />
     </div>
-    <a-footer
-      :legalName="config.LEGAL_NAME"
-      copyrightYear="2020"
-      :mailLink="config.CONTACT_LINK"
-      :facebookLink="config.FACEBOOK_LINK"
-      :instagramLink="config.INSTAGRAM_LINK"
-    />
+    <Footer />
   </div>
 </template>
 

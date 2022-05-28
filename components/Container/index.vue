@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { propsToAttrMap } from '@vue/shared'
+/***********
+ ** Props **
+ ***********/
 
 interface ContainerProps {
   /**
@@ -23,6 +25,10 @@ interface ContainerProps {
 }
 
 const props = defineProps<ContainerProps>()
+
+/***********
+ ** State **
+ ***********/
 
 const elem = props.as ? props.as : 'div'
 </script>
