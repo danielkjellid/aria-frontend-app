@@ -2,14 +2,21 @@ import { defineStore } from 'pinia'
 import { performGet } from '~~/composables/performGet'
 
 const useCategoriesStore = defineStore('categories', {
-  state: () => {
-    return { navbarCategories: null }
-  },
+  state: () => ({
+    parentCategories: null,
+    navbarCategories: null,
+  }),
   actions: {
     async fetchNavbarCategories() {
       try {
-        const categories = await performGet('categories/')
-        this.categories = categories
+        this.navbarCategories = await performGet('categories/')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async fetchParentCategories() {
+      try {
+        this.parentCategories = await performGet('categories/parents/')
       } catch (error) {
         console.log(error)
       }

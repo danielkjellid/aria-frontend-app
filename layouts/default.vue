@@ -1,17 +1,28 @@
 <template>
   <div class="content relative min-h-screen">
-    <div v-if="isDevEnvironment" class="dev-env-warning z-50 py-1 text-center">
+    <!-- <div
+      v-if="isDevEnvironment"
+      class="dev-env-warning absolute top-0 left-0 right-0 z-50 py-1 text-center"
+    >
       <span class="z-50 text-sm font-semibold text-yellow-900">Development environment</span>
+    </div> -->
+    <div class="relative min-h-screen">
+      <Navbar />
+      <slot class="relative" />
     </div>
-    <a-message display variant="info">
-      <div class="md:hidden flex-col">Text</div>
-      <div class="md:flex hidden">Test2</div>
-    </a-message>
-    <slot class="relative min-h-screen" />
+    <a-footer
+      :legalName="config.LEGAL_NAME"
+      copyrightYear="2020"
+      :mailLink="config.CONTACT_LINK"
+      :facebookLink="config.FACEBOOK_LINK"
+      :instagramLink="config.INSTAGRAM_LINK"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig().public
+
 const isDevEnvironment = computed(() => {
   if (process.env.NODE_ENV !== 'production') return true
 

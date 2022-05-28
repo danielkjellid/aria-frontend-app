@@ -12,10 +12,10 @@ export const apiService = $fetch.create({
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
-  async onRequestError ({ request, options, error }) {
+  async onRequestError({ request, options, error }) {
     console.log('[fetch request error]', request, error)
   },
-  async onResponseError ({ request, response, options }) {
+  async onResponseError({ request, response, options }) {
     console.log('[fetch response error]', request, response.status, response.body)
   },
 })

@@ -1,0 +1,63 @@
+<script setup lang="ts">
+/**********
+ ** Props **
+ ***********/
+interface NavbarMenuItemFlyoutProps {
+  active?: boolean
+  renderTransparent?: boolean
+}
+
+const { active = false, renderTransparent = false } = defineProps<NavbarMenuItemFlyoutProps>()
+
+/**********
+ ** Emits **
+ ***********/
+
+interface NavbarMenuItemFlyoutEmits {
+  (e: 'toggle'): void
+}
+
+const emits = defineEmits<NavbarMenuItemFlyoutEmits>()
+
+/*************************
+ ** Menu state handling **
+ *************************/
+
+const toggleFlyoutMenu = () => {
+  emits('toggle')
+}
+</script>
+
+<template>
+  <div class="lg:border-0 lg:p-0 lg:m-0 lg:pb-0 flex p-2 pb-6 border-b border-gray-200">
+    <div class="relative flex">
+      <button
+        type="button"
+        class="lg:flex relative z-10 items-center hidden pt-px -mb-px text-sm font-medium transition-colors duration-200 ease-out border-b-2 border-transparent"
+        :class="[
+          active && !renderTransparent ? 'border-brand-800' : 'border-transparent',
+          active && renderTransparent ? 'border-brand-100' : 'border-transparent',
+          renderTransparent
+            ? 'text-white hover:text-gray-300'
+            : 'hover:text-brand-800 text-brand-700',
+        ]"
+        :aria-expanded="active ? 'true' : 'false'"
+        @click="toggleFlyoutMenu"
+      >
+        <slot />
+      </button>
+    </div>
+    <div class="lg:block hidden">
+      <TransformSlideInDown>
+        <NavbarFlyoutMenu v-show="active">
+          <slot name="items" />
+        </NavbarFlyoutMenu>
+      </TransformSlideInDown>
+    </div>
+    <div class="lg:hidden block">
+      <NavbarFlyoutMenu>
+        <slot name="items" />
+      </NavbarFlyoutMenu>
+    </div>
+  </div>
+</template>

@@ -2,6 +2,18 @@ import { defineNuxtConfig } from 'nuxt'
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      BASE_URL: process.env.BASE_URL,
+      BRAND_NAME: process.env.BRAND_NAME,
+      LEGAL_NAME: process.env.LEGAL_NAME,
+
+      CONTACT_LINK: process.env.CONTACT_LINK,
+      FACEBOOK_LINK: process.env.FACEBOOK_LINK,
+      INSTAGRAM_LINK: process.env.INSTAGRAM_LINK,
+    },
+  },
+
   meta: {
     title: 'Flishuset',
     htmlAttrs: {
@@ -58,17 +70,14 @@ export default defineNuxtConfig({
     pages: 'views',
   },
 
+  plugins: ['~/plugins/detect-click-outside'],
+
   buildModules: ['@pinia/nuxt'],
 
   modules: [
     '@nuxtjs/tailwindcss',
     ['aria-ui-nuxt', { defaultLinkTag: 'router-link', defaultHomePath: '/' }],
   ],
-
-  // modules: [
-  //   // @ts-ignore
-  //   ["aria-ui-nuxt", { defaultLinkTag: "router-link", defaultHomePath: "/" }],
-  // ],
 
   tailwindcss: {
     viewer: true,

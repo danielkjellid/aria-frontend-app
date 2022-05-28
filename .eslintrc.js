@@ -9,6 +9,7 @@ module.exports = {
     '@vue/airbnb',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
+    '@nuxtjs/eslint-config-typescript',
     'prettier',
   ],
   parserOptions: {
@@ -41,4 +42,10 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-loss-of-precision': 'off',
   },
+  overrides: {
+    files: ['views/*.vue'],
+    rules: {
+      'vue/multi-word-component-names': 'off'
+    }
+  }
 }

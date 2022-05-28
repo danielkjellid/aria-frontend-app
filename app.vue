@@ -10,7 +10,5 @@
 import useCategoriesStore from '~~/store/categories'
 
 const categoriesStore = useCategoriesStore()
-
 categoriesStore.fetchNavbarCategories()
-
 </script>
