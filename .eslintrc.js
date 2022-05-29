@@ -29,6 +29,7 @@ module.exports = {
     semi: 'off',
     'max-len': 'off',
     'import/extensions': 'off',
+    'import/order': 'off', // handled by prettier
     'import/no-extraneous-dependencies': 'off',
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
