@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import useCategoriesStore from '~~/store/categories'
+
 /***************
  ** Page meta **
  ***************/
-
-import useCategoriesStore from '~~/store/categories'
 
 const route = useRoute()
 
@@ -95,7 +95,8 @@ const childrenLoading = computed(() => childCategories.value.length <= 0)
     </Container>
     <CollectionList v-if="childrenLoading">
       <CollectionListItem
-        v-for="i in 8"
+        v-for="(n, i) in 8"
+        :key="n"
         title="Loading"
         description="Loading..."
         loading
@@ -107,6 +108,7 @@ const childrenLoading = computed(() => childCategories.value.length <= 0)
     <CollectionList v-else>
       <CollectionListItem
         v-for="(child, index) in childCategories"
+        :key="child.slug"
         :title="child.name"
         :description="child.description"
         :loading="childrenLoading"

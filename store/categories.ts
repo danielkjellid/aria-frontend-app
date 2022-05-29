@@ -1,6 +1,4 @@
 import {
-  BaseHeaderImageRecord,
-  BaseListImageRecord,
   CategoryChildrenListOutput,
   CategoryDetailOutput,
   CategoryListOutput,

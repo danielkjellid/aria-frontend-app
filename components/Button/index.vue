@@ -31,7 +31,6 @@ const leftIcon = computed(() => !!slots.leftIcon)
 
 const size = computed(() => (props.size ? props.size : 'm'))
 const variant = computed(() => (props.variant ? props.variant : 'primary'))
-const loadingState = computed(() => (props.loadingState ? props.loadingState : 'inital'))
 const alignSelf = computed(() => (props.alignSelf ? props.alignSelf : 'center'))
 
 const elem = computed(() => {
