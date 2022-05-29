@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { ChevronRightIcon } from '@heroicons/vue/solid'
+import { ChevronRightIcon } from '@heroicons/vue/solid' // eslint-disable-line
 
 /***********
  ** Props **

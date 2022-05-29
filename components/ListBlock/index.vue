@@ -17,14 +17,21 @@ interface ListBlockProps {
   listClass?: string
 }
 
-const { labelAs = 'p', loading = false } = defineProps<ListBlockProps>()
+const props = defineProps<ListBlockProps>()
+
+/**************
+ ** Defaults **
+ **************/
+
+const labelAs = computed(() => (props.labelAs ? props.labelAs : 'p'))
+const loading = computed(() => (props.loading ? props.loading : false))
 </script>
 
 <template>
   <div>
     <component
-      v-if="!loading"
       :is="labelAs"
+      v-if="!loading"
       v-bind="$attrs"
       class="font-medium text-gray-900"
       :class="labelClass"
@@ -33,7 +40,7 @@ const { labelAs = 'p', loading = false } = defineProps<ListBlockProps>()
     </component>
     <SkeletonLoader v-else :loading="loading" width="w-24" />
 
-    <ul role="list" class="mt-6 space-y-6" :class="listClass">
+    <ul class="mt-6 space-y-6" :class="listClass">
       <slot />
     </ul>
   </div>

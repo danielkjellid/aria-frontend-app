@@ -102,7 +102,7 @@ const childrenLoading = computed(() => childCategories.value.length <= 0)
         loading
         :reverse="i % 2 == 0"
         to="#"
-        linkLabel="Loading"
+        link-label="Loading"
       />
     </CollectionList>
     <CollectionList v-else>
@@ -115,7 +115,7 @@ const childrenLoading = computed(() => childCategories.value.length <= 0)
         :images="child.listImages"
         :reverse="index % 2 == 0"
         :to="`/category/${currentCategory}/${child.slug}/`"
-        linkLabel="Se produkter"
+        link-label="Se produkter"
       />
     </CollectionList>
   </main>

@@ -1,4 +1,6 @@
-import { getter } from './_api'
 import { Getter } from './types'
+import { getter } from './_api'
 
-export const performGet: Getter = getter
+const performGet: Getter = getter
+
+export default performGet

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { $fetch } from 'ohmyfetch'
 import { Setter } from './types'
 
@@ -13,10 +14,10 @@ export const apiService = $fetch.create({
     Accept: 'application/json',
   },
   async onRequestError({ request, options, error }) {
-    console.log('[fetch request error]', request, error)
+    await console.log('[fetch request error]', request, error)
   },
   async onResponseError({ request, response, options }) {
-    console.log('[fetch response error]', request, response.status, response.body)
+    await console.log('[fetch response error]', request, response.status, response.body)
   },
 })
 

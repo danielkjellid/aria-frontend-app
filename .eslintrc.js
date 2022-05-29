@@ -42,10 +42,10 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-loss-of-precision': 'off',
   },
-  overrides: {
-    files: ['views/*.vue'],
+  overrides: [{
+    files: ['views/**/*.vue', 'components/**/*.vue'],
     rules: {
       'vue/multi-word-component-names': 'off'
     }
-  }
+  }]
 }

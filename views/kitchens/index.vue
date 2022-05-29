@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/* eslint-disable vuejs-accessibility/media-has-caption */
 import useKitchensStore from '~~/store/kitchens'
 
 /***************
@@ -121,7 +122,7 @@ const kitchenImages = {
         loading
         :reverse="i % 2 == 0"
         to="#"
-        linkLabel="Loading"
+        link-label="Loading"
       />
     </CollectionList>
     <CollectionList v-else>
@@ -134,7 +135,7 @@ const kitchenImages = {
         :images="kitchen.listImages"
         :reverse="index % 2 == 0"
         :to="`/kitchens/${kitchen.slug}/`"
-        linkLabel="Les mer"
+        link-label="Les mer"
       />
     </CollectionList>
   </main>

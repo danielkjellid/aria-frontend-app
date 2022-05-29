@@ -28,9 +28,9 @@ const closeMenu = () => {
             <h1 class="font-medium text-gray-900">Meny</h1>
             <div>
               <button
-                @click="closeMenu"
                 type="button"
                 class="inline-flex items-center justify-center p-2 -m-2 text-gray-400 rounded-md"
+                @click="closeMenu"
               >
                 <span class="sr-only">Close menu</span>
                 <XIcon class="w-6 h-6" />

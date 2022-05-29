@@ -3,8 +3,8 @@
   "scripts": {
     "prettier:check": "prettier --check \"**/*.{js,ts,tsx,vue,css,json,md}\"",
     "prettier:fix": "prettier --write \"**/*.{js,ts,tsx,css,vue,json,md}\"",
-    "eslint:check": "eslint --ext vue,ts,js **/*",
-    "eslint:fix": "eslint --ext vue,ts,js **/* --fix",
+    "eslint:check": "eslint --ext vue,ts,js .",
+    "eslint:fix": "eslint --ext vue,ts,js . --fix",
     "lint": "npm run prettier:check && npm run eslint:check",
     "lint:fix": "npm run prettier:fix && npm run eslint:fix",
     "openapi:generate": "node ./utils/generateAPITypes.js",

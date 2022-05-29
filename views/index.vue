@@ -101,6 +101,7 @@ const kitchenImages = {
     <section v-else>
       <Image
         v-for="category in store.parentCategories"
+        :key="category.slug"
         :title="category.name"
         :loading="false"
         :images="category.images"

@@ -5,6 +5,10 @@
  * binds its attributes.
  */
 
+/***********
+ ** Props **
+ ***********/
+
 interface IconWrapperProps {
   /**
    * Type of tag to be rendered.
@@ -17,12 +21,19 @@ interface IconWrapperProps {
   transparentBg?: boolean
 }
 
-const { as = 'div', transparentBg = false } = defineProps<IconWrapperProps>()
+const props = defineProps<IconWrapperProps>()
+
+/***********
+ ** State **
+ ***********/
+
+const elem = computed(() => (props.as ? props.as : 'div'))
+const transparentBg = computed(() => (props.transparentBg ? props.transparentBg : false))
 </script>
 
 <template>
   <component
-    :is="as"
+    :is="elem"
     v-bind="$attrs"
     class="focus:outline-none focus:ring-2 focus:ring-offset-2 inline-flex rounded-md"
     :class="

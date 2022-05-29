@@ -13,12 +13,14 @@ interface ListBlockItemProps {
   loading?: boolean
 }
 
-const { as = 'div', loading = false } = defineProps<ListBlockItemProps>()
+const props = defineProps<ListBlockItemProps>()
+const elem = computed(() => (props.as ? props.as : 'div'))
+const loading = computed(() => (props.loading ? props.loading : false))
 </script>
 
 <template>
   <li class="flex">
-    <component v-if="!loading" :is="as" v-bind="$attrs">
+    <component :is="elem" v-if="!loading" v-bind="$attrs">
       <slot />
     </component>
     <SkeletonLoader v-else :loading="loading" :count="6" />

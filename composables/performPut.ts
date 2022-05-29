@@ -1,4 +1,6 @@
-import { setter } from './_api'
 import { Setter } from './types'
+import { setter } from './_api'
 
-export const performPut: Setter = setter('PUT')
+const performPut: Setter = setter('PUT')
+
+export default performPut

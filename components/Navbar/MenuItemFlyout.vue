@@ -7,7 +7,16 @@ interface NavbarMenuItemFlyoutProps {
   renderTransparent?: boolean
 }
 
-const { active = false, renderTransparent = false } = defineProps<NavbarMenuItemFlyoutProps>()
+const props = defineProps<NavbarMenuItemFlyoutProps>()
+
+/**************
+ ** Defaults **
+ **************/
+
+const active = computed(() => (props.active ? props.active : false))
+const renderTransparent = computed(() =>
+  props.renderTransparent ? props.renderTransparent : false
+)
 
 /**********
  ** Emits **

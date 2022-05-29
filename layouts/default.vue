@@ -1,6 +1,4 @@
 <script setup lang="ts">
-const config = useRuntimeConfig().public
-
 const isDevEnvironment = computed(() => {
   if (process.env.NODE_ENV !== 'production') return true
 
@@ -10,12 +8,12 @@ const isDevEnvironment = computed(() => {
 
 <template>
   <div class="content relative min-h-screen">
-    <!-- <div
+    <div
       v-if="isDevEnvironment"
       class="dev-env-warning absolute top-0 left-0 right-0 z-50 py-1 text-center"
     >
       <span class="z-50 text-sm font-semibold text-yellow-900">Development environment</span>
-    </div> -->
+    </div>
     <div class="relative min-h-screen">
       <Navbar />
       <slot class="relative" />

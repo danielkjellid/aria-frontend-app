@@ -30,10 +30,10 @@ const loading = computed(() => store.navbarCategories === null)
           <ListBlock
             v-for="menuItem in store.navbarCategories"
             :key="menuItem.id"
-            labelAs="router-link"
+            label-as="router-link"
             :to="`/category/${menuItem.slug}/`"
             :label="menuItem.name"
-            labelClass="hover:text-brand-700"
+            label-class="hover:text-brand-700"
             :loading="loading"
           >
             <ListBlockItem
@@ -66,7 +66,7 @@ const loading = computed(() => store.navbarCategories === null)
           <IconWrapper
             as="button"
             type="button"
-            :transparentBg="isTransparent"
+            :transparent-bg="isTransparent"
             aria-expanded="false"
             class="relative"
           >
@@ -83,7 +83,7 @@ const loading = computed(() => store.navbarCategories === null)
         </div>
 
         <div class="relative flex">
-          <ActionMenu :transparentBg="isTransparent" alignment="right">
+          <ActionMenu :transparent-bg="isTransparent" alignment="right">
             <span class="sr-only">Your account, view account options</span>
             <UserCircleIcon
               class="w-6 h-6"
@@ -110,7 +110,7 @@ const loading = computed(() => store.navbarCategories === null)
         <IconWrapper
           as="button"
           type="button"
-          :transparentBg="isTransparent"
+          :transparent-bg="isTransparent"
           aria-expanded="false"
           class="relative"
         >

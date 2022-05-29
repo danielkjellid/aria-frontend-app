@@ -76,12 +76,11 @@ const renderBgClass = computed(() => {
   if (!props.flyoutMenuActive) {
     if (isTransparent.value) {
       return 'bg-transparent-blur transition ease-in-out delay-75'
-    } else {
-      return 'bg-transparent-white transition ease-in-out delay-75'
     }
-  } else {
-    return 'bg-white'
+    return 'bg-transparent-white transition ease-in-out delay-75'
   }
+
+  return 'bg-white'
 })
 </script>
 
@@ -106,7 +105,7 @@ const renderBgClass = computed(() => {
                 <div class="lg:flex lg:items-center hidden">
                   <router-link to="/">
                     <span class="sr-only">{{ config.BRAND_NAME }}</span>
-                    <slot name="logo" :isTransparent="isTransparent">
+                    <slot name="logo" :is-transparent="isTransparent">
                       <CubeTransparentIcon
                         class="w-8 h-8 text-white"
                         :class="isTransparent ? 'text-white' : 'text-brand-800'"
@@ -118,7 +117,7 @@ const renderBgClass = computed(() => {
                 <div class="lg:flex hidden h-full">
                   <div class="ml-8">
                     <div class="flex justify-center h-full space-x-8">
-                      <slot name="start" :isTransparent="isTransparent" />
+                      <slot name="start" :is-transparent="isTransparent" />
                     </div>
                   </div>
                 </div>
@@ -128,7 +127,7 @@ const renderBgClass = computed(() => {
                     <IconWrapper
                       as="button"
                       type="button"
-                      :transparentBg="isTransparent"
+                      :transparent-bg="isTransparent"
                       @click="openMobileMenu"
                     >
                       <span class="sr-only">Open menu</span>
@@ -146,7 +145,7 @@ const renderBgClass = computed(() => {
                     <IconWrapper
                       as="button"
                       type="button"
-                      :transparentBg="isTransparent"
+                      :transparent-bg="isTransparent"
                       aria-expanded="false"
                       class="relative"
                     >
@@ -166,7 +165,7 @@ const renderBgClass = computed(() => {
                 <!-- Logo (lg-) -->
                 <router-link to="/" class="lg:hidden">
                   <span class="sr-only">{{ config.BRAND_NAME }}</span>
-                  <slot name="logo" :isTransparent="isTransparent">
+                  <slot name="logo" :is-transparent="isTransparent">
                     <CubeTransparentIcon
                       class="w-8 h-8"
                       :class="isTransparent ? 'text-white' : 'text-brand-800'"
@@ -176,7 +175,7 @@ const renderBgClass = computed(() => {
 
                 <div class="flex items-center justify-end flex-1">
                   <div class="lg:ml-8 flex items-center">
-                    <slot name="end" :isTransparent="isTransparent" />
+                    <slot name="end" :is-transparent="isTransparent" />
                   </div>
                 </div>
               </div>

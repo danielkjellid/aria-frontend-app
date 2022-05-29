@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-unused-vars: "off" */
 import type { RouterConfig } from '@nuxt/schema'
 
 // https://router.vuejs.org/api/#routeroptions
