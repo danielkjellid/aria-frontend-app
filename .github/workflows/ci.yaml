@@ -31,21 +31,21 @@ jobs:
             target: npm run prettier:check
           - name: 'JavaScript lint: ESLint'
             target: npm run eslint:check
-      name: ${{ matrix.name }}
-      steps:
-        - uses: actions/checkout@v3
-        - uses: actions/setup-node@v3
-          with:
-            node-version: '16.11.0'
-        - name: Cache Node.js modules
-          uses: actions/cache@v3.0.1
-          with:
-            path: ~/.npm
-            key: node-${{ runner.os }}-${{ hashfiles('**/package-lock.json') }}
-            restore-keys: |
-              node-${{ runner.os }}-
-        - run: npm ci
-        - run: ${{ matrix.target }}
+    name: ${{ matrix.name }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.11.0'
+      - name: Cache Node.js modules
+        uses: actions/cache@v3.0.1
+        with:
+          path: ~/.npm
+          key: node-${{ runner.os }}-${{ hashfiles('**/package-lock.json') }}
+          restore-keys: |
+            node-${{ runner.os }}-
+      - run: npm ci
+      - run: ${{ matrix.target }}
 
   ci-done:
     # Gather job which delpoy workflow can wait on.
