@@ -15,7 +15,8 @@ export default defineNuxtConfig({
   },
 
   meta: {
-    title: 'Flishuset',
+    title: 'FK JKE Design',
+    titleTemplate: '%s - FK JKE Design',
     htmlAttrs: {
       lang: 'no',
     },

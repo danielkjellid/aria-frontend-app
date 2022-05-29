@@ -32,6 +32,7 @@
     "@heroicons/vue": "^1.0.6",
     "@pinia/nuxt": "^0.1.9",
     "aria-ui-nuxt": "^1.1.14",
+    "humps": "^2.0.1",
     "pinia": "^2.0.14"
   }
 }

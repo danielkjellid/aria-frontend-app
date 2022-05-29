@@ -65,7 +65,7 @@ const convertSpec = (spec) => {
 }
 
 const generateTypesFromSchema = () => {
-  fs.readFile(path.join(__dirname, '../schema.json'), (err, file) => {
+  fs.readFile(path.join(__dirname, '../@types/schema.json'), (err, file) => {
     OpenAPI.generate({
       input: convertSpec(JSON.parse(file)),
       output: outputPath,

@@ -1,3 +1,13 @@
+<script setup lang="ts">
+const config = useRuntimeConfig().public
+
+const isDevEnvironment = computed(() => {
+  if (process.env.NODE_ENV !== 'production') return true
+
+  return false
+})
+</script>
+
 <template>
   <div class="content relative min-h-screen">
     <!-- <div
@@ -13,16 +23,6 @@
     <Footer />
   </div>
 </template>
-
-<script setup lang="ts">
-const config = useRuntimeConfig().public
-
-const isDevEnvironment = computed(() => {
-  if (process.env.NODE_ENV !== 'production') return true
-
-  return false
-})
-</script>
 
 <style scoped>
 .dev-env-warning {

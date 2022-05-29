@@ -1,25 +1,89 @@
+import {
+  BaseHeaderImageRecord,
+  BaseListImageRecord,
+  CategoryChildrenListOutput,
+  CategoryDetailOutput,
+  CategoryListOutput,
+  CategoryParentListOutput,
+} from '~~/@types/generated/dist'
+
 import { defineStore } from 'pinia'
 import { performGet } from '~~/composables/performGet'
 
 const useCategoriesStore = defineStore('categories', {
   state: () => ({
-    parentCategories: null,
-    navbarCategories: null,
+    categories: [], // Categories, but unknown level (could either be parent or child)
+    parentCategories: [], // Only top level categories
+    navbarCategories: [], // Categories used for navigation
+    childCategories: [], // Only sub categories
   }),
   actions: {
     async fetchNavbarCategories() {
       try {
-        this.navbarCategories = await performGet('categories/')
+        this.navbarCategories = await performGet<CategoryListOutput[]>('categories/')
       } catch (error) {
         console.log(error)
       }
     },
     async fetchParentCategories() {
       try {
-        this.parentCategories = await performGet('categories/parents/')
+        this.parentCategories = await performGet<CategoryParentListOutput[]>('categories/parents/')
       } catch (error) {
         console.log(error)
       }
+    },
+    async fetchChildCategories(parentSlug: string) {
+      try {
+        const childCategories = await performGet<CategoryChildrenListOutput[]>(
+          `categories/category/${parentSlug}/children/`
+        )
+
+        if (childCategories.length > 0) {
+          const payload = { parentSlug: parentSlug, children: childCategories }
+
+          const index = this.childCategories.findIndex(
+            (category) => category.parentSlug === parentSlug
+          )
+
+          // Check if object with parent slug already exist, and replace it if it
+          // does, if not, push the item to the array.
+          if (index === -1) {
+            this.childCategories.push(payload)
+          } else {
+            this.childCategories[index] = payload
+          }
+        } else {
+          // TODO: handle error
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async fetchCategory(slug: string) {
+      try {
+        const category = await performGet<CategoryDetailOutput>(`categories/category/${slug}/`)
+
+        const index = this.categories.findIndex((c) => c.slug === slug)
+
+        // Check if object with parent slug already exist, and replace it if it
+        // does, if not, push the item to the array.
+        if (index === -1) {
+          this.categories.push(category)
+        } else {
+          this.categories[index] = category
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+  },
+  getters: {
+    getCategory: (state) => {
+      return (slug: string) => state.categories.find((category) => category.slug === slug)
+    },
+    getChildCategories: (state) => {
+      return (parentSlug: string) =>
+        state.childCategories.find((category) => category.parentSlug === parentSlug)
     },
   },
 })

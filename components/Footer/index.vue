@@ -4,8 +4,8 @@ const config = useRuntimeConfig().public
 
 <template>
   <footer class="bg-brand-50 relative bottom-0 left-0 right-0">
-    <a-container>
-      <div class="md:flex md:items-center md:justify-between lg:px-8 sm:px-8 px-5 py-12 mx-auto">
+    <Container>
+      <div class="md:flex md:items-center md:justify-between py-12 mx-auto">
         <div class="md:order-2 flex justify-center space-x-6">
           <a :href="config.CONTACT_LINK" class="hover:text-brand-600 text-brand-500">
             <span class="sr-only">Email</span>
@@ -51,6 +51,6 @@ const config = useRuntimeConfig().public
           </p>
         </div>
       </div>
-    </a-container>
+    </Container>
   </footer>
 </template>
