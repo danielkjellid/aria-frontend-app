@@ -5,7 +5,7 @@ import { Setter } from './types'
 const baseURL =
   process.env.NODE_ENV !== 'production'
     ? 'http://127.0.0.1:8000/api/'
-    : 'https://aria-api-prod.herokuapp.com/api/'
+    : 'http://127.0.0.1:8000/api/'
 
 export const apiService = $fetch.create({
   baseURL,

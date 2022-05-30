@@ -71,14 +71,13 @@ export default defineNuxtConfig({
     pages: 'views',
   },
 
-  plugins: ['~/plugins/detect-click-outside'],
-
   buildModules: ['@pinia/nuxt'],
 
-  modules: [
-    '@nuxtjs/tailwindcss',
-    ['aria-ui-nuxt', { defaultLinkTag: 'router-link', defaultHomePath: '/' }],
-  ],
+  build: {
+    transpile: ['@heroicons/vue'],
+  },
+
+  modules: ['@nuxtjs/tailwindcss'],
 
   tailwindcss: {
     viewer: true,

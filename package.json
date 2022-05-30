@@ -15,6 +15,7 @@
     "start": "node .output/server/index.mjs"
   },
   "devDependencies": {
+    "@headlessui/vue": "^0.0.0-insiders.1d53ac3",
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
     "@nuxtjs/tailwindcss": "^5.1.2",
     "@tailwindcss/forms": "^0.5.2",
@@ -31,7 +32,6 @@
   "dependencies": {
     "@heroicons/vue": "^1.0.6",
     "@pinia/nuxt": "^0.1.9",
-    "aria-ui-nuxt": "^1.1.14",
     "humps": "^2.0.1",
     "pinia": "^2.0.14"
   }
