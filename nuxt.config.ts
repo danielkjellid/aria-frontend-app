@@ -71,15 +71,19 @@ export default defineNuxtConfig({
     pages: 'views',
   },
 
+  css: ['~/assets/css/tailwind.css'],
+
   buildModules: ['@pinia/nuxt'],
 
   build: {
     transpile: ['@heroicons/vue'],
-  },
-
-  modules: ['@nuxtjs/tailwindcss'],
-
-  tailwindcss: {
-    viewer: true,
+    postcss: {
+      postcssOptions: {
+        plugins: {
+          tailwindcss: {},
+          autoprefixer: {},
+        },
+      },
+    },
   },
 })
