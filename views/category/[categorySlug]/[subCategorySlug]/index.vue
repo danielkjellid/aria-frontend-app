@@ -1,5 +1,74 @@
 <script setup lang="ts">
-const products = await performGet('categories/category/1-keramisk-naturstein/products/')
+import useCategoriesStore from '~~/store/categories'
+
+/***************
+ ** Page meta **
+ ***************/
+
+const route = useRoute()
+
+const currentParentCategory = computed(() => {
+  let slug: string
+  if (typeof route.params.categorySlug === 'string') {
+    slug = route.params.categorySlug
+  } else {
+    // eslint-disable-next-line prefer-destructuring
+    slug = route.params.categorySlug[0]
+  }
+
+  return slug.charAt(0).toUpperCase() + slug.slice(1)
+})
+
+const currentCategorySlug = computed(() => {
+  if (typeof route.params.subCategorySlug === 'string') {
+    return route.params.subCategorySlug
+  }
+  return route.params.subCategorySlug[0]
+})
+
+/***********
+ ** Store **
+ ***********/
+
+const store = useCategoriesStore()
+
+/***********
+ ** State **
+ ***********/
+
+// Get current visited category, and check if we already have fetched it
+// at some point. if so, retrieve it from pinia instead of calling the api
+// on every site render.
+const currentCategoryObj = computed(() => {
+  if (!store.getCategory(currentCategorySlug.value)) {
+    // Call api to populate pinia state.
+    store.fetchCategory(currentCategorySlug.value)
+  }
+
+  // Return pinia state.
+  return store.getCategory(currentCategorySlug.value)
+})
+
+const categoryProducts = computed(() => {
+  if (!store.getCategoryProducts(currentCategorySlug.value)) {
+    store.fetchCategoryProducts(currentCategorySlug.value)
+  }
+
+  return store.getCategoryProducts(currentCategorySlug.value)
+})
+
+const products = computed(() =>
+  categoryProducts.value !== undefined &&
+  categoryProducts.value.products !== undefined &&
+  categoryProducts.value.products.length > 0
+    ? categoryProducts.value.products
+    : null
+)
+
+const currentCategoryLoading = computed(() => !currentCategoryObj.value)
+const categoryProductsLoading = computed(() => !products.value)
+
+const metaTitle = computed(() => (currentCategoryObj.value ? currentCategoryObj.value.name : ''))
 // const products = []
 
 const availableFilters = (filteredProducts, arrKey, filterKey = 'name') => {
@@ -41,34 +110,97 @@ const availableFilters = (filteredProducts, arrKey, filterKey = 'name') => {
   return filters
 }
 
-const colors = computed(() => availableFilters(products, 'colors'))
-const shapes = computed(() => availableFilters(products, 'shapes'))
-const materials = computed(() => availableFilters(products, 'materials'))
-const rooms = computed(() => availableFilters(products, 'rooms'))
-const suppliers = computed(() => availableFilters(products, 'supplier'))
-
 const selectedColors = ref([])
 const selectedShapes = ref([])
 const selectedMaterials = ref([])
 const selectedRooms = ref([])
 const selectedSuppliers = ref([])
+
+const aggregatedFilters = computed(() => [
+  ...selectedColors.value,
+  ...selectedShapes.value,
+  ...selectedMaterials.value,
+  ...selectedRooms.value,
+  ...selectedSuppliers.value,
+])
+
+const filteredProducts = computed(() => {
+  if (products.value) {
+    const matchedProducts = products.value.filter(
+      (product) =>
+        aggregatedFilters.value.every(
+          (filter) =>
+            product.colors.find((color) => color.name === filter.name) ||
+            product.shapes.find((shape) => shape.name === filter.name) ||
+            product.materials.find((material) => material.name === filter.name) ||
+            product.rooms.find((room) => room.name === filter.name) ||
+            product.supplier.name === filter.name
+        )
+
+      // aggregatedFilters.value.every((filter) => )
+    )
+
+    return matchedProducts
+  }
+
+  // product.colors.some((color) => color === filter))
+
+  return []
+})
+const colors = computed(() => availableFilters(filteredProducts.value, 'colors'))
+const shapes = computed(() => availableFilters(filteredProducts.value, 'shapes'))
+const materials = computed(() => availableFilters(filteredProducts.value, 'materials'))
+const rooms = computed(() => availableFilters(filteredProducts.value, 'rooms'))
+const suppliers = computed(() => availableFilters(filteredProducts.value, 'supplier'))
 </script>
 
 <template>
   <main>
-    <Image />
+    <Image v-if="currentCategoryLoading" loading />
+    <Image
+      v-else
+      :title="currentCategoryObj.name"
+      :loading="false"
+      :images="currentCategoryObj.images"
+    />
     <Container>
-      <Breadcrumbs>
+      <Breadcrumbs v-if="currentCategoryLoading">
+        <BreadcrumbsItem loading to="#">Loading...</BreadcrumbsItem>
+        <BreadcrumbsItem loading to="#">Loading...</BreadcrumbsItem>
+        <BreadcrumbsItem loading to="#" active>Loading...</BreadcrumbsItem>
+      </Breadcrumbs>
+      <Breadcrumbs v-else>
         <BreadcrumbsItem to="/">FK JKE Design</BreadcrumbsItem>
-        <BreadcrumbsItem to="#">Main cat</BreadcrumbsItem>
-        <BreadcrumbsItem to="#" active>Sub cat</BreadcrumbsItem>
+        <BreadcrumbsItem to="#">{{ currentParentCategory }}</BreadcrumbsItem>
+        <BreadcrumbsItem to="#" active>{{ metaTitle }}</BreadcrumbsItem>
       </Breadcrumbs>
       <Spacer spacing="md" />
       <div class="flex items-center justify-between py-3 bg-white border-b border-gray-200">
         <div class="lg:flex items-center justify-start hidden space-x-4">
-          <ListBox v-model="selectedColors" label="Farger" multiple :selected="selectedColors">
-            <ListBoxItem v-for="color in colors" :key="color.id" :value="color">
-              {{ color.name }}
+          <ListBox
+            v-model="selectedColors"
+            label="Farger"
+            multiple
+            :selected="selectedColors"
+            :disabled="!colors.length"
+          >
+            <ListBoxItem
+              v-for="color in colors"
+              :key="color.id"
+              :value="color"
+              :disabled="color.count === 0"
+            >
+              <template #default="{ selected }">
+                <div class="flex justify-between">
+                  <span>{{ color.name }}</span>
+                  <span
+                    :class="selected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
+                    class="shrink-0 flex items-center justify-center w-5 h-5 mr-6 text-xs rounded-full"
+                  >
+                    {{ color.count }}
+                  </span>
+                </div>
+              </template>
               <template #leftIcon>
                 <div
                   :style="`background-color: ${color.colorHex}`"
@@ -77,9 +209,30 @@ const selectedSuppliers = ref([])
               </template>
             </ListBoxItem>
           </ListBox>
-          <ListBox v-model="selectedShapes" label="Fasonger" multiple :selected="selectedShapes">
-            <ListBoxItem v-for="shape in shapes" :key="shape.id" :value="shape">
-              {{ shape.name }}
+          <ListBox
+            v-model="selectedShapes"
+            label="Fasonger"
+            multiple
+            :selected="selectedShapes"
+            :disabled="!shapes.length"
+          >
+            <ListBoxItem
+              v-for="shape in shapes"
+              :key="shape.id"
+              :value="shape"
+              :disabled="shape.count === 0"
+            >
+              <template #default="{ selected }">
+                <div class="flex justify-between">
+                  <span>{{ shape.name }}</span>
+                  <span
+                    :class="selected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
+                    class="shrink-0 flex items-center justify-center w-5 h-5 mr-6 text-xs rounded-full"
+                  >
+                    {{ shape.count }}
+                  </span>
+                </div>
+              </template>
               <template #leftIcon>
                 <img alt="" :src="shape.image" class="w-6 h-6" />
               </template>
@@ -90,24 +243,51 @@ const selectedSuppliers = ref([])
             label="Materialer"
             multiple
             :selected="selectedMaterials"
+            :disabled="!materials.length"
           >
             <ListBoxItem
               v-for="material in materials"
+              v-slot="{ selected }"
               :key="material"
               :value="material"
               check-mark-alignment="right"
+              :disabled="material.count === 0"
             >
-              {{ material.name }}
+              <div class="flex justify-between">
+                <span>{{ material.name }}</span>
+                <span
+                  :class="selected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
+                  class="shrink-0 flex items-center justify-center w-5 h-5 mr-6 text-xs rounded-full"
+                >
+                  {{ material.count }}
+                </span>
+              </div>
             </ListBoxItem>
           </ListBox>
-          <ListBox v-model="selectedRooms" label="Rom" multiple :selected="selectedRooms">
+          <ListBox
+            v-model="selectedRooms"
+            label="Rom"
+            multiple
+            :selected="selectedRooms"
+            :disabled="!rooms.length"
+          >
             <ListBoxItem
               v-for="room in rooms"
+              v-slot="{ selected }"
               :key="room"
               :value="room"
               check-mark-alignment="right"
+              :disabled="room.count === 0"
             >
-              {{ room.name }}
+              <div class="flex justify-between">
+                <span>{{ room.name }}</span>
+                <span
+                  :class="selected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
+                  class="shrink-0 flex items-center justify-center w-5 h-5 mr-6 text-xs rounded-full"
+                >
+                  {{ room.count }}
+                </span>
+              </div>
             </ListBoxItem>
           </ListBox>
           <ListBox
@@ -115,14 +295,25 @@ const selectedSuppliers = ref([])
             label="Leverandør"
             multiple
             :selected="selectedSuppliers"
+            :disabled="!suppliers.length"
           >
             <ListBoxItem
               v-for="supplier in suppliers"
+              v-slot="{ selected }"
               :key="supplier"
               :value="supplier"
               check-mark-alignment="right"
+              :disabled="supplier.count === 0"
             >
-              {{ supplier.originCountryFlag }} {{ supplier.name }}
+              <div class="flex justify-between">
+                <span>{{ supplier.originCountryFlag }} {{ supplier.name }}</span>
+                <span
+                  :class="selected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
+                  class="shrink-0 flex items-center justify-center w-5 h-5 mr-6 text-xs rounded-full"
+                >
+                  {{ supplier.count }}
+                </span>
+              </div>
             </ListBoxItem>
           </ListBox>
         </div>
@@ -136,52 +327,13 @@ const selectedSuppliers = ref([])
           <Button>Søk</Button>
         </div>
       </div>
+      <!-- {{ aggregatedFilters }}
+      <hr /> -->
+      {{ filteredProducts && filteredProducts.length ? filteredProducts.length : 'N' }} |
+      {{ !categoryProductsLoading ? products.length : 'N' }}
+
       <Spacer spacing="md" />
-      <div
-        class="xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid w-full grid-cols-1 gap-5 bg-red-100"
-      >
-        <div
-          style="min-height: 440px"
-          class="sm:h-auto sm:aspect-w-2 sm:aspect-h-3 w-full overflow-hidden bg-blue-600 rounded-md"
-        >
-          <img
-            src="https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-01.jpg"
-            alt="Model wearing women's black cotton crewneck tee."
-            class="object-cover object-center w-full h-full"
-          />
-        </div>
-        <div
-          style="min-height: 440px"
-          class="sm:h-auto sm:aspect-w-2 sm:aspect-h-3 w-full overflow-hidden bg-blue-600 rounded-md"
-        >
-          <img
-            src="https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-01.jpg"
-            alt="Model wearing women's black cotton crewneck tee."
-            class="object-cover object-center w-full h-full"
-          />
-        </div>
-        <div
-          style="min-height: 440px"
-          class="sm:h-auto sm:aspect-w-2 sm:aspect-h-3 w-full overflow-hidden bg-blue-600 rounded-md"
-        >
-          <img
-            src="https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-01.jpg"
-            alt="Model wearing women's black cotton crewneck tee."
-            class="object-cover object-center w-full h-full"
-          />
-        </div>
-        <div
-          style="min-height: 440px"
-          class="sm:h-auto sm:aspect-w-2 sm:aspect-h-3 w-full overflow-hidden bg-blue-600 rounded-md"
-        >
-          <img
-            src="https://tailwindui.com/img/ecommerce-images/home-page-03-favorite-01.jpg"
-            alt="Model wearing women's black cotton crewneck tee."
-            class="object-cover object-center w-full h-full"
-          />
-        </div>
-      </div>
+      <ProductList :loading="categoryProductsLoading" :products="filteredProducts" />
     </Container>
-    <div class="min-h-screen"></div>
   </main>
 </template>

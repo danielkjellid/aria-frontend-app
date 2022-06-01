@@ -14,6 +14,7 @@ import { ChevronRightIcon } from '@heroicons/vue/solid' // eslint-disable-line
 interface BreadcrumbsItemProps {
   as?: string
   active?: boolean
+  loading?: boolean
 }
 
 const props = defineProps<BreadcrumbsItemProps>()
@@ -28,8 +29,10 @@ const elem = computed(() => (props.as ? props.as : 'router-link'))
 <template>
   <li>
     <div class="flex items-center">
+      <SkeletonLoader v-if="loading" width="w-24" loading />
       <component
         :is="elem"
+        v-else
         v-bind="$attrs"
         :aria-current="active ? 'page' : undefined"
         class="mr-2 text-sm font-medium"

@@ -16,7 +16,7 @@ const leftIcon = computed(() => !!slots.leftIcon)
 </script>
 
 <template>
-  <ListboxOption v-slot="{ active, selected }" :value="value">
+  <ListboxOption v-slot="{ active, selected }" :value="value" class="z-10">
     <li
       :class="[
         active || selected ? 'bg-brand-100 text-brand-900' : 'text-gray-900',
@@ -25,7 +25,7 @@ const leftIcon = computed(() => !!slots.leftIcon)
       ]"
     >
       <span :class="[selected ? 'font-medium' : 'font-normal', 'block truncate']">
-        <slot />
+        <slot :selected="selected" />
       </span>
       <template v-if="leftIcon || rightIcon">
         <template v-if="leftIcon">

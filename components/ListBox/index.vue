@@ -50,7 +50,7 @@ defineProps<ListBoxProps>()
         leave-to-class="transform scale-95 opacity-0"
       >
         <ListboxOptions
-          class="max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm absolute w-64 py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg"
+          class="max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm absolute z-10 w-64 py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg"
         >
           <slot />
         </ListboxOptions>
