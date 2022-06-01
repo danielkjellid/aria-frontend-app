@@ -21,8 +21,8 @@ defineProps<ListBoxProps>()
         :class="[
           disabled
             ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-            : 'bg-white text-brand-800 cursor-pointer hover:bg-brand-100',
-          'focus:ring-brand-800 border-brand-300 focus:outline-none focus:ring-2 focus:ring-offset-2 relative inline-flex items-center justify-center px-4 py-2 text-sm font-semibold leading-5 border rounded-md shadow-sm appearance-none',
+            : 'bg-white text-brand-800 cursor-pointer hover:bg-brand-100 focus:ring-brand-800 border-brand-300 focus:outline-none focus:ring-2 focus:ring-offset-2',
+          ' relative inline-flex items-center justify-center px-4 py-2 text-sm font-semibold leading-5 border rounded-md shadow-sm appearance-none',
         ]"
       >
         {{ label }}
