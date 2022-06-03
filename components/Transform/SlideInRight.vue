@@ -1,12 +1,12 @@
 <template>
-  <transition
-    enter-active-class="transition duration-300 ease-in-out transform"
-    enter-class="-translate-x-full"
+  <Transition
+    enter-active-class="sm:duration-700 transition duration-500 ease-in-out transform"
+    enter-from-class="-translate-x-full"
     enter-to-class="translate-x-0"
-    leave-active-class="transition duration-300 ease-in-out transform"
-    leave-class="translate-x-0"
+    leave-active-class="sm:duration-700 transition duration-500 ease-in-out transform"
+    leave-from-class="translate-x-0"
     leave-to-class="-translate-x-full"
   >
     <slot />
-  </transition>
+  </Transition>
 </template>

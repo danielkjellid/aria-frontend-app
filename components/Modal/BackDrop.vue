@@ -1,4 +1,10 @@
 <script setup lang="ts">
+interface ModalBackDropProps {
+  active: boolean
+}
+
+defineProps<ModalBackDropProps>()
+
 /***********
  ** Emits **
  ***********/
@@ -10,6 +16,7 @@ const emit = defineEmits<{ (e: 'close'): void }>()
  ********************/
 
 const close = () => {
+  console.log('fired')
   emit('close')
 }
 </script>
@@ -17,12 +24,17 @@ const close = () => {
 <template>
   <transition
     enter-active-class="transition-opacity duration-300 ease-linear"
-    enter-class="opacity-0"
+    enter-from-class="opacity-0"
     enter-to-class="opacity-100"
     leave-active-class="transition-opacity duration-300 ease-linear"
-    leave-class="opacity-100"
+    leave-from-class="opacity-100"
     leave-to-class="opacity-0"
   >
-    <div class="fixed inset-0 bg-black bg-opacity-25" aria-hidden="true" @click="close" />
+    <div
+      v-show="active"
+      class="fixed inset-0 bg-black bg-opacity-25"
+      aria-hidden="true"
+      @click="close"
+    />
   </transition>
 </template>

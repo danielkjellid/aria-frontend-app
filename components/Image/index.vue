@@ -85,7 +85,7 @@ const imageObj: ImageType = props.images ? props.images : defaultImageObj
       <div class="table-cell align-middle">
         <img
           class="absolute inset-0 object-cover w-full h-full"
-          :src="imageObj.image1536x860"
+          :src="imageObj.image2048x1150"
           :alt="`Få inspirasjon og veiledning rundt ${title} hos oss, med fokus på bærekraft og ro.`"
           :srcset="`${imageObj.image512x512} 512w,
                   ${imageObj.image640x275} 640w,

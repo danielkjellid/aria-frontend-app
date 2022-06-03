@@ -1,34 +1,52 @@
 <script setup lang="ts">
-import { Listbox, ListboxButton, ListboxOptions } from '@headlessui/vue'
+/* eslint-disable vuejs-accessibility/label-has-for */
 import { SelectorIcon } from '@heroicons/vue/solid'
+import { ButtonProps } from '~~/components/Button/index.vue'
+
+/***********
+ ** Props **
+ ***********/
 
 interface ListBoxProps {
-  as?: string
-  label: string
+  id?: string
+  label?: string
+  buttonLabel: string
+  buttonVariant?: ButtonProps['variant']
   multiple?: boolean
-  selected?: unknown[]
+  selected: string[]
   disabled?: boolean
 }
 
-defineProps<ListBoxProps>()
+const props = defineProps<ListBoxProps>()
+
+/*********************
+ ** Props: defaults **
+ *********************/
+
+const buttonVariant = computed(() => (props.buttonVariant ? props.buttonVariant : 'secondary'))
+
+/***********
+ ** State **
+ ***********/
+
+const menuOpen = ref<boolean>(false)
+
+const closeMenu = () => {
+  menuOpen.value = false
+}
 </script>
 
 <template>
-  <Listbox class="max-w-72" :multiple="multiple" :as="as">
-    <div class="relative mt-1">
-      <ListboxButton
-        :disabled="disabled"
-        :class="[
-          disabled
-            ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-            : 'bg-white text-brand-800 cursor-pointer hover:bg-brand-100 focus:ring-brand-800 border-brand-300 focus:outline-none focus:ring-2 focus:ring-offset-2',
-          ' relative inline-flex items-center justify-center px-4 py-2 text-sm font-semibold leading-5 border rounded-md shadow-sm appearance-none',
-        ]"
-      >
-        {{ label }}
-        <div class="flex items-center ml-2 -mr-1">
+  <div v-click-outside="closeMenu">
+    <label v-if="label" :for="id" class="block mb-1 text-sm font-medium text-gray-700">
+      {{ label }}
+    </label>
+    <div class="max-w-72 relative mt-1">
+      <Button :disabled="disabled" :variant="buttonVariant" @click="menuOpen = true">
+        {{ buttonLabel }}
+        <template #rightIcon>
           <SelectorIcon
-            v-if="selected.length == 0"
+            v-if="!selected || selected.length == 0"
             class="w-5 h-5 text-gray-400"
             aria-hidden="true"
           />
@@ -38,8 +56,8 @@ defineProps<ListBoxProps>()
           >
             {{ selected.length }}
           </div>
-        </div>
-      </ListboxButton>
+        </template>
+      </Button>
 
       <transition
         enter-active-class="transition duration-100 ease-out"
@@ -49,12 +67,20 @@ defineProps<ListBoxProps>()
         leave-from-class="transform scale-100 opacity-100"
         leave-to-class="transform scale-95 opacity-0"
       >
-        <ListboxOptions
+        <ul
+          v-show="menuOpen"
           class="max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm absolute z-10 w-64 py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg"
+          :aria-multiselectable="multiple ? 'true' : 'false'"
+          aria-labelledby="listbox-button"
+          aria-orientation="vertical"
+          role="listbox"
+          tabindex="0"
+          @click="!props.multiple ? closeMenu() : null"
+          @keypress.enter="!props.multiple ? closeMenu() : null"
         >
           <slot />
-        </ListboxOptions>
+        </ul>
       </transition>
     </div>
-  </Listbox>
+  </div>
 </template>

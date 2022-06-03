@@ -6,7 +6,8 @@ import { CategoryProductListOutput } from '~~/@types/generated/dist'
  ***********/
 
 interface ProductFiltersProps {
-  products: CategoryProductListOutput[]
+  products?: CategoryProductListOutput[]
+  filteredProducts: CategoryProductListOutput[]
   loading?: boolean
 }
 
@@ -55,32 +56,76 @@ const availableFilters = (filteredProducts, arrKey, filterKey = 'name') => {
   return filters
 }
 
-const selectedColors = ref([])
-const selectedShapes = ref([])
-const selectedMaterials = ref([])
-const selectedRooms = ref([])
-const selectedSuppliers = ref([])
+/*******************************
+ ** State: mobile filter menu **
+ *******************************/
 
-const aggregatedFilters = computed(() => [
-  ...selectedColors.value,
-  ...selectedShapes.value,
-  ...selectedMaterials.value,
-  ...selectedRooms.value,
-  ...selectedSuppliers.value,
+const mobileFilterMenuActive = ref<boolean>(true)
+
+// const openMobileFilterMenu = () => {
+//   mobileFilterMenuActive.value = true
+//   document.body.classList.add('overflow-hidden')
+// }
+
+const closeMobileFilterMenu = () => {
+  mobileFilterMenuActive.value = false
+  document.body.classList.remove('overflow-hidden')
+}
+
+const filters = reactive([
+  {
+    label: 'Farger',
+    key: 'colors',
+    data: computed(() => availableFilters(props.filteredProducts, 'colors')),
+    originalData: computed(() => availableFilters(props.products, 'colors')),
+    selectedData: [],
+  },
+  {
+    label: 'Fasonger',
+    key: 'shapes',
+    data: computed(() => availableFilters(props.filteredProducts, 'shapes')),
+    originalData: computed(() => availableFilters(props.products, 'shapes')),
+    selectedData: [],
+  },
+  {
+    label: 'Materialer',
+    key: 'materials',
+    data: computed(() => availableFilters(props.filteredProducts, 'materials')),
+    originalData: computed(() => availableFilters(props.products, 'materials')),
+    selectedData: [],
+  },
+  {
+    label: 'Rom',
+    key: 'rooms',
+    data: computed(() => availableFilters(props.filteredProducts, 'rooms')),
+    originalData: computed(() => availableFilters(props.products, 'rooms')),
+    selectedData: [],
+  },
+  {
+    label: 'Leverandører',
+    key: 'supplier',
+    data: computed(() => availableFilters(props.filteredProducts, 'supplier')),
+    originalData: computed(() => availableFilters(props.products, 'supplier')),
+    selectedData: [],
+  },
 ])
 
-const colors = computed(() => availableFilters(props.products, 'colors'))
-const shapes = computed(() => availableFilters(props.products, 'shapes'))
-const materials = computed(() => availableFilters(props.products, 'materials'))
-const rooms = computed(() => availableFilters(props.products, 'rooms'))
-const suppliers = computed(() => availableFilters(props.products, 'supplier'))
+const aggregatedFilters = computed(() => filters.flatMap((filter) => filter.selectedData))
+
+const handleFilterSelect = (val: string, arr: string[]) => {
+  if (arr.includes(val)) {
+    arr.splice(arr.indexOf(val), 1)
+  } else {
+    arr.push(val)
+  }
+}
 
 /***********
  ** Emits **
  ***********/
 
 interface ProductFiltersEmits {
-  (e: 'on-change', value: typeof aggregatedFilters.value): void
+  (e: 'change', value: typeof aggregatedFilters.value): void
 }
 
 const emits = defineEmits<ProductFiltersEmits>()
@@ -91,8 +136,8 @@ const emits = defineEmits<ProductFiltersEmits>()
 
 watch(
   () => aggregatedFilters,
-  (_, filters) => {
-    emits('on-change', filters.value)
+  (_, newValue) => {
+    emits('change', newValue.value)
   },
   { deep: true }
 )
@@ -102,145 +147,82 @@ watch(
   <div v-if="loading" class="lg:flex items-center justify-start hidden space-x-4">
     <SkeletonLoader v-for="i in 5" :key="i" loading width="w-28" height="h-9" class="mt-1" />
   </div>
-  <div v-else class="lg:flex items-center justify-start hidden space-x-4">
-    <ListBox
-      v-model="selectedColors"
-      label="Farger"
-      multiple
-      :selected="selectedColors"
-      :disabled="!colors.length"
+  <div v-else>
+    <ModalSlideOver
+      title="Filter"
+      :active="mobileFilterMenuActive"
+      max-width="max-w-sm"
+      @close="closeMobileFilterMenu"
     >
-      <ListBoxItem
-        v-for="color in colors"
-        :key="color.id"
-        :value="color"
-        :disabled="color.count === 0"
-      >
-        <template #default="{ selected }">
+      <!-- <ListBlock label-as="button" label="Farger" label-class="hover:text-brand-700">
+        <ListBoxTestItem
+          v-for="supplier in suppliers"
+          v-slot="{ isSelected }"
+          :key="supplier"
+          :selected="['Gigacer']"
+          :value="supplier.name"
+          check-mark-alignment="right"
+          @select="(e) => handleFilterSelect(e, selectedSuppliers)"
+        >
           <div class="flex justify-between">
-            <span>{{ color.name }}</span>
+            <span>{{ supplier.originCountryFlag }} {{ supplier.name }}</span>
             <span
-              :class="selected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
+              :class="isSelected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
               class="shrink-0 flex items-center justify-center w-5 h-5 mr-6 text-xs rounded-full"
             >
-              {{ color.count }}
+              {{ supplier.count }}
             </span>
           </div>
-        </template>
-        <template #leftIcon>
-          <div
-            :style="`background-color: ${color.colorHex}`"
-            class="w-6 h-6 mr-3 border border-gray-300 rounded-full"
-          />
-        </template>
-      </ListBoxItem>
-    </ListBox>
-    <ListBox
-      v-model="selectedShapes"
-      label="Fasonger"
-      multiple
-      :selected="selectedShapes"
-      :disabled="!shapes.length"
+        </ListBoxTestItem>
+      </ListBlock> -->
+    </ModalSlideOver>
+
+    <div
+      v-if="filters && products && filteredProducts"
+      class="lg:flex items-center justify-start hidden space-x-4"
     >
-      <ListBoxItem
-        v-for="shape in shapes"
-        :key="shape.id"
-        :value="shape"
-        :disabled="shape.count === 0"
-      >
-        <template #default="{ selected }">
-          <div class="flex justify-between">
-            <span>{{ shape.name }}</span>
-            <span
-              :class="selected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
-              class="shrink-0 flex items-center justify-center w-5 h-5 mr-6 text-xs rounded-full"
-            >
-              {{ shape.count }}
-            </span>
-          </div>
-        </template>
-        <template #leftIcon>
-          <img alt="" :src="shape.image" class="w-6 h-6" />
-        </template>
-      </ListBoxItem>
-    </ListBox>
-    <ListBox
-      v-model="selectedMaterials"
-      label="Materialer"
-      multiple
-      :selected="selectedMaterials"
-      :disabled="!materials.length"
-    >
-      <ListBoxItem
-        v-for="material in materials"
-        v-slot="{ selected }"
-        :key="material"
-        :value="material"
-        check-mark-alignment="right"
-        :disabled="material.count === 0"
-      >
-        <div class="flex justify-between">
-          <span>{{ material.name }}</span>
-          <span
-            :class="selected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
-            class="shrink-0 flex items-center justify-center w-5 h-5 mr-6 text-xs rounded-full"
+      <template v-for="filter in filters">
+        <ListBox
+          v-if="filter.originalData.length"
+          :key="filter.label"
+          :button-label="filter.label"
+          :selected="filter.selectedData"
+          :disabled="!filter.data.length"
+          multiple
+        >
+          <ListBoxItem
+            v-for="data in filter.data"
+            :key="data.name"
+            :value="data.name"
+            :selected="filter.selectedData"
+            check-mark-alignment="right"
+            @select="(e) => handleFilterSelect(e, filter.selectedData)"
           >
-            {{ material.count }}
-          </span>
-        </div>
-      </ListBoxItem>
-    </ListBox>
-    <ListBox
-      v-model="selectedRooms"
-      label="Rom"
-      multiple
-      :selected="selectedRooms"
-      :disabled="!rooms.length"
-    >
-      <ListBoxItem
-        v-for="room in rooms"
-        v-slot="{ selected }"
-        :key="room"
-        :value="room"
-        check-mark-alignment="right"
-        :disabled="room.count === 0"
-      >
-        <div class="flex justify-between">
-          <span>{{ room.name }}</span>
-          <span
-            :class="selected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
-            class="shrink-0 flex items-center justify-center w-5 h-5 mr-6 text-xs rounded-full"
-          >
-            {{ room.count }}
-          </span>
-        </div>
-      </ListBoxItem>
-    </ListBox>
-    <ListBox
-      v-model="selectedSuppliers"
-      label="Leverandør"
-      multiple
-      :selected="selectedSuppliers"
-      :disabled="!suppliers.length"
-    >
-      <ListBoxItem
-        v-for="supplier in suppliers"
-        v-slot="{ selected }"
-        :key="supplier"
-        :value="supplier"
-        check-mark-alignment="right"
-        :disabled="supplier.count === 0"
-      >
-        <div class="flex justify-between">
-          <span>{{ supplier.originCountryFlag }} {{ supplier.name }}</span>
-          <span
-            :class="selected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
-            class="shrink-0 flex items-center justify-center w-5 h-5 mr-6 text-xs rounded-full"
-          >
-            {{ supplier.count }}
-          </span>
-        </div>
-      </ListBoxItem>
-    </ListBox>
+            <template #default="{ selected }">
+              <div class="flex justify-between">
+                <span v-if="filter.key === 'supplier'">
+                  {{ data.originCountryFlag }} {{ data.name }}
+                </span>
+                <span v-else>{{ data.name }}</span>
+                <span
+                  :class="selected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
+                  class="shrink-0 flex items-center justify-center w-5 h-5 mr-6 text-xs rounded-full"
+                >
+                  {{ data.count }}
+                </span>
+              </div>
+            </template>
+            <template v-if="filter.key === 'colors' || filter.key === 'shapes'" #leftIcon>
+              <div
+                v-if="filter.key == 'colors'"
+                :style="`background-color: ${data.colorHex}`"
+                class="w-6 h-6 mr-3 border border-gray-300 rounded-full"
+              />
+              <img v-else-if="filter.key === 'shapes'" alt="" :src="data.image" class="w-6 h-6" />
+            </template>
+          </ListBoxItem>
+        </ListBox>
+      </template>
+    </div>
   </div>
 </template>

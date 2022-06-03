@@ -36,7 +36,7 @@ const elem = props.as ? props.as : 'div'
 <template>
   <component
     :is="elem"
-    class="relative mx-auto"
+    class="mx-auto"
     :class="[
       xPadding || xPadding === null ? xPadding : '2xl:px-8 md:px-6 lg:px-8 px-5',
       yPadding || yPadding === null ? yPadding : '2xl:py-12 py-8',

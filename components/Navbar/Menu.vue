@@ -87,7 +87,7 @@ const renderBgClass = computed(() => {
 <template>
   <div v-click-outside="cleanupMenus" class="fixed top-0 left-0 right-0 z-40">
     <!-- Mobile menu -->
-    <NavbarMobileMenu v-show="mobileMenuActive" @close="closeMobileMenu">
+    <NavbarMobileMenu :active="mobileMenuActive" @close="closeMobileMenu">
       <slot name="start" />
     </NavbarMobileMenu>
 

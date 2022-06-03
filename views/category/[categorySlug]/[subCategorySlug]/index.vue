@@ -78,11 +78,11 @@ const filteredProducts = computed(() => {
       (product) =>
         aggregatedFilters.value.every(
           (filter) =>
-            product.colors.find((color) => color.name === filter.name) ||
-            product.shapes.find((shape) => shape.name === filter.name) ||
-            product.materials.find((material) => material.name === filter.name) ||
-            product.rooms.find((room) => room.name === filter.name) ||
-            product.supplier.name === filter.name
+            product.colors.find((color) => color.name === filter) ||
+            product.shapes.find((shape) => shape.name === filter) ||
+            product.materials.find((material) => material.name === filter) ||
+            product.rooms.find((room) => room.name === filter) ||
+            product.supplier.name === filter
         )
 
       // aggregatedFilters.value.every((filter) => )
@@ -120,9 +120,10 @@ const filteredProducts = computed(() => {
       <Spacer spacing="md" />
       <div class="flex items-center justify-between py-3 bg-white border-b border-gray-200">
         <ProductFilters
-          :products="filteredProducts"
+          :products="products"
+          :filtered-products="filteredProducts"
           :loading="categoryProductsLoading"
-          @on-change="(val) => (aggregatedFilters = val)"
+          @change="(val) => (aggregatedFilters = val)"
         />
         <div class="flex items-center mt-1 space-x-3">
           <Input
@@ -131,7 +132,6 @@ const filteredProducts = computed(() => {
             :hidden-label="true"
             placeholder="Søk etter tusenvis av varer..."
           />
-          <Button>Søk</Button>
         </div>
       </div>
       <Spacer spacing="md" />

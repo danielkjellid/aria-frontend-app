@@ -5,7 +5,7 @@ import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/vue/solid'
  ** Props **
  ***********/
 
-interface ButtonProps {
+export interface ButtonProps {
   size?: 's' | 'm' | 'l'
   variant?: 'primary' | 'primaryDanger' | 'secondary' | 'secondaryDanger' | 'outlined'
   to?: string
@@ -13,6 +13,7 @@ interface ButtonProps {
   loadingState?: 'initial' | 'loading' | 'error' | 'success'
   fluid?: boolean
   alignSelf?: 'auto' | 'left' | 'right' | 'center' | 'stretch' | 'baseline'
+  disabled?: boolean
 }
 
 const props = defineProps<ButtonProps>()
@@ -48,20 +49,22 @@ const elem = computed(() => {
   <component
     :is="elem"
     :to="to"
+    :aria-disabled="disabled ? 'true' : 'false'"
+    :disabled="disabled"
     class="focus:outline-none focus:ring-2 focus:ring-offset-2 inline-flex items-center justify-center text-sm font-semibold leading-5 border rounded-md shadow-sm appearance-none cursor-pointer"
     :class="[
       fluid ? 'w-full' : 'w-auto',
       {
         'hover:bg-brand-900 focus:ring-brand-800 text-white bg-brand-800 border-brand-900':
-          variant === 'primary',
+          variant === 'primary' && !disabled,
         'hover:bg-red-800 focus:ring-red-800 text-white bg-red-700 border-red-800':
-          variant === 'primaryDanger',
+          variant === 'primaryDanger' && !disabled,
         'hover:bg-brand-100 focus:ring-brand-800 text-brand-800 bg-white border-brand-300':
-          variant === 'secondary',
+          variant === 'secondary' && !disabled,
         'hover:bg-red-100 focus:ring-red-600 text-red-600 bg-white border-red-500':
-          variant === 'secondaryDanger',
+          variant === 'secondaryDanger' && !disabled,
         'hover:bg-black hover:bg-opacity-25 focus:ring-white focus:bg-opacity-25 text-white bg-transparent border-white':
-          variant === 'outlined',
+          variant === 'outlined' && !disabled,
         'px-3 py-1.5': size === 's',
         'px-4 py-2': size === 'm',
         'px-5 py-3': size === 'l',
@@ -71,6 +74,7 @@ const elem = computed(() => {
         'self-center': alignSelf === 'center',
         'self-stretch': alignSelf === 'stretch',
         'self-baseline': alignSelf === 'baseline',
+        'bg-gray-100 text-gray-500 cursor-not-allowed': disabled,
       },
     ]"
   >
