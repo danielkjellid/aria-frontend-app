@@ -65,9 +65,11 @@ const toggleFlyoutMenu = () => {
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
       >
-        <NavbarFlyoutMenu v-show="active">
-          <slot name="items" />
-        </NavbarFlyoutMenu>
+        <div v-show="active">
+          <NavbarFlyoutMenu>
+            <slot name="items" />
+          </NavbarFlyoutMenu>
+        </div>
       </Transition>
     </div>
     <div class="lg:hidden block">
