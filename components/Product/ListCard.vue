@@ -133,9 +133,9 @@ const campaignFeatureFlag = ref<boolean>(false)
                 <span class="text-gray-500">{{ unit }}</span>
               </p>
               <p>
-                <strike>
+                <s>
                   Fra kr {{ fromPrice }} <span class="text-gray-500">{{ unit }}</span>
-                </strike>
+                </s>
               </p>
             </div>
           </template>

@@ -75,56 +75,12 @@ const useCategoriesStore = defineStore('categories', {
         console.log(error)
       }
     },
-    async fetchCategoryProducts(slug: string) {
-      try {
-        const products = await performGet<CategoryDetailOutput[]>(
-          `categories/category/${slug}/products/`
-        )
-
-        if (products.length > 0) {
-          const payload = { categorySlug: slug, products }
-
-          const index = this.categoryProducts.findIndex(
-            (categoryProduct) => categoryProduct.categorySlug === slug
-          )
-
-          // Check if object with parent slug already exist, and replace it if it
-          // does, if not, push the item to the array.
-          if (index === -1) {
-            this.categoryProducts.push(payload)
-          } else {
-            this.categoryProducts[index] = payload
-          }
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    replaceCategoryProducts(slug: string, productPayload: CategoryDetailOutput[]) {
-      if (productPayload.length > 0) {
-        const payload = { categorySlug: slug, payload: productPayload }
-
-        const index = this.categoryProducts.findIndex(
-          (categoryProduct) => categoryProduct.categorySlug === slug
-        )
-
-        // Check if object with parent slug already exist, and replace it if it
-        // does, if not, push the item to the array.
-        if (index === -1) {
-          this.categoryProducts.push(payload)
-        } else {
-          this.categoryProducts[index] = payload
-        }
-      }
-    },
   },
   getters: {
     getCategory: (state) => (slug: string) =>
       state.categories.find((category) => category.slug === slug),
     getChildCategories: (state) => (parentSlug: string) =>
       state.childCategories.find((category) => category.parentSlug === parentSlug),
-    getCategoryProducts: (state) => (slug: string) =>
-      state.categoryProducts.find((categoryProduct) => categoryProduct.categorySlug === slug),
   },
 })
 

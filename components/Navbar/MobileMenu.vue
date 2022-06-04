@@ -27,7 +27,14 @@ const closeMenu = () => {
     <ModalBackDrop :active="active" @close="closeMenu" />
     <div class="absolute inset-0 overflow-hidden">
       <div class="lg:hidden fixed inset-y-0 z-40 flex" role="dialog" aria-modal="true">
-        <TransformSlideInRight>
+        <Transition
+          enter-active-class="sm:duration-700 transition duration-500 ease-in-out transform"
+          enter-from-class="-translate-x-full"
+          enter-to-class="translate-x-0"
+          leave-active-class="sm:duration-700 transition duration-500 ease-in-out transform"
+          leave-from-class="translate-x-0"
+          leave-to-class="-translate-x-full"
+        >
           <div
             v-show="active"
             class="relative flex flex-col w-screen max-w-xs pb-12 overflow-y-auto bg-white shadow-xl"
@@ -49,7 +56,7 @@ const closeMenu = () => {
               <slot />
             </div>
           </div>
-        </TransformSlideInRight>
+        </Transition>
       </div>
     </div>
   </div>

@@ -35,7 +35,14 @@ const hideActionMenu = () => {
       </IconWrapper>
     </div>
 
-    <TransformFade>
+    <Transition
+      enter-active-class="transition duration-100 ease-out"
+      enter-from-class="transform scale-95 opacity-0"
+      enter-to-class="transform scale-100 opacity-100"
+      leave-active-class="transition duration-75 ease-in"
+      leave-from-class="transform scale-100 opacity-100"
+      leave-to-class="transform scale-95 opacity-0"
+    >
       <div
         v-show="actionMenuActive"
         class="ring-1 ring-black ring-opacity-5 focus:outline-none absolute mt-6 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg"
@@ -54,6 +61,6 @@ const hideActionMenu = () => {
       >
         <slot name="items" />
       </div>
-    </TransformFade>
+    </Transition>
   </div>
 </template>
