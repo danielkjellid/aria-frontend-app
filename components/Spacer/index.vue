@@ -11,12 +11,12 @@ const spacing = computed(() => (props.spacing ? props.spacing : 'md'))
 <template>
   <div
     :class="{
-      'my-2': spacing === 'xs',
-      'my-4': spacing === 'sm',
-      'my-5': spacing === 'md',
-      'my-8': spacing === 'lg',
-      'my-12': spacing === 'xl',
-      'my-20': spacing === '2xl',
+      'py-2': spacing === 'xs',
+      'py-4': spacing === 'sm',
+      'py-5': spacing === 'md',
+      'py-8': spacing === 'lg',
+      'py-12': spacing === 'xl',
+      'py-20': spacing === '2xl',
     }"
   />
 </template>

@@ -100,6 +100,23 @@ const useCategoriesStore = defineStore('categories', {
         console.log(error)
       }
     },
+    replaceCategoryProducts(slug: string, productPayload: CategoryDetailOutput[]) {
+      if (productPayload.length > 0) {
+        const payload = { categorySlug: slug, payload: productPayload }
+
+        const index = this.categoryProducts.findIndex(
+          (categoryProduct) => categoryProduct.categorySlug === slug
+        )
+
+        // Check if object with parent slug already exist, and replace it if it
+        // does, if not, push the item to the array.
+        if (index === -1) {
+          this.categoryProducts.push(payload)
+        } else {
+          this.categoryProducts[index] = payload
+        }
+      }
+    },
   },
   getters: {
     getCategory: (state) => (slug: string) =>

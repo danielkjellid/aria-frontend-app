@@ -46,6 +46,7 @@ const existingIcon = computed(() => !!slots.default)
 const hiddenLabel = computed(() => (props.hiddenLabel ? props.hiddenLabel : false))
 const type = computed(() => (props.type ? props.type : 'text'))
 const plain = computed(() => (props.plain ? props.plain : false))
+defineEmits(['update:modelValue'])
 </script>
 
 <template>
@@ -76,7 +77,7 @@ const plain = computed(() => (props.plain ? props.plain : false))
         :placeholder="placeholder"
         :type="type"
         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent block w-full text-sm leading-5 border-gray-200 rounded-md"
-        @input="$emit('input', ($event.target as HTMLTextAreaElement).value)"
+        @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
       />
       <div
         v-if="error"
