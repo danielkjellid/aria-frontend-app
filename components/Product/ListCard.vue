@@ -97,7 +97,7 @@ const campaignFeatureFlag = ref<boolean>(false)
     @focus="showVariants = true"
     @focusout="showVariants = false"
   >
-    <router-link :to="`${slug}`">
+    <NuxtLink :to="`${slug}/`">
       <div
         class="product-card sm:h-auto sm:aspect-w-2 sm:aspect-h-3 relative w-full overflow-hidden rounded-md"
       >
@@ -162,7 +162,7 @@ const campaignFeatureFlag = ref<boolean>(false)
           </div>
         </div>
       </div>
-    </router-link>
+    </NuxtLink>
   </article>
 </template>
 

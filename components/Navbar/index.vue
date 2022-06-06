@@ -30,32 +30,28 @@ const loading = computed(() => store.navbarCategories === null)
           <ListBlock
             v-for="menuItem in store.navbarCategories"
             :key="menuItem.id"
-            label-as="router-link"
             :to="`/category/${menuItem.slug}/`"
             :label="menuItem.name"
             label-class="hover:text-brand-700"
             :loading="loading"
+            @click="flyoutActive = false"
           >
             <ListBlockItem
               v-for="childItem in menuItem.children"
               :key="childItem.slug"
-              as="router-link"
               :to="`/category/${menuItem.slug}/${childItem.slug}/`"
               :loading="loading"
               class="hover:text-brand-900"
+              @click="flyoutActive = false"
             >
               {{ childItem.name }}
             </ListBlockItem>
           </ListBlock>
         </template>
       </NavbarMenuItemFlyout>
-      <NavbarMenuItem as="router-link" to="/kitchens/" :render-transparent="isTransparent">
-        Kjøkken
-      </NavbarMenuItem>
-      <NavbarMenuItem as="router-link" to="/about-us/" :render-transparent="isTransparent">
-        Om oss
-      </NavbarMenuItem>
-      <NavbarMenuItem as="router-link" to="/contact-us/" :render-transparent="isTransparent">
+      <NavbarMenuItem to="/kitchens/" :render-transparent="isTransparent"> Kjøkken </NavbarMenuItem>
+      <NavbarMenuItem to="/about-us/" :render-transparent="isTransparent"> Om oss </NavbarMenuItem>
+      <NavbarMenuItem to="/contact-us/" :render-transparent="isTransparent">
         Kontakt
       </NavbarMenuItem>
     </template>
@@ -95,9 +91,9 @@ const loading = computed(() => store.navbarCategories === null)
             />
             <template #items>
               <ActionMenuSection>
-                <ActionMenuItem as="router-link" to="#">Your profile</ActionMenuItem>
-                <ActionMenuItem as="router-link" to="#">Settings</ActionMenuItem>
-                <ActionMenuItem as="router-link" to="#">Sign out</ActionMenuItem>
+                <ActionMenuItem as="NuxtLink" to="#">Your profile</ActionMenuItem>
+                <ActionMenuItem as="NuxtLink" to="#">Settings</ActionMenuItem>
+                <ActionMenuItem as="NuxtLink" to="#">Sign out</ActionMenuItem>
               </ActionMenuSection>
             </template>
           </ActionMenu>

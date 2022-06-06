@@ -91,7 +91,7 @@ const imageObj: ImageType = props.images ? props.images : defaultImageObj
         <Text v-if="!loading" tag="h1" variant="title4">{{ title }}</Text>
         <SkeletonLoader v-else :loading="loading" height="h-6" />
         <slot>
-          <Link v-if="!loading" :to="to" class="lg:hidden">{{ linkLabel }}</Link>
+          <ButtonLink v-if="!loading" :to="to" class="lg:hidden">{{ linkLabel }}</ButtonLink>
         </slot>
       </div>
       <div>
@@ -106,7 +106,9 @@ const imageObj: ImageType = props.images ? props.images : defaultImageObj
         </div>
       </div>
       <slot>
-        <Link v-if="!loading" :to="to" class="lg:inline-flex hidden">{{ linkLabel }}</Link>
+        <ButtonLink v-if="!loading" :to="to" class="lg:inline-flex hidden">
+          {{ linkLabel }}
+        </ButtonLink>
         <SkeletonLoader v-else :loading="loading" width="w-1/3" class="lg:inline-flex hidden" />
       </slot>
     </div>

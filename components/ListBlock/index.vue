@@ -15,6 +15,7 @@ interface ListBlockProps {
   labelClass?: string
   loading?: boolean
   listClass?: string
+  to?: string
 }
 
 const props = defineProps<ListBlockProps>()
@@ -23,18 +24,18 @@ const props = defineProps<ListBlockProps>()
  ** Defaults **
  **************/
 
-const labelAs = computed(() => (props.labelAs ? props.labelAs : 'p'))
 const loading = computed(() => (props.loading ? props.loading : false))
+const elem = computed(() => (props.to ? resolveComponent('NuxtLink') : 'p'))
 </script>
 
 <template>
   <div>
     <component
-      :is="labelAs"
+      :is="elem"
       v-if="!loading"
-      v-bind="$attrs"
       class="font-medium text-gray-900"
       :class="labelClass"
+      :to="to"
     >
       {{ label }}
     </component>

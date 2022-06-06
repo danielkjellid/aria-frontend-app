@@ -103,7 +103,7 @@ const renderBgClass = computed(() => {
               <div class="flex items-center justify-between h-20">
                 <!-- Logo (lg+) -->
                 <div class="lg:flex lg:items-center hidden">
-                  <router-link to="/">
+                  <NuxtLink to="/">
                     <span class="sr-only">{{ config.BRAND_NAME }}</span>
                     <slot name="logo" :is-transparent="isTransparent">
                       <CubeTransparentIcon
@@ -111,7 +111,7 @@ const renderBgClass = computed(() => {
                         :class="isTransparent ? 'text-white' : 'text-brand-800'"
                       />
                     </slot>
-                  </router-link>
+                  </NuxtLink>
                 </div>
 
                 <div class="lg:flex hidden h-full">
@@ -163,7 +163,7 @@ const renderBgClass = computed(() => {
                 </div>
 
                 <!-- Logo (lg-) -->
-                <router-link to="/" class="lg:hidden">
+                <NuxtLink to="/" class="lg:hidden">
                   <span class="sr-only">{{ config.BRAND_NAME }}</span>
                   <slot name="logo" :is-transparent="isTransparent">
                     <CubeTransparentIcon
@@ -171,7 +171,7 @@ const renderBgClass = computed(() => {
                       :class="isTransparent ? 'text-white' : 'text-brand-800'"
                     />
                   </slot>
-                </router-link>
+                </NuxtLink>
 
                 <div class="flex items-center justify-end flex-1">
                   <div class="lg:ml-8 flex items-center">

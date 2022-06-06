@@ -36,9 +36,9 @@ const alignSelf = computed(() => (props.alignSelf ? props.alignSelf : 'center'))
 
 const elem = computed(() => {
   if (props.to) {
-    if (props.as) return props.as
+    if (props.as) return resolveComponent(props.as)
 
-    return 'router-link'
+    return resolveComponent('NuxtLink')
   }
 
   return 'button'

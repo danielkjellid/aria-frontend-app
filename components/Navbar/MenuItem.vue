@@ -15,7 +15,7 @@ const props = defineProps<NavbarMenuItemProps>()
  ** Defaults **
  **************/
 
-const elem = computed(() => (props.as ? props.as : 'router-link'))
+const elem = computed(() => (props.as ? props.as : resolveComponent('NuxtLink')))
 const active = computed(() => (props.active ? props.active : false))
 const renderTransparent = computed(() =>
   props.renderTransparent ? props.renderTransparent : false

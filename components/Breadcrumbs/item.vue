@@ -23,7 +23,7 @@ const props = defineProps<BreadcrumbsItemProps>()
  ** State **
  ***********/
 
-const elem = computed(() => (props.as ? props.as : 'router-link'))
+const elem = computed(() => (props.as ? props.as : resolveComponent('NuxtLink')))
 </script>
 
 <template>

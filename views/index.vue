@@ -106,12 +106,12 @@ const kitchenImages = {
         :loading="false"
         :images="category.images"
       >
-        <Button as="router-link" variant="outlined" :to="`/category/${category.slug}/`">
+        <Button variant="outlined" :to="`/category/${category.slug}/`">
           {{ category.name }}
         </Button>
       </Image>
       <Image title="Kjøkken" :loading="loading" :images="kitchenImages">
-        <Button as="router-link" variant="outlined" to="/kitchens/"> Kjøkken </Button>
+        <Button variant="outlined" to="/kitchens/"> Kjøkken </Button>
       </Image>
     </section>
   </main>
