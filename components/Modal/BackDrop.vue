@@ -32,7 +32,7 @@ const close = () => {
   >
     <div
       v-show="active"
-      class="fixed inset-0 bg-black bg-opacity-25"
+      class="bg-opacity-30 fixed inset-0 z-30 bg-black"
       aria-hidden="true"
       @click="close"
     />
