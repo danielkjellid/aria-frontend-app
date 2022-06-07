@@ -21,7 +21,7 @@ interface ContainerProps {
   /**
    * Set a new max width for content. Should not be more than 2xl breakpoint (1536px)
    */
-  maxWidth?: 'none' | 'prose' | 'xs' | 'sm' | 'md' | 'xl' | '2xl'
+  maxWidth?: 'none' | 'prose' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 }
 
 const props = defineProps<ContainerProps>()
@@ -47,6 +47,7 @@ const elem = props.as ? props.as : 'div'
             'max-w-xs': maxWidth === 'xs',
             'max-w-sm': maxWidth === 'sm',
             'max-w-md': maxWidth === 'md',
+            'max-w-lg': maxWidth === 'lg',
             'max-w-xl': maxWidth === 'xl',
             'max-w-2xl': maxWidth === '2xl',
           }

@@ -3,9 +3,10 @@ import useCategoriesStore from '~~/store/categories'
 import { FilterIcon } from '@heroicons/vue/outline'
 import { CategoryProductListOutput } from '~~/@types/generated/dist'
 import { ButtonProps } from '~~/components/Button/index.vue'
-/***************
- ** Page meta **
- ***************/
+
+/************
+ ** Routes **
+ ************/
 
 const route = useRoute()
 
