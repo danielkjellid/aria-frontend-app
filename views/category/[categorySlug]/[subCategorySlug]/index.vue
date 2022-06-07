@@ -147,7 +147,7 @@ const closeMobileFilterMenu = () => {
       </Breadcrumbs>
       <Breadcrumbs v-else>
         <BreadcrumbsItem to="/">FK JKE Design</BreadcrumbsItem>
-        <BreadcrumbsItem to="#">{{ currentParentCategory }}</BreadcrumbsItem>
+        <BreadcrumbsItem to="/">{{ currentParentCategory }}</BreadcrumbsItem>
         <BreadcrumbsItem to="#" active>{{ metaTitle }}</BreadcrumbsItem>
       </Breadcrumbs>
 

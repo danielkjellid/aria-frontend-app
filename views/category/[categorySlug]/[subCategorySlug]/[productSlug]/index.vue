@@ -5,17 +5,78 @@ import {
   ProductSizeOutput,
   ProductVariantOutput,
 } from '~~/@types/generated/dist'
+import useCategoriesStore from '~~/store/categories'
+
+/************
+ ** Routes **
+ ************/
+
+const route = useRoute()
+
+const currentParentCategorySlug = computed(() => {
+  if (typeof route.params.categorySlug === 'string') {
+    return route.params.categorySlug
+  }
+  return route.params.categorySlug[0]
+})
+
+const currentChildCategorySlug = computed(() => {
+  if (typeof route.params.subCategorySlug === 'string') {
+    return route.params.subCategorySlug
+  }
+  return route.params.subCategorySlug[0]
+})
+
+/***********
+ ** Store **
+ ***********/
+
+const store = useCategoriesStore()
+
+/***********************
+ ** State: Categories **
+ ***********************/
+
+// Get current visited parent and child category, and check if we already
+// have fetched it at some point. if so, retrieve it from pinia instead
+// of calling the api on every site render.
+const currenParentCategoryObj = computed(() => {
+  if (!store.getCategory(currentParentCategorySlug.value)) {
+    store.fetchCategory(currentParentCategorySlug.value)
+  }
+
+  return store.getCategory(currentParentCategorySlug.value)
+})
+
+const currentChildCategoryObj = computed(() => {
+  if (!store.getCategory(currentChildCategorySlug.value)) {
+    store.fetchCategory(currentChildCategorySlug.value)
+  }
+
+  return store.getCategory(currentChildCategorySlug.value)
+})
+
+const currentParentCategoryObjLoaded = computed(() => !!currenParentCategoryObj.value)
+const currentChildCategoryObjLoaded = computed(() => !!currentChildCategoryObj.value)
+
+/*********************
+ ** State: Products **
+ *********************/
 
 const product = ref<ProductDetailOutput>()
+const productLoaded = computed((): boolean => !!product.value)
 
 const fetchedProduct = async () => {
   product.value = await performGet<ProductDetailOutput>('products/product/panaria-memory-mood/')
 }
 
-const productLoaded = computed((): boolean => !!product.value)
-
 fetchedProduct()
 
+/****************************
+ ** State: Product options **
+ ****************************/
+
+// Utility function to find unique values in a set of options.
 const aggregateOption = (key: string) => {
   if (product.value && product.value.options && product.value.options.length) {
     const aggregatedOptionKey = product.value.options
@@ -34,11 +95,12 @@ const aggregateOption = (key: string) => {
 }
 
 const variants = computed(() => aggregateOption('variant'))
-const sizes = computed(() => aggregateOption('size'))
-
 const selectedVariant = ref<ProductVariantOutput>(null)
+
+const sizes = computed(() => aggregateOption('size'))
 const selectedSize = ref<ProductSizeOutput>(null)
 
+// Find related option based on selected variant and size.
 const selectedOption = computed(() => {
   if (
     product.value &&
@@ -48,6 +110,10 @@ const selectedOption = computed(() => {
     selectedOption.value !== null
   ) {
     return product.value.options.find((option) => {
+      // An option does not necessarily need to have both a
+      // variant and size, and we have cases where only one
+      // of them is present. In that case, the missing key will
+      // be returned from endpoint with value null.
       if (selectedVariant.value === null) {
         return option.variant === null && option.size.id === selectedSize.value.id
       }
@@ -69,11 +135,23 @@ const selectedOption = computed(() => {
     <ImageCarousel v-if="productLoaded" :images="product && product.images ? product.images : []" />
     <Image v-else loading />
     <Container>
-      <Breadcrumbs>
-        <BreadcrumbsItem to="#">FK-JKE Design</BreadcrumbsItem>
-        <BreadcrumbsItem to="#">Fliser</BreadcrumbsItem>
-        <BreadcrumbsItem to="#">Keramisk naturstein</BreadcrumbsItem>
-        <BreadcrumbsItem to="#" active>Produkt</BreadcrumbsItem>
+      <Breadcrumbs
+        v-if="productLoaded && currentParentCategoryObjLoaded && currentChildCategoryObjLoaded"
+      >
+        <BreadcrumbsItem to="/">FK-JKE Design</BreadcrumbsItem>
+        <BreadcrumbsItem :to="`/${currenParentCategoryObj.slug}/`">
+          {{ currenParentCategoryObj.name }}
+        </BreadcrumbsItem>
+        <BreadcrumbsItem :to="`/${currenParentCategoryObj.slug}/${currentChildCategoryObj.slug}/`">
+          {{ currentChildCategoryObj.name }}
+        </BreadcrumbsItem>
+        <BreadcrumbsItem to="#" active>{{ product.name }}</BreadcrumbsItem>
+      </Breadcrumbs>
+      <Breadcrumbs v-else>
+        <BreadcrumbsItem loading to="/">Loading...</BreadcrumbsItem>
+        <BreadcrumbsItem loading to="#">Loading...</BreadcrumbsItem>
+        <BreadcrumbsItem loading to="#">Loading...</BreadcrumbsItem>
+        <BreadcrumbsItem loading to="#" active>Loading...</BreadcrumbsItem>
       </Breadcrumbs>
 
       <Spacer spacing="md" />
@@ -161,11 +239,6 @@ const selectedOption = computed(() => {
                   v-if="productLoaded"
                   class="sm:grid-cols-4 lg:grid-cols-2 grid grid-cols-2 gap-4"
                 >
-                  <!-- Active: "ring-2 ring-indigo-500" -->
-                  <!--
-                    Active: "border", Not Active: "border-2"
-                    Checked: "border-indigo-500", Not Checked: "border-transparent"
-                  -->
                   <label
                     v-for="size in sizes"
                     :key="size.id"
@@ -197,6 +270,7 @@ const selectedOption = computed(() => {
                 </div>
               </fieldset>
             </div>
+
             <Callout
               v-if="product && !product.canBePurchasedOnline"
               class="mt-6 mb-3"
@@ -211,6 +285,7 @@ const selectedOption = computed(() => {
               v-if="productLoaded"
               type="submit"
               variant="primary"
+              size="l"
               fluid
               class="w-full mt-3"
               :disabled="!selectedOption"
@@ -219,13 +294,7 @@ const selectedOption = computed(() => {
                 !selectedOption ? 'Gjør tilvalg før du legger til i kurven' : 'Legg til i kurven'
               }}
             </Button>
-            <SkeletonLoader v-else loading height="h-10 mt-3" />
-            <!-- <button
-              type="submit"
-              class="hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center justify-center w-full px-8 py-3 mt-10 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md"
-            >
-              Add to bag
-            </button> -->
+            <SkeletonLoader v-else loading height="h-12 mt-3" />
           </form>
         </div>
 
