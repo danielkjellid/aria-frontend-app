@@ -110,8 +110,8 @@ const closeModal = () => {
     <div v-if="variants && variants.length">
       <CollapsableSection title="Varianter">
         <div class="sm:grid-cols-5 md:grid-cols-6 grid grid-cols-3 gap-5 mt-6">
-          <article v-for="variant in variants" :key="variant.name" class="relative">
-            <div class="text-center">
+          <article v-for="variant in variants" :key="variant.name" class="group relative">
+            <div class="group-hover:opacity-80 text-center">
               <button v-if="variant.colorHex" @click="activateModal(variant)">
                 <div
                   :style="`background-color: ${variant.colorHex}`"
@@ -120,7 +120,7 @@ const closeModal = () => {
               </button>
               <button v-else-if="variant.image" @click="activateModal(variant)">
                 <img
-                  class="object-cover w-20 h-20 mx-auto border-2 border-gray-200 rounded-full"
+                  class="object-cover w-20 h-20 mx-auto border-2 border-gray-300 rounded-full"
                   :src="variant.image"
                   alt=""
                 />

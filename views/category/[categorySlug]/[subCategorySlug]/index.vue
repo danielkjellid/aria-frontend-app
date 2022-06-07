@@ -206,11 +206,10 @@ const closeMobileFilterMenu = () => {
 
       <div class="border-t border-gray-200">
         <Spacer spacing="md" />
-        <Callout
-          variant="info"
-          title="Finner du ikke det du leter etter?"
-          message="Det hender at vi har varer som ikke ligger i nettbutikken, men vi har et bredt sortiment fra alle våre leverandører. Ta kontakt med oss på hei@flis.no så hjelper vi deg videre 😊"
-        />
+        <Callout variant="info" title="Finner du ikke det du leter etter?">
+          Det hender at vi har varer som ikke ligger i nettbutikken, men vi har et bredt sortiment
+          fra alle våre leverandører. Ta kontakt med oss på hei@flis.no så hjelper vi deg videre 😊
+        </Callout>
       </div>
     </Container>
   </main>

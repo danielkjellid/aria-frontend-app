@@ -51,7 +51,7 @@ const elem = props.as ? props.as : 'div'
             'max-w-xl': maxWidth === 'xl',
             'max-w-2xl': maxWidth === '2xl',
           }
-        : 'container',
+        : 'container max-w-7xl',
     ]"
   >
     <slot />

@@ -11,11 +11,10 @@ import {
  ***********/
 
 interface CalloutProps {
-  title: string
   /**
    * Initial heading message.
    */
-  message?: string
+  title: string
   /**
    * The callout variant.
    */
@@ -65,7 +64,6 @@ const variant = computed(() => (props.variant ? props.variant : 'danger'))
           {{ title }}
         </h3>
         <div
-          v-if="message || (context && context.length)"
           class="mt-2 text-sm leading-5"
           :class="{
             'text-red-700': variant === 'danger',
@@ -74,8 +72,8 @@ const variant = computed(() => (props.variant ? props.variant : 'danger'))
             'text-green-700': variant === 'success',
           }"
         >
-          {{ message }}
-          <ul v-if="context" class="pl-5 list-disc">
+          <slot />
+          <ul v-if="context && context.length" class="pl-5 list-disc">
             <li v-for="c in context" :key="c" class="mt-1">
               <span>
                 {{ c }}

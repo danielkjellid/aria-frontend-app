@@ -1,6 +1,10 @@
 <script setup lang="ts">
 /* eslint-disable vue/no-v-html */
-import { ProductDetailOutput } from '~~/@types/generated/dist'
+import {
+  ProductDetailOutput,
+  ProductSizeOutput,
+  ProductVariantOutput,
+} from '~~/@types/generated/dist'
 
 const product = ref<ProductDetailOutput>()
 
@@ -31,6 +35,33 @@ const aggregateOption = (key: string) => {
 
 const variants = computed(() => aggregateOption('variant'))
 const sizes = computed(() => aggregateOption('size'))
+
+const selectedVariant = ref<ProductVariantOutput>(null)
+const selectedSize = ref<ProductSizeOutput>(null)
+
+const selectedOption = computed(() => {
+  if (
+    product.value &&
+    product.value.options &&
+    product.value.options.length &&
+    selectedVariant.value !== null &&
+    selectedOption.value !== null
+  ) {
+    return product.value.options.find((option) => {
+      if (selectedVariant.value === null) {
+        return option.variant === null && option.size.id === selectedSize.value.id
+      }
+      if (selectedSize.value === null) {
+        return option.size === null && option.variant.id === selectedVariant.value.id
+      }
+      return (
+        option.variant.id === selectedVariant.value.id && option.size.id === selectedSize.value.id
+      )
+    })
+  }
+
+  return undefined
+})
 </script>
 
 <template>
@@ -47,34 +78,43 @@ const sizes = computed(() => aggregateOption('size'))
 
       <Spacer spacing="md" />
 
-      <div class="mx-auto lg:grid lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8">
-        <div class="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
+      <div
+        class="mx-auto lg:grid lg:grid-cols-3 xl:grid-cols-5 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8"
+      >
+        <div class="lg:col-span-2 xl:col-span-3 lg:border-r lg:border-gray-200 lg:pr-8">
           <Text v-if="productLoaded" variant="title2">{{ product.name }}</Text>
           <SkeletonLoader v-else loading width="w-60" height="h-12" />
         </div>
 
         <!-- Options -->
-        <div class="lg:mt-0 lg:row-span-3 mt-4">
-          <h2 class="sr-only">Product information</h2>
-          <p class="text-3xl text-gray-900">599 m2</p>
-
-          <form class="mt-6">
+        <div class="lg:mt-0 lg:row-span-3 xl:col-span-2 lg:col-span-1 mt-4">
+          <h2 class="sr-only">Produktinformasjon</h2>
+          <div v-if="product && product.displayPrice">
+            <Text v-if="productLoaded" variant="title2" class="font-normal">
+              Fra kr 599,00
+              <span class="text-gray-600">{{ product.unit }}</span>
+            </Text>
+            <SkeletonLoader v-else loading width="w-60" height="h-10" />
+          </div>
+          <form :class="product && product.displayPrice ? 'mt-6' : 'mt-0'">
             <!-- Colors -->
             <div>
-              <h3 class="text-sm font-medium text-gray-900">Varianter</h3>
-
+              <h3 v-if="productLoaded" class="text-sm font-medium text-gray-900">Varianter</h3>
+              <SkeletonLoader v-else loading width="w-16" height="h-5" />
               <fieldset class="mt-4">
-                <legend class="sr-only">Choose a color</legend>
-                <div class="lg:grid-cols-6 xl:grid-cols-7 grid grid-cols-6 gap-5">
-                  <!--
-                    Active and Checked: "ring ring-offset-1"
-                    Not Active and Checked: "ring-2"
-                  -->
+                <legend class="sr-only">Velg en variant</legend>
+                <div
+                  v-if="productLoaded"
+                  class="lg:grid-cols-5 xl:grid-cols-7 sm:grid-cols-7 md:grid-cols-9 grid grid-cols-6 gap-5"
+                >
                   <label
                     v-for="variant in variants"
                     :key="variant.id"
                     :for="`variant-choice-${variant.id}`"
-                    class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none ring-brand-800"
+                    class="focus:outline-none ring-brand-800 relative flex items-center justify-center mx-auto rounded-full cursor-pointer"
+                    :class="{
+                      ring: variant && selectedVariant && variant.id === selectedVariant.id,
+                    }"
                   >
                     <input
                       :id="`variant-choice-${variant.id}`"
@@ -83,6 +123,7 @@ const sizes = computed(() => aggregateOption('size'))
                       :value="variant.id"
                       class="sr-only"
                       :aria-labelledby="`variant-choice-${variants.id}-label`"
+                      @input="selectedVariant = variant"
                     />
                     <span :id="`variant-choice-${variants.id}-label`" class="sr-only">
                       {{ variant.name }}
@@ -91,20 +132,35 @@ const sizes = computed(() => aggregateOption('size'))
                       aria-hidden="true"
                       :src="variant.image"
                       alt=""
-                      class="object-cover w-8 h-8 border-2 border-gray-300 rounded-full"
+                      class="sm:w-12 sm:h-12 lg:w-10 lg:h-10 xl:w-12 xl:h-12 object-cover w-10 h-10 border-2 border-gray-300 rounded-full"
                     />
                   </label>
+                </div>
+                <div
+                  v-else
+                  class="lg:grid-cols-5 xl:grid-cols-7 sm:grid-cols-7 md:grid-cols-9 grid grid-cols-6 gap-5"
+                >
+                  <SkeletonLoader
+                    v-for="i in 14"
+                    :key="i"
+                    loading
+                    shape="circle"
+                    class="sm:w-12 sm:h-12 lg:w-10 lg:h-10 xl:w-12 xl:h-12 w-10 h-10"
+                  />
                 </div>
               </fieldset>
             </div>
 
             <!-- Sizes -->
             <div class="mt-10">
-              <h3 class="text-sm font-medium text-gray-900">Størrelser</h3>
-
+              <h3 v-if="productLoaded" class="text-sm font-medium text-gray-900">Størrelser</h3>
+              <SkeletonLoader v-else loading width="w-16" height="h-5" />
               <fieldset class="mt-4">
                 <legend class="sr-only">Choose a size</legend>
-                <div class="sm:grid-cols-4 lg:grid-cols-2 grid grid-cols-2 gap-4">
+                <div
+                  v-if="productLoaded"
+                  class="sm:grid-cols-4 lg:grid-cols-2 grid grid-cols-2 gap-4"
+                >
                   <!-- Active: "ring-2 ring-indigo-500" -->
                   <!--
                     Active: "border", Not Active: "border-2"
@@ -115,13 +171,19 @@ const sizes = computed(() => aggregateOption('size'))
                     :key="size.id"
                     :for="`size-choice-${size.id}`"
                     class="group hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6 relative flex items-center justify-center px-4 py-3 text-sm font-medium text-gray-900 uppercase bg-white border rounded-md shadow-sm cursor-pointer"
+                    :class="{
+                      'border-brand-800 border-2':
+                        size && selectedSize && size.id === selectedSize.id,
+                    }"
                   >
                     <input
+                      :id="`size-choice-${size.id}`"
                       type="radio"
                       name="size-choice"
                       :value="size.name"
                       class="sr-only"
                       :aria-labelledby="`size-choice-${size.id}-label`"
+                      @input="selectedSize = size"
                     />
                     <span :id="`size-choice-${size.id}-label`">{{ size.name }}</span>
                     <span
@@ -130,11 +192,34 @@ const sizes = computed(() => aggregateOption('size'))
                     ></span>
                   </label>
                 </div>
+                <div v-else class="sm:grid-cols-4 lg:grid-cols-2 grid grid-cols-2 gap-4 mt-1">
+                  <SkeletonLoader v-for="i in 4" :key="i" loading class="sm:h-16 h-12 rounded-md" />
+                </div>
               </fieldset>
             </div>
-            <Button type="submit" variant="primary" fluid class="w-full mt-3"
-              >Legg til i kurven</Button
+            <Callout
+              v-if="product && !product.canBePurchasedOnline"
+              class="mt-6 mb-3"
+              variant="info"
+              title="Kan ikke kjøpes på nett"
             >
+              Dette produktet kan ikke kjøpes på nett direkte, men du kan fortsatt legge det til i
+              handlekurven og starte en online konsultasjon, så hjepler vi deg mer enn gjerne.
+              Konsultasjonen er ikke forpliktende.
+            </Callout>
+            <Button
+              v-if="productLoaded"
+              type="submit"
+              variant="primary"
+              fluid
+              class="w-full mt-3"
+              :disabled="!selectedOption"
+            >
+              {{
+                !selectedOption ? 'Gjør tilvalg før du legger til i kurven' : 'Legg til i kurven'
+              }}
+            </Button>
+            <SkeletonLoader v-else loading height="h-10 mt-3" />
             <!-- <button
               type="submit"
               class="hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center justify-center w-full px-8 py-3 mt-10 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md"
@@ -145,7 +230,7 @@ const sizes = computed(() => aggregateOption('size'))
         </div>
 
         <div
-          class="lg:pt-6 lg:pb-16 lg:col-start-1 lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8 py-10 space-y-12"
+          class="lg:pt-6 lg:pb-16 lg:col-start-1 xl:col-span-3 lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8 py-10 space-y-12"
         >
           <!-- Description -->
           <div v-if="productLoaded">
@@ -233,6 +318,14 @@ const sizes = computed(() => aggregateOption('size'))
           <div v-else>
             <section>
               <SkeletonLoader loading width="w-full" height="h-10" />
+              <div class="flex items-center mt-6 space-x-8">
+                <SkeletonLoader loading width="w-32" height="h-4" />
+                <SkeletonLoader loading height="h-4" width="w-48" />
+              </div>
+              <div class="flex items-center mt-6 space-x-8">
+                <SkeletonLoader loading width="w-32" height="h-4" />
+                <SkeletonLoader loading height="h-4" width="w-48" />
+              </div>
               <div class="flex items-center mt-6 space-x-8">
                 <SkeletonLoader loading width="w-32" height="h-4" />
                 <SkeletonLoader loading height="h-4" width="w-48" />
