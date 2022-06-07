@@ -27,7 +27,7 @@ export default defineNuxtConfig({
         hid: 'description',
         name: 'description',
         content:
-          'Flishuset er en totalleverandør av markedest mest spennende utvalg innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken fra noen av verdens mest spennende produsenter.',
+          'Flishuset er en totalleverandør av markedes mest spennende utvalg innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken fra noen av verdens mest spennende produsenter.',
       },
       { name: 'format-detection', content: 'telephone=no' },
       {
@@ -44,14 +44,14 @@ export default defineNuxtConfig({
       {
         property: 'og:description',
         content:
-          'Flishuset er en totalleverandør av markedest mest spennende utvalg innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken fra noen av verdens mest spennende produsenter.',
+          'Flishuset er en totalleverandør av markedes mest spennende utvalg innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken fra noen av verdens mest spennende produsenter.',
       },
       { property: 'og:site_name', content: 'Flishuset' },
       { property: 'twitter:card', content: 'summary' },
       {
         property: 'twitter:description',
         content:
-          'Flishuset er en totalleverandør av markedest mest spennende utvalg innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken fra noen av verdens mest spennende produsenter.',
+          'Flishuset er en totalleverandør av markedes mest spennende utvalg innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken fra noen av verdens mest spennende produsenter.',
       },
       {
         property: 'twitter:title',

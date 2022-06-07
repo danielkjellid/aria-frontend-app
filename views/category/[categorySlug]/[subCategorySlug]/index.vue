@@ -5,21 +5,22 @@ import { CategoryProductListOutput } from '~~/@types/generated/dist'
 import { ButtonProps } from '~~/components/Button/index.vue'
 
 /************
+ ** Config **
+ ************/
+
+const config = useRuntimeConfig().public
+
+/************
  ** Routes **
  ************/
 
 const route = useRoute()
 
-const currentParentCategory = computed(() => {
-  let slug: string
+const currentParentCategorySlug = computed(() => {
   if (typeof route.params.categorySlug === 'string') {
-    slug = route.params.categorySlug
-  } else {
-    // eslint-disable-next-line prefer-destructuring
-    slug = route.params.categorySlug[0]
+    return route.params.categorySlug
   }
-
-  return slug.charAt(0).toUpperCase() + slug.slice(1)
+  return route.params.categorySlug[0]
 })
 
 const currentCategorySlug = computed(() => {
@@ -42,20 +43,29 @@ const store = useCategoriesStore()
 // Get current visited category, and check if we already have fetched it
 // at some point. if so, retrieve it from pinia instead of calling the api
 // on every site render.
-const currentCategoryObj = computed(() => {
-  if (!store.getCategory(currentCategorySlug.value)) {
+
+const currentParentCategoryObj = computed(() => {
+  if (!store.getCategory(currentParentCategorySlug.value)) {
     // Call api to populate pinia state.
-    store.fetchCategory(currentCategorySlug.value)
+    store.fetchCategory(currentParentCategorySlug.value)
   }
 
   // Return pinia state.
+  return store.getCategory(currentParentCategorySlug.value)
+})
+
+const currentCategoryObj = computed(() => {
+  if (!store.getCategory(currentCategorySlug.value)) {
+    store.fetchCategory(currentCategorySlug.value)
+  }
+
   return store.getCategory(currentCategorySlug.value)
 })
 
-const currentCategoryLoading = computed(() => !currentCategoryObj.value)
-const categoryProductsLoading = computed(() => !products.value)
+const currentParentCategoryObjLoaded = computed(() => !!currentParentCategoryObj.value)
+const currentCategoryObjLoaded = computed(() => !!currentCategoryObj.value)
 
-const metaTitle = computed(() => (currentCategoryObj.value ? currentCategoryObj.value.name : ''))
+const categoryProductsLoading = computed(() => !products.value)
 
 /*********************
  ** State: Products **
@@ -128,89 +138,112 @@ const closeMobileFilterMenu = () => {
   mobileFilterMenuActive.value = false
   document.body.classList.remove('overflow-hidden')
 }
+
+/***************
+ ** Page meta **
+ ***************/
+
+const metaTitle = computed(() =>
+  currentCategoryObjLoaded.value ? currentCategoryObj.value.name : undefined
+)
 </script>
 
 <template>
-  <main>
-    <Image v-if="currentCategoryLoading" loading />
-    <Image
-      v-else
-      :title="currentCategoryObj.name"
-      :loading="false"
-      :images="currentCategoryObj.images"
-    />
-    <Container>
-      <Breadcrumbs v-if="currentCategoryLoading">
-        <BreadcrumbsItem loading to="#">Loading...</BreadcrumbsItem>
-        <BreadcrumbsItem loading to="#">Loading...</BreadcrumbsItem>
-        <BreadcrumbsItem loading to="#" active>Loading...</BreadcrumbsItem>
-      </Breadcrumbs>
-      <Breadcrumbs v-else>
-        <BreadcrumbsItem to="/">FK JKE Design</BreadcrumbsItem>
-        <BreadcrumbsItem to="/">{{ currentParentCategory }}</BreadcrumbsItem>
-        <BreadcrumbsItem to="#" active>{{ metaTitle }}</BreadcrumbsItem>
-      </Breadcrumbs>
+  <div>
+    <Head>
+      <Title>Bli inspirert av {{ metaTitle }} på nett</Title>
+      <Meta
+        name="description"
+        :content="`Bli inspirert av spennende produkter innenfor ${metaTitle} på nett.`"
+      />
+    </Head>
+    <main>
+      <Image
+        v-if="currentCategoryObjLoaded"
+        :title="currentCategoryObj.name"
+        :loading="false"
+        :images="currentCategoryObj.images"
+      />
+      <Image v-else loading />
+      <Container>
+        <Breadcrumbs v-if="currentCategoryObjLoaded && currentParentCategoryObjLoaded">
+          <BreadcrumbsItem to="/">{{ config.BRAND_NAME }}</BreadcrumbsItem>
+          <BreadcrumbsItem to="/">{{ currentParentCategoryObj.name }}</BreadcrumbsItem>
+          <BreadcrumbsItem to="#" active>{{ currentCategoryObj.name }}</BreadcrumbsItem>
+        </Breadcrumbs>
+        <Breadcrumbs v-else>
+          <BreadcrumbsItem loading to="#">Loading...</BreadcrumbsItem>
+          <BreadcrumbsItem loading to="#">Loading...</BreadcrumbsItem>
+          <BreadcrumbsItem loading to="#" active>Loading...</BreadcrumbsItem>
+        </Breadcrumbs>
 
-      <Spacer spacing="xs" />
+        <Spacer spacing="xs" />
 
-      <!-- Filtering and search on default -->
-      <div class="lg:hidden flex-col py-3">
-        <Button variant="secondary" fluid @click="openMobileFilterMenu">
-          Filtrer
-          <template #leftIcon>
-            <FilterIcon class="w-5 h-5 text-gray-500" />
-          </template>
-        </Button>
-        <form class="lg:flex items-center hidden mt-1 space-x-3" @submit.prevent="searchEndpoint">
-          <Input
-            id="search-1"
-            label="Søk"
-            :hidden-label="true"
-            placeholder="Søk etter tusenvis av varer..."
-            class="w-full"
-          />
-          <Button type="submit" primary :loading-state="searchLoadingState" @click="searchEndpoint">
-            Søk
+        <!-- Filtering and search on default -->
+        <div class="lg:hidden flex-col py-3">
+          <Button variant="secondary" fluid @click="openMobileFilterMenu">
+            Filtrer
+            <template #leftIcon>
+              <FilterIcon class="w-5 h-5 text-gray-500" />
+            </template>
           </Button>
-        </form>
-      </div>
+          <form class="lg:flex items-center hidden mt-1 space-x-3" @submit.prevent="searchEndpoint">
+            <Input
+              id="search-1"
+              label="Søk"
+              :hidden-label="true"
+              placeholder="Søk etter tusenvis av varer..."
+              class="w-full"
+            />
+            <Button
+              type="submit"
+              primary
+              :loading-state="searchLoadingState"
+              @click="searchEndpoint"
+            >
+              Søk
+            </Button>
+          </form>
+        </div>
 
-      <!-- Filtering and search on lg+ -->
-      <div class="lg:py-3 flex items-center justify-between bg-white border-b border-gray-200">
-        <ProductFilters
-          :products="products"
-          :filtered-products="filteredProducts"
-          :loading="categoryProductsLoading"
-          :mobile-menu-active="mobileFilterMenuActive"
-          @change="(val) => (aggregatedFilters = val)"
-          @modal-close="closeMobileFilterMenu"
-        />
-        <form class="lg:flex items-center hidden mt-1 space-x-3" @submit.prevent="searchEndpoint">
-          <Input
-            id="search-2"
-            v-model.trim="query"
-            label="Søk"
-            :value="query"
-            :hidden-label="true"
-            placeholder="Søk etter tusenvis av varer..."
+        <!-- Filtering and search on lg+ -->
+        <div class="lg:py-3 flex items-center justify-between bg-white border-b border-gray-200">
+          <ProductFilters
+            :products="products"
+            :filtered-products="filteredProducts"
+            :loading="categoryProductsLoading"
+            :mobile-menu-active="mobileFilterMenuActive"
+            @change="(val) => (aggregatedFilters = val)"
+            @modal-close="closeMobileFilterMenu"
           />
-          <Button type="submit" primary :loading-state="searchLoadingState"> Søk </Button>
-        </form>
-      </div>
+          <form class="lg:flex items-center hidden mt-1 space-x-3" @submit.prevent="searchEndpoint">
+            <Input
+              id="search-2"
+              v-model.trim="query"
+              label="Søk"
+              :value="query"
+              :hidden-label="true"
+              placeholder="Søk etter tusenvis av varer..."
+            />
+            <Button type="submit" primary :loading-state="searchLoadingState"> Søk </Button>
+          </form>
+        </div>
 
-      <Spacer spacing="sm" />
+        <Spacer spacing="sm" />
 
-      <ProductList :loading="productsLoading" :products="filteredProducts" />
+        <ProductList :loading="productsLoading" :products="filteredProducts" />
 
-      <Spacer spacing="md" />
-
-      <div class="border-t border-gray-200">
         <Spacer spacing="md" />
-        <Callout variant="info" title="Finner du ikke det du leter etter?">
-          Det hender at vi har varer som ikke ligger i nettbutikken, men vi har et bredt sortiment
-          fra alle våre leverandører. Ta kontakt med oss på hei@flis.no så hjelper vi deg videre 😊
-        </Callout>
-      </div>
-    </Container>
-  </main>
+
+        <div class="border-t border-gray-200">
+          <Spacer spacing="md" />
+          <Callout variant="info" title="Finner du ikke det du leter etter?">
+            Det hender at vi har varer som ikke ligger i nettbutikken, men vi har et bredt sortiment
+            fra alle våre leverandører. Ta kontakt med oss på hei@flis.no så hjelper vi deg videre
+            😊
+          </Callout>
+        </div>
+      </Container>
+    </main>
+  </div>
 </template>

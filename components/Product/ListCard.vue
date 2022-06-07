@@ -5,6 +5,12 @@ import { CategoryProductListVariantOutput } from '~~/@types/generated/dist'
 import breakpointData from '~~/utils/breakpoints'
 
 /***********
+ ** Route **
+ ***********/
+
+const route = useRoute()
+
+/***********
  ** Props **
  ***********/
 
@@ -97,7 +103,7 @@ const campaignFeatureFlag = ref<boolean>(false)
     @focus="showVariants = true"
     @focusout="showVariants = false"
   >
-    <NuxtLink :to="`${slug}/`">
+    <NuxtLink :to="`${route.fullPath}${slug}/`">
       <div
         class="product-card sm:h-auto sm:aspect-w-2 sm:aspect-h-3 relative w-full overflow-hidden rounded-md"
       >
