@@ -2,15 +2,6 @@
 /* eslint-disable vuejs-accessibility/media-has-caption */
 import useKitchensStore from '~~/store/kitchens'
 
-/***************
- ** Page meta **
- ***************/
-
-useHead({
-  title: 'Kjøkken',
-  meta: [{ name: 'description', content: 'En oversikt over kjøkken-serier vi fører.' }],
-})
-
 /***********
  ** Store **
  ***********/

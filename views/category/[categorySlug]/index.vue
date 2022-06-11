@@ -18,11 +18,6 @@ const metaTitle = computed(
   () => currentCategory.value.charAt(0).toUpperCase() + currentCategory.value.slice(1)
 )
 
-useHead({
-  title: `${metaTitle.value}`,
-  meta: [{ name: 'description', content: `Underkategorier innenfor ${currentCategory.value}` }],
-})
-
 /***********
  ** Store **
  ***********/
