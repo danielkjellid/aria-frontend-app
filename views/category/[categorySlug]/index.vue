@@ -77,46 +77,56 @@ const childrenLoading = computed(() => childCategories.value.length <= 0)
 </script>
 
 <template>
-  <main>
-    <Image v-if="currentCategoryLoading" loading />
-    <Image
-      v-else
-      :title="currentCategoryObj.name"
-      :loading="false"
-      :images="currentCategoryObj.images"
-    />
-    <Container>
-      <Breadcrumbs>
-        <BreadcrumbsItem to="/">FK JKE Design</BreadcrumbsItem>
-        <BreadcrumbsItem :to="`/category/${currentCategory}/`" active>
-          {{ metaTitle }}
-        </BreadcrumbsItem>
-      </Breadcrumbs>
-    </Container>
-    <CollectionList v-if="childrenLoading">
-      <CollectionListItem
-        v-for="(n, i) in 8"
-        :key="n"
-        title="Loading"
-        description="Loading..."
-        loading
-        :reverse="i % 2 == 0"
-        to="#"
-        link-label="Loading"
+  <div>
+    <Head>
+      <Title>Kjøp {{ metaTitle }}</Title>
+      <Meta name="og:type" content="website" />
+      <Meta
+        name="og:description"
+        :content="`Kjøp ${metaTitle}, og alt innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken på nett.`"
       />
-    </CollectionList>
-    <CollectionList v-else>
-      <CollectionListItem
-        v-for="(child, index) in childCategories"
-        :key="child.slug"
-        :title="child.name"
-        :description="child.description"
-        :loading="childrenLoading"
-        :images="child.listImages"
-        :reverse="index % 2 == 0"
-        :to="`/category/${currentCategory}/${child.slug}/`"
-        link-label="Se produkter"
+    </Head>
+    <main>
+      <Image v-if="currentCategoryLoading" loading />
+      <Image
+        v-else
+        :title="currentCategoryObj.name"
+        :loading="false"
+        :images="currentCategoryObj.images"
       />
-    </CollectionList>
-  </main>
+      <Container>
+        <Breadcrumbs>
+          <BreadcrumbsItem to="/">FK JKE Design</BreadcrumbsItem>
+          <BreadcrumbsItem :to="`/category/${currentCategory}/`" active>
+            {{ metaTitle }}
+          </BreadcrumbsItem>
+        </Breadcrumbs>
+      </Container>
+      <CollectionList v-if="childrenLoading">
+        <CollectionListItem
+          v-for="(n, i) in 8"
+          :key="n"
+          title="Loading"
+          description="Loading..."
+          loading
+          :reverse="i % 2 == 0"
+          to="#"
+          link-label="Loading"
+        />
+      </CollectionList>
+      <CollectionList v-else>
+        <CollectionListItem
+          v-for="(child, index) in childCategories"
+          :key="child.slug"
+          :title="child.name"
+          :description="child.description"
+          :loading="childrenLoading"
+          :images="child.listImages"
+          :reverse="index % 2 == 0"
+          :to="`/category/${currentCategory}/${child.slug}/`"
+          link-label="Se produkter"
+        />
+      </CollectionList>
+    </main>
+  </div>
 </template>

@@ -140,23 +140,21 @@ const closeMobileFilterMenu = () => {
   mobileFilterMenuActive.value = false
   document.body.classList.remove('overflow-hidden')
 }
-
-/***************
- ** Page meta **
- ***************/
-
-const metaTitle = computed(() =>
-  currentCategoryObjLoaded.value ? currentCategoryObj.value.name : undefined
-)
 </script>
 
 <template>
   <div>
     <Head>
-      <Title>Bli inspirert av {{ metaTitle }} på nett</Title>
+      <Title>
+        Kjøp {{ currentCategoryObjLoaded ? currentCategoryObj.name : 'Loading...' }} innenfor
+        {{ currentParentCategoryObjLoaded ? currentParentCategoryObj.name : 'Loading...' }} på nett
+      </Title>
+      <Meta name="og:type" content="website" />
       <Meta
-        name="description"
-        :content="`Bli inspirert av spennende produkter innenfor ${metaTitle} på nett.`"
+        name="og:description"
+        :content="`Kjøp ${
+          currentCategoryObjLoaded ? currentCategoryObj.name : 'Loading...'
+        }, og alt annet innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken på nett.`"
       />
     </Head>
     <main>

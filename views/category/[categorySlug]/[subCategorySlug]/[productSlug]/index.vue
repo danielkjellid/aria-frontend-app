@@ -183,7 +183,6 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
     <Head>
       <Title>Kjøp {{ metaTitle }} på nett</Title>
       <Meta name="og:type" content="product" />
-      <Meta name="og:url" :content="route.fullPath" />
       <Meta
         name="og:image"
         :content="product && product.images ? product.images[0].image1536x860 : ''"
