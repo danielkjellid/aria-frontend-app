@@ -38,17 +38,19 @@ const toggleFlyoutMenu = () => {
 </script>
 
 <template>
-  <div class="lg:border-0 lg:p-0 lg:m-0 lg:pb-0 flex p-2 pb-6 border-b border-gray-200">
+  <div
+    class="lg:border-0 lg:p-0 lg:m-0 lg:pb-0 flex items-center p-2 pb-6 border-b border-gray-200"
+  >
     <div class="relative flex">
       <button
         type="button"
-        class="lg:flex relative z-10 items-center hidden pt-px -mb-px text-sm font-medium transition-colors duration-200 ease-out border-b-2 border-transparent"
+        class="lg:flex focus:outline-none focus:ring-2 focus:ring-offset-2 focus:rounded-md relative z-10 items-center hidden p-1 -mb-px text-sm font-medium transition-colors duration-200 ease-out border-b-2 border-transparent"
         :class="[
           active && !renderTransparent ? 'border-brand-800' : 'border-transparent',
           active && renderTransparent ? 'border-brand-100' : 'border-transparent',
           renderTransparent
-            ? 'text-white hover:text-gray-300'
-            : 'hover:text-brand-800 text-brand-700',
+            ? 'text-white hover:text-gray-300 bg-transparent focus:ring-transparent focus:ring-offset-white'
+            : 'hover:text-brand-800 text-brand-700 bg-inherit focus:ring-offset-brand-800 focus:ring-transparent',
         ]"
         :aria-expanded="active ? 'true' : 'false'"
         @click="toggleFlyoutMenu"

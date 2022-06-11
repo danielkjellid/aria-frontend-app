@@ -20,7 +20,7 @@ defineProps<ProductDetailBlockShapesProps>()
         <div class="sm:grid-cols-6 grid grid-cols-3 gap-5 mt-6">
           <article v-for="shape in shapes" :key="shape.name" class="relative">
             <div class="text-center">
-              <div class="relative w-20 h-20 p-1 rounded-md">
+              <div class="relative w-20 h-20 p-1 mx-auto rounded-md">
                 <img :src="shape.image" alt="" class="object-cover mx-auto" />
               </div>
               <h3 class="mt-3 text-sm font-medium text-gray-900">{{ shape.name }}</h3>

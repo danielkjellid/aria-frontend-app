@@ -5,12 +5,6 @@ import { CategoryProductListVariantOutput } from '~~/@types/generated/dist'
 import breakpointData from '~~/utils/breakpoints'
 
 /***********
- ** Route **
- ***********/
-
-const route = useRoute()
-
-/***********
  ** Props **
  ***********/
 
@@ -103,7 +97,12 @@ const campaignFeatureFlag = ref<boolean>(false)
     @focus="showVariants = true"
     @focusout="showVariants = false"
   >
-    <NuxtLink :to="`${route.fullPath}${slug}/`">
+    <NuxtLink
+      :to="{
+        name: 'category-categorySlug-subCategorySlug-productSlug',
+        params: { productSlug: slug },
+      }"
+    >
       <div
         class="product-card sm:h-auto sm:aspect-w-2 sm:aspect-h-3 relative w-full overflow-hidden rounded-md"
       >
@@ -121,7 +120,7 @@ const campaignFeatureFlag = ref<boolean>(false)
           </div>
         </div>
       </div>
-      <div v-if="!showVariants" class="mt-4">
+      <div v-if="showVariants" class="mt-4">
         <div class="items-top flex justify-between text-base font-medium text-gray-900">
           <div>
             <h3 class="mr-2 truncate">{{ name }}</h3>
@@ -148,7 +147,8 @@ const campaignFeatureFlag = ref<boolean>(false)
         </div>
       </div>
       <div v-else class="mt-6">
-        <div class="flex items-center space-x-3">
+        {{ variants }}
+        <div class="flex items-center space-x-3 bg-red-500">
           <div v-for="(variant, index) in slicedVariants" :key="variant.id">
             <div
               v-if="index <= indexToShowBasedOnBreakpoint"

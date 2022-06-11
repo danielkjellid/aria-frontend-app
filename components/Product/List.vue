@@ -5,7 +5,6 @@ interface ProductListProps {
   products: CategoryProductListOutput[]
   loading?: boolean
 }
-
 defineProps<ProductListProps>()
 </script>
 

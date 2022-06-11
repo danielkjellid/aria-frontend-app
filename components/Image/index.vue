@@ -111,9 +111,9 @@ const imageObj = computed(() => {
       <!-- Defaults to a chevron bouncing up and down that navigates to content on click. -->
       <div class="absolute bottom-0 left-0 right-0 mb-8 text-center">
         <slot>
-          <button @click="onNavigateToContent">
+          <IconWrapper as="button" transparent-bg @click="onNavigateToContent">
             <ChevronDownIcon class="hover:text-gray-300 animate-bounce-slow w-12 h-12 text-white" />
-          </button>
+          </IconWrapper>
         </slot>
       </div>
     </div>

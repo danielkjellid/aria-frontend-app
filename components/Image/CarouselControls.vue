@@ -37,7 +37,7 @@ const previous = () => {
 </script>
 
 <template>
-  <div class="flex items-center justify-center">
+  <div v-if="indexRange > 1" class="flex items-center justify-center">
     <IconWrapper
       as="button"
       type="button"

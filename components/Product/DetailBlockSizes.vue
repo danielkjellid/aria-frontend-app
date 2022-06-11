@@ -18,7 +18,7 @@ defineProps<ProductDetailBlockSizesProps>()
   <div v-if="loaded">
     <div v-if="sizes && sizes.length">
       <CollapsableSection title="Størrelser oppgitt i cm">
-        <div class="sm:grid-cols-5 grid grid-cols-3 gap-5 mt-6">
+        <div class="sm:grid-cols-5 lg:grid-cols-4 xl:grid-cols-5 grid grid-cols-3 gap-5 mt-6">
           <span v-for="size in sizes" :key="size.id" class="text-sm font-medium text-gray-900">
             {{ size.name }}
           </span>

@@ -114,9 +114,9 @@ const renderBgClass = computed(() => {
                   </NuxtLink>
                 </div>
 
-                <div class="lg:flex hidden h-full">
+                <div class="lg:flex items-center hidden h-full">
                   <div class="ml-8">
-                    <div class="flex justify-center h-full space-x-8">
+                    <div class="flex items-center justify-center space-x-8">
                       <slot name="start" :is-transparent="isTransparent" />
                     </div>
                   </div>

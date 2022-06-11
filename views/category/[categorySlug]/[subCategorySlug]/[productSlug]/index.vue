@@ -6,6 +6,8 @@ import {
   ProductVariantOutput,
 } from '~~/@types/generated/dist'
 import useCategoriesStore from '~~/store/categories'
+import image80x80 from '~~/assets/images/default_80x80.jpeg'
+import image380x575 from '~~/assets/images/default_380x575.jpeg'
 
 /************
  ** Config **
@@ -109,8 +111,33 @@ const aggregateOption = (key: string) => {
   return []
 }
 
-const variants = computed(() => aggregateOption('variant'))
+const mergedVariants = computed(() => aggregateOption('variant'))
 const selectedVariant = ref<ProductVariantOutput>(null)
+
+// Replace all missing images sizes with defaults if missing.
+const variants = computed(() => {
+  const modifiedVariants: ProductVariantOutput[] = []
+  if (mergedVariants.value) {
+    mergedVariants.value.forEach((variant) => {
+      const defaultVariantObj = {
+        id: null,
+        name: null,
+        image: image80x80,
+        thumbnail: image380x575,
+        colorHex: null,
+      }
+
+      Object.keys(defaultVariantObj).forEach((key) => {
+        if (variant[key]) {
+          defaultVariantObj[key] = variant[key]
+        }
+      })
+      modifiedVariants.push(defaultVariantObj)
+    })
+  }
+
+  return modifiedVariants
+})
 
 const sizes = computed(() => aggregateOption('size'))
 const selectedSize = ref<ProductSizeOutput>(null)
@@ -240,10 +267,10 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
                         name="variant-choice"
                         :value="variant.id"
                         class="sr-only"
-                        :aria-labelledby="`variant-choice-${variants.id}-label`"
+                        :aria-labelledby="`variant-choice-${variant.id}-label`"
                         @input="selectedVariant = variant"
                       />
-                      <span :id="`variant-choice-${variants.id}-label`" class="sr-only">
+                      <span :id="`variant-choice-${variant.id}-label`" class="sr-only">
                         {{ variant.name }}
                       </span>
                       <img
@@ -298,7 +325,9 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
                         :aria-labelledby="`size-choice-${size.id}-label`"
                         @input="selectedSize = size"
                       />
-                      <span :id="`size-choice-${size.id}-label`">{{ size.name }}</span>
+                      <span :id="`size-choice-${size.id}-label`" class="shrink-0">{{
+                        size.name
+                      }}</span>
                       <span
                         class="-inset-px absolute rounded-md pointer-events-none"
                         aria-hidden="true"
@@ -350,7 +379,7 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
             <div v-if="productLoaded">
               <section v-if="product.description">
                 <h3 class="sr-only">Beskrivelse</h3>
-                <article class="space-y-5 text-sm text-gray-900" v-html="product.description" />
+                <article class="text-sm text-gray-900" v-html="product.description" />
               </section>
             </div>
             <div v-else>
