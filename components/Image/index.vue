@@ -53,27 +53,21 @@ const onNavigateToContent = () => {
  ***********/
 
 // Replace all missing image srcset sizes with defaults if missing.
-const imageObj = computed(() => {
-  const defaultImageObj: BaseHeaderImageRecord = {
-    applyFilter: false,
-    image512x512,
-    image640x275,
-    image1024x1024,
-    image1024x575,
-    image1536x860,
-    image2048x1150,
-  }
-
-  Object.keys(defaultImageObj).forEach((key) => {
-    if (props.images) {
-      if (props.images[key]) {
-        defaultImageObj[key] = props.images[key]
-      }
-    }
-  })
-
-  return defaultImageObj
-})
+const imageObj = computed(
+  () =>
+    replaceWithDefaults(
+      {
+        applyFilter: false,
+        image512x512,
+        image640x275,
+        image1024x1024,
+        image1024x575,
+        image1536x860,
+        image2048x1150,
+      },
+      props.images
+    ) as BaseHeaderImageRecord
+)
 </script>
 
 <template>

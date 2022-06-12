@@ -115,29 +115,19 @@ const mergedVariants = computed(() => aggregateOption('variant'))
 const selectedVariant = ref<ProductVariantOutput>(null)
 
 // Replace all missing images sizes with defaults if missing.
-const variants = computed(() => {
-  const modifiedVariants: ProductVariantOutput[] = []
-  if (mergedVariants.value) {
-    mergedVariants.value.forEach((variant) => {
-      const defaultVariantObj = {
+const variants = computed(
+  () =>
+    replaceWithDefaults(
+      {
         id: null,
         name: null,
         image: image80x80,
         thumbnail: image380x575,
         colorHex: null,
-      }
-
-      Object.keys(defaultVariantObj).forEach((key) => {
-        if (variant[key]) {
-          defaultVariantObj[key] = variant[key]
-        }
-      })
-      modifiedVariants.push(defaultVariantObj)
-    })
-  }
-
-  return modifiedVariants
-})
+      },
+      mergedVariants.value
+    ) as ProductVariantOutput[]
+)
 
 const sizes = computed(() => aggregateOption('size'))
 const selectedSize = ref<ProductSizeOutput>(null)
