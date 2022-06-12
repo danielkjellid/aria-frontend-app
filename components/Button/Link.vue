@@ -5,6 +5,7 @@
 
 interface LinkProps {
   as?: string
+  variant?: 'primary' | 'secondary'
 }
 
 const props = defineProps<LinkProps>()
@@ -14,13 +15,24 @@ const props = defineProps<LinkProps>()
  ***********/
 
 const elem = computed(() => (props.as ? props.as : resolveComponent('NuxtLink')))
+const variant = computed(() => (props.variant ? props.variant : 'primary'))
 </script>
 
 <template>
   <component
     :is="elem"
     v-bind="$attrs"
-    class="decoration-brand-900 underline-offset-2 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent hover:text-brand-800 inline-flex items-center flex-shrink-0 text-sm font-medium text-gray-900 rounded-sm appearance-none cursor-pointer"
+    class="underline-offset-2 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:border-transparent inline-flex items-center flex-shrink-0 text-sm font-medium rounded-sm appearance-none cursor-pointer"
+    :class="[
+      {
+        'decoration-brand-900 focus:ring-brand-800 hover:text-brand-800 text-gray-900':
+          variant === 'primary',
+      },
+      {
+        'decoration-white focus:ring-gray-200 hover:ring-gray-200 text-gray-100':
+          variant === 'secondary',
+      },
+    ]"
   >
     <slot /> →
   </component>
