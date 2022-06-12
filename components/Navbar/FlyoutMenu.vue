@@ -5,7 +5,7 @@
     <div class="lg:block top-1/2 absolute inset-0 hidden bg-white shadow" aria-hidden="true" />
 
     <div class="relative bg-white">
-      <Container as="div" :y-padding="null" class="px-0">
+      <Container :y-padding="null" class="sm:px-0 md:px-0 px-0">
         <div class="gap-y-10 lg:gap-x-8 lg:grid-cols-5 lg:pt-5 lg:pb-12 gap-x-6 grid grid-cols-1">
           <slot />
         </div>

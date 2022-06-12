@@ -6,7 +6,7 @@ import {
 } from '~~/@types/generated/dist'
 
 import { defineStore } from 'pinia'
-import { performGet } from '~~/composables/performGet'
+import performGet from '~~/composables/performGet'
 
 const useCategoriesStore = defineStore('categories', {
   state: () => ({
@@ -14,6 +14,7 @@ const useCategoriesStore = defineStore('categories', {
     parentCategories: [], // Only top level categories
     navbarCategories: [], // Categories used for navigation
     childCategories: [], // Only sub categories
+    categoryProducts: [], // Products belonging to a sub category
   }),
   actions: {
     async fetchNavbarCategories() {
@@ -37,7 +38,7 @@ const useCategoriesStore = defineStore('categories', {
         )
 
         if (childCategories.length > 0) {
-          const payload = { parentSlug: parentSlug, children: childCategories }
+          const payload = { parentSlug, children: childCategories }
 
           const index = this.childCategories.findIndex(
             (category) => category.parentSlug === parentSlug
@@ -76,13 +77,10 @@ const useCategoriesStore = defineStore('categories', {
     },
   },
   getters: {
-    getCategory: (state) => {
-      return (slug: string) => state.categories.find((category) => category.slug === slug)
-    },
-    getChildCategories: (state) => {
-      return (parentSlug: string) =>
-        state.childCategories.find((category) => category.parentSlug === parentSlug)
-    },
+    getCategory: (state) => (slug: string) =>
+      state.categories.find((category) => category.slug === slug),
+    getChildCategories: (state) => (parentSlug: string) =>
+      state.childCategories.find((category) => category.parentSlug === parentSlug),
   },
 })
 

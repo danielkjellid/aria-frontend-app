@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-param-reassign */
 import { DirectiveBinding } from 'vue'
 
 export interface ClickOutsideElement extends HTMLElement {

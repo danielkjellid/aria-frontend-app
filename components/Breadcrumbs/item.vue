@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script setup lang="ts">
-import { ChevronRightIcon } from '@heroicons/vue/solid'
+import { ChevronRightIcon } from '@heroicons/vue/solid' // eslint-disable-line
 
 /***********
  ** Props **
@@ -14,6 +14,7 @@ import { ChevronRightIcon } from '@heroicons/vue/solid'
 interface BreadcrumbsItemProps {
   as?: string
   active?: boolean
+  loading?: boolean
 }
 
 const props = defineProps<BreadcrumbsItemProps>()
@@ -22,14 +23,16 @@ const props = defineProps<BreadcrumbsItemProps>()
  ** State **
  ***********/
 
-const elem = computed(() => (props.as ? props.as : 'router-link'))
+const elem = computed(() => (props.as ? props.as : resolveComponent('NuxtLink')))
 </script>
 
 <template>
   <li>
     <div class="flex items-center">
+      <SkeletonLoader v-if="loading" width="w-24" loading />
       <component
         :is="elem"
+        v-else
         v-bind="$attrs"
         :aria-current="active ? 'page' : undefined"
         class="mr-2 text-sm font-medium"

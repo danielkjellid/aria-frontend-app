@@ -1,3 +1,4 @@
+/* eslint-disable */
 const OpenAPI = require('openapi-typescript-codegen')
 const humps = require('humps')
 const yargs = require('yargs')

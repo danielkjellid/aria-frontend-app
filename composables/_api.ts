@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { $fetch } from 'ohmyfetch'
 import { Setter } from './types'
 
 const baseURL =
-  process.env.NODE_ENV !== 'production'
-    ? 'http://127.0.0.1:8000/api/'
-    : 'https://aria-api-prod.herokuapp.com/api/'
+  process.env.NODE_ENV !== 'production' ? 'http://127.0.0.1:8000/api/' : 'https://api.flis.no/api/'
 
 export const apiService = $fetch.create({
   baseURL,
@@ -13,10 +12,10 @@ export const apiService = $fetch.create({
     Accept: 'application/json',
   },
   async onRequestError({ request, options, error }) {
-    console.log('[fetch request error]', request, error)
+    await console.log('[fetch request error]', request, error)
   },
   async onResponseError({ request, response, options }) {
-    console.log('[fetch response error]', request, response.status, response.body)
+    await console.log('[fetch response error]', request, response.status, response.body)
   },
 })
 

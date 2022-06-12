@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ShoppingBagIcon, UserCircleIcon } from '@heroicons/vue/outline'
-
 interface ActionMenuProps {
   alignment?: 'left' | 'center' | 'right'
   width?: string
@@ -11,7 +9,9 @@ interface ActionMenuProps {
   transparentBg?: boolean
 }
 
-const { transparentBg = false } = defineProps<ActionMenuProps>()
+const props = defineProps<ActionMenuProps>()
+
+const transparentBg = computed(() => (props.transparentBg ? props.transparentBg : false))
 
 const actionMenuActive = ref<boolean>(false)
 const hideActionMenu = () => {
@@ -26,7 +26,7 @@ const hideActionMenu = () => {
         as="button"
         type="button"
         class="relative"
-        :transparentBg="transparentBg"
+        :transparent-bg="transparentBg"
         aria-haspopup="true"
         :aria-expanded="actionMenuActive ? 'true' : 'false'"
         @click="actionMenuActive = true"
@@ -35,8 +35,16 @@ const hideActionMenu = () => {
       </IconWrapper>
     </div>
 
-    <TransformFade>
+    <Transition
+      enter-active-class="transition duration-100 ease-out"
+      enter-from-class="transform scale-95 opacity-0"
+      enter-to-class="transform scale-100 opacity-100"
+      leave-active-class="transition duration-75 ease-in"
+      leave-from-class="transform scale-100 opacity-100"
+      leave-to-class="transform scale-95 opacity-0"
+    >
       <div
+        v-show="actionMenuActive"
         class="ring-1 ring-black ring-opacity-5 focus:outline-none absolute mt-6 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg"
         :class="[
           {
@@ -50,10 +58,9 @@ const hideActionMenu = () => {
         aria-orientation="vertical"
         aria-labelledby="user-menu-button"
         tabindex="-1"
-        v-show="actionMenuActive"
       >
         <slot name="items" />
       </div>
-    </TransformFade>
+    </Transition>
   </div>
 </template>

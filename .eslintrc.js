@@ -28,6 +28,8 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     semi: 'off',
     'max-len': 'off',
+    'import/extensions': 'off',
+    'import/order': 'off', // handled by prettier
     'import/no-extraneous-dependencies': 'off',
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -42,10 +44,10 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-loss-of-precision': 'off',
   },
-  overrides: {
-    files: ['views/*.vue'],
+  overrides: [{
+    files: ['views/**/*.vue', 'components/**/*.vue'],
     rules: {
       'vue/multi-word-component-names': 'off'
     }
-  }
+  }]
 }

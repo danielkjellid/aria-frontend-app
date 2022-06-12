@@ -1,4 +1,6 @@
-import { setter } from './_api'
 import { Setter } from './types'
+import { setter } from './_api'
 
-export const performDelete: Setter = setter('DELETE')
+const performDelete: Setter = setter('DELETE')
+
+export default performDelete

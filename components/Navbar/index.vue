@@ -30,32 +30,28 @@ const loading = computed(() => store.navbarCategories === null)
           <ListBlock
             v-for="menuItem in store.navbarCategories"
             :key="menuItem.id"
-            labelAs="router-link"
             :to="`/category/${menuItem.slug}/`"
             :label="menuItem.name"
-            labelClass="hover:text-brand-700"
+            label-class="hover:text-brand-700"
             :loading="loading"
+            @click="flyoutActive = false"
           >
             <ListBlockItem
               v-for="childItem in menuItem.children"
               :key="childItem.slug"
-              as="router-link"
               :to="`/category/${menuItem.slug}/${childItem.slug}/`"
               :loading="loading"
               class="hover:text-brand-900"
+              @click="flyoutActive = false"
             >
               {{ childItem.name }}
             </ListBlockItem>
           </ListBlock>
         </template>
       </NavbarMenuItemFlyout>
-      <NavbarMenuItem as="router-link" to="/kitchens/" :render-transparent="isTransparent">
-        Kjøkken
-      </NavbarMenuItem>
-      <NavbarMenuItem as="router-link" to="/about-us/" :render-transparent="isTransparent">
-        Om oss
-      </NavbarMenuItem>
-      <NavbarMenuItem as="router-link" to="/contact-us/" :render-transparent="isTransparent">
+      <NavbarMenuItem to="/kitchens/" :render-transparent="isTransparent"> Kjøkken </NavbarMenuItem>
+      <NavbarMenuItem to="/about-us/" :render-transparent="isTransparent"> Om oss </NavbarMenuItem>
+      <NavbarMenuItem to="/contact-us/" :render-transparent="isTransparent">
         Kontakt
       </NavbarMenuItem>
     </template>
@@ -66,7 +62,7 @@ const loading = computed(() => store.navbarCategories === null)
           <IconWrapper
             as="button"
             type="button"
-            :transparentBg="isTransparent"
+            :transparent-bg="isTransparent"
             aria-expanded="false"
             class="relative"
           >
@@ -83,7 +79,7 @@ const loading = computed(() => store.navbarCategories === null)
         </div>
 
         <div class="relative flex">
-          <ActionMenu :transparentBg="isTransparent" alignment="right">
+          <ActionMenu :transparent-bg="isTransparent" alignment="right">
             <span class="sr-only">Your account, view account options</span>
             <UserCircleIcon
               class="w-6 h-6"
@@ -95,9 +91,9 @@ const loading = computed(() => store.navbarCategories === null)
             />
             <template #items>
               <ActionMenuSection>
-                <ActionMenuItem as="router-link" to="#">Your profile</ActionMenuItem>
-                <ActionMenuItem as="router-link" to="#">Settings</ActionMenuItem>
-                <ActionMenuItem as="router-link" to="#">Sign out</ActionMenuItem>
+                <ActionMenuItem as="NuxtLink" to="#">Your profile</ActionMenuItem>
+                <ActionMenuItem as="NuxtLink" to="#">Settings</ActionMenuItem>
+                <ActionMenuItem as="NuxtLink" to="#">Sign out</ActionMenuItem>
               </ActionMenuSection>
             </template>
           </ActionMenu>
@@ -110,7 +106,7 @@ const loading = computed(() => store.navbarCategories === null)
         <IconWrapper
           as="button"
           type="button"
-          :transparentBg="isTransparent"
+          :transparent-bg="isTransparent"
           aria-expanded="false"
           class="relative"
         >

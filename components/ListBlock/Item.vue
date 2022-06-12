@@ -9,16 +9,18 @@ an unordered list.
  ***********/
 
 interface ListBlockItemProps {
-  as?: string
   loading?: boolean
+  to?: string
 }
 
-const { as = 'div', loading = false } = defineProps<ListBlockItemProps>()
+const props = defineProps<ListBlockItemProps>()
+const elem = computed(() => (props.to ? resolveComponent('NuxtLink') : 'div'))
+const loading = computed(() => (props.loading ? props.loading : false))
 </script>
 
 <template>
   <li class="flex">
-    <component v-if="!loading" :is="as" v-bind="$attrs">
+    <component :is="elem" v-if="!loading" :to="to">
       <slot />
     </component>
     <SkeletonLoader v-else :loading="loading" :count="6" />

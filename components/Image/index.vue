@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { BaseHeaderImageRecord } from '~~/@types/generated/dist'
 import { ChevronDownIcon } from '@heroicons/vue/outline'
 import image512x512 from '~~/assets/images/default_512x512.jpeg'
 import image640x275 from '~~/assets/images/default_640x275.jpeg'
@@ -6,20 +7,6 @@ import image1024x1024 from '~~/assets/images/default_1024x1024.jpeg'
 import image1024x575 from '~~/assets/images/default_1024x575.jpeg'
 import image1536x860 from '~~/assets/images/default_1536x860.jpeg'
 import image2048x1150 from '~~/assets/images/default_2048x1150.jpeg'
-
-/*******************
- ** Generic types **
- *******************/
-
-interface ImageType {
-  applyFilter: boolean
-  image512x512: string
-  image640x275: string
-  image1024x1024: string
-  image1024x575: string
-  image1536x860: string
-  image2048x1150: string
-}
 
 /***********
  ** Props **
@@ -42,7 +29,7 @@ interface ImageProps {
    * Images to display. Uses srcset to toggle between the sizes 2048x1150,
    * 1536x860, 1024x575, 1024x1024, 640x275 and 512x512.
    */
-  images?: ImageType
+  images?: BaseHeaderImageRecord
 }
 
 const props = defineProps<ImageProps>()
@@ -65,17 +52,22 @@ const onNavigateToContent = () => {
  ** State **
  ***********/
 
-const defaultImageObj: ImageType = {
-  applyFilter: false,
-  image512x512,
-  image640x275,
-  image1024x1024,
-  image1024x575,
-  image1536x860,
-  image2048x1150,
-}
-
-const imageObj: ImageType = props.images ? props.images : defaultImageObj
+// Replace all missing image srcset sizes with defaults if missing.
+const imageObj = computed(
+  () =>
+    replaceWithDefaults(
+      {
+        applyFilter: false,
+        image512x512,
+        image640x275,
+        image1024x1024,
+        image1024x575,
+        image1536x860,
+        image2048x1150,
+      },
+      props.images
+    ) as BaseHeaderImageRecord
+)
 </script>
 
 <template>
@@ -85,8 +77,8 @@ const imageObj: ImageType = props.images ? props.images : defaultImageObj
       <div class="table-cell align-middle">
         <img
           class="absolute inset-0 object-cover w-full h-full"
-          :src="imageObj.image1536x860"
-          :alt="`Få inspirasjon og veiledning rundt ${title} hos oss, med fokus på bærekraft og ro.`"
+          :src="imageObj.image2048x1150"
+          alt=""
           :srcset="`${imageObj.image512x512} 512w,
                   ${imageObj.image640x275} 640w,
                   ${imageObj.image1024x1024} 1024w,
@@ -113,9 +105,9 @@ const imageObj: ImageType = props.images ? props.images : defaultImageObj
       <!-- Defaults to a chevron bouncing up and down that navigates to content on click. -->
       <div class="absolute bottom-0 left-0 right-0 mb-8 text-center">
         <slot>
-          <button @click="onNavigateToContent">
+          <IconWrapper as="button" transparent-bg @click="onNavigateToContent">
             <ChevronDownIcon class="hover:text-gray-300 animate-bounce-slow w-12 h-12 text-white" />
-          </button>
+          </IconWrapper>
         </slot>
       </div>
     </div>

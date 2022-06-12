@@ -1,14 +1,6 @@
 <script setup lang="ts">
+/* eslint-disable vuejs-accessibility/media-has-caption */
 import useKitchensStore from '~~/store/kitchens'
-
-/***************
- ** Page meta **
- ***************/
-
-useHead({
-  title: 'Kjøkken',
-  meta: [{ name: 'description', content: 'En oversikt over kjøkken-serier vi fører.' }],
-})
 
 /***********
  ** Store **
@@ -60,82 +52,92 @@ const kitchenImages = {
 </script>
 
 <template>
-  <main>
-    <Image title="Kjøkken" :images="kitchenImages" />
-    <Container>
-      <Breadcrumbs>
-        <BreadcrumbsItem to="/">FK JKE Design</BreadcrumbsItem>
-        <BreadcrumbsItem to="/kitchens/" active>Kjøkken</BreadcrumbsItem>
-      </Breadcrumbs>
-    </Container>
-    <Container>
-      <div class="bg-gray-50 relative w-full">
-        <div class="sm:h-72 md:absolute md:right-0 md:h-full md:w-1/2 md:top-0 z-10 h-56">
-          <video
-            controls
-            height="2000"
-            src="https://flishuset.s3.eu-north-1.amazonaws.com/media/kitchens/videos/JKE-Design-production.mp4"
-            class="z-25 object-cover w-full h-full"
-          >
-            Sorry, your browser doesn't support embedded videos, but don't worry, you can
-            <a
-              href="https://flishuset.s3.eu-north-1.amazonaws.com/media/kitchens/videos/JKE-Design-production.mp4"
-              >download it</a
+  <div>
+    <Head>
+      <Title>Kjøp kjøkken på nett</Title>
+      <Meta
+        name="og:description"
+        content="Bli inspirert av kjøkken, og alt annet innenfor fliser, baderomsinnredning og tilbehør til bad på nett."
+      />
+      <Meta name="og:type" content="website" />
+    </Head>
+    <main>
+      <Image title="Kjøkken" :images="kitchenImages" />
+      <Container>
+        <Breadcrumbs>
+          <BreadcrumbsItem to="/">FK JKE Design</BreadcrumbsItem>
+          <BreadcrumbsItem to="/kitchens/" active>Kjøkken</BreadcrumbsItem>
+        </Breadcrumbs>
+      </Container>
+      <Container>
+        <div class="bg-gray-50 relative w-full">
+          <div class="sm:h-72 md:absolute md:right-0 md:h-full md:w-1/2 md:top-0 z-10 h-56">
+            <video
+              controls
+              height="2000"
+              src="https://flishuset.s3.eu-north-1.amazonaws.com/media/kitchens/videos/JKE-Design-production.mp4"
+              class="z-25 object-cover w-full h-full"
             >
-            and watch it with your favorite video player!
-          </video>
-        </div>
-        <div class="sm:px-6 lg:px-8 xl:px-20 lg:py-16 relative px-4 py-12 mx-auto">
-          <div class="md:mr-auto md:w-1/2 md:pr-10 max-w-prose">
-            <h2 class="text-base font-semibold tracking-wider text-gray-500 uppercase">
-              Stilrene nordiske kjøkken
-            </h2>
-            <p class="sm:text-4xl mt-2 text-3xl font-extrabold tracking-tight text-gray-900">
-              En verden av muligheter, skreddersydd for deg.
-            </p>
-            <p class="mt-3 text-lg text-gray-600">
-              Vi er stolte samarbeidspartnere med Kjøkkenhuset Lillestrøm, som tilbyr et hav av
-              mulige løsninger fra JKE Design, skreddersydd dine behov.
-            </p>
-            <div class="mt-2">
-              <Button
-                as="a"
-                href="https://jke-design.com/no/booking/velg-tidspunkt/?sId=2784"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="mt-8"
+              Sorry, your browser doesn't support embedded videos, but don't worry, you can
+              <a
+                href="https://flishuset.s3.eu-north-1.amazonaws.com/media/kitchens/videos/JKE-Design-production.mp4"
+                >download it</a
               >
-                Bestill tegnetime hos oss i dag!
-              </Button>
+              and watch it with your favorite video player!
+            </video>
+          </div>
+          <div class="sm:px-6 lg:px-8 xl:px-20 lg:py-16 relative px-4 py-12 mx-auto">
+            <div class="md:mr-auto md:w-1/2 md:pr-10 max-w-prose">
+              <h2 class="text-base font-semibold tracking-wider text-gray-500 uppercase">
+                Stilrene nordiske kjøkken
+              </h2>
+              <p class="sm:text-4xl mt-2 text-3xl font-extrabold tracking-tight text-gray-900">
+                En verden av muligheter, skreddersydd for deg.
+              </p>
+              <p class="mt-3 text-lg text-gray-600">
+                Vi er stolte samarbeidspartnere med Kjøkkenhuset Lillestrøm, som tilbyr et hav av
+                mulige løsninger fra JKE Design, skreddersydd dine behov.
+              </p>
+              <div class="mt-2">
+                <Button
+                  as="a"
+                  href="https://jke-design.com/no/booking/velg-tidspunkt/?sId=2784"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mt-8"
+                >
+                  Bestill tegnetime hos oss i dag!
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Container>
-    <CollectionList v-if="loading">
-      <CollectionListItem
-        v-for="(n, i) in 8"
-        :key="n"
-        title="Loading"
-        description="Loading..."
-        loading
-        :reverse="i % 2 == 0"
-        to="#"
-        linkLabel="Loading"
-      />
-    </CollectionList>
-    <CollectionList v-else>
-      <CollectionListItem
-        v-for="(kitchen, index) in kitchens"
-        :key="kitchen.slug"
-        :title="kitchen.name"
-        :description="kitchen.thumbnailDescription"
-        :loading="loading"
-        :images="kitchen.listImages"
-        :reverse="index % 2 == 0"
-        :to="`/kitchens/${kitchen.slug}/`"
-        linkLabel="Les mer"
-      />
-    </CollectionList>
-  </main>
+      </Container>
+      <CollectionList v-if="loading">
+        <CollectionListItem
+          v-for="(n, i) in 8"
+          :key="n"
+          title="Loading"
+          description="Loading..."
+          loading
+          :reverse="i % 2 == 0"
+          to="#"
+          link-label="Loading"
+        />
+      </CollectionList>
+      <CollectionList v-else>
+        <CollectionListItem
+          v-for="(kitchen, index) in kitchens"
+          :key="kitchen.slug"
+          :title="kitchen.name"
+          :description="kitchen.thumbnailDescription"
+          :loading="loading"
+          :images="kitchen.listImages"
+          :reverse="index % 2 == 0"
+          :to="`/kitchens/${kitchen.slug}/`"
+          link-label="Les mer"
+        />
+      </CollectionList>
+    </main>
+  </div>
 </template>

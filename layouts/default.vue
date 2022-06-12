@@ -1,31 +1,39 @@
 <script setup lang="ts">
-const config = useRuntimeConfig().public
+const route = useRoute()
 
-const isDevEnvironment = computed(() => {
-  if (process.env.NODE_ENV !== 'production') return true
-
-  return false
-})
+const metaDescription = ref(
+  'FK-JKE Design er en totalleverandør av markedes mest spennende utvalg innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken fra noen av verdens mest spennende produsenter.'
+)
 </script>
 
 <template>
-  <div class="content relative min-h-screen">
-    <!-- <div
-      v-if="isDevEnvironment"
-      class="dev-env-warning absolute top-0 left-0 right-0 z-50 py-1 text-center"
-    >
-      <span class="z-50 text-sm font-semibold text-yellow-900">Development environment</span>
-    </div> -->
-    <div class="relative min-h-screen">
-      <Navbar />
-      <slot class="relative" />
+  <div>
+    <Head>
+      <Meta charset="utf-8" />
+      <Meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <Meta name="description" hid="description" :content="metaDescription" />
+      <Meta name="format-detection" content="telephone=no" />
+      <Meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+      <Meta name="twitter:card" content="summary" />
+      <Meta
+        name="twitter:title"
+        content="FK-JKE Design: Din totalleverandør av fliser, kjøkken og baderomsinnredning!"
+      />
+      <Meta name="twitter:description" :content="metaDescription" />
+      <Meta
+        name="twitter:image"
+        content="https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/eternity.jpeg"
+      />
+      <Meta name="og:site_name" content="FK-JKE Design" />
+      <Meta name="og:locale" content="no_NO" />
+      <Meta name="og:url" :content="route.fullPath" />
+    </Head>
+    <div class="content relative min-h-screen">
+      <div class="relative min-h-screen">
+        <Navbar />
+        <slot class="relative" />
+      </div>
+      <Footer />
     </div>
-    <Footer />
   </div>
 </template>
-
-<style scoped>
-.dev-env-warning {
-  background: repeating-linear-gradient(45deg, #fbbf24, #fbbf24 10px, #f59e0b 10px, #f59e0b 20px);
-}
-</style>

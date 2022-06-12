@@ -3,8 +3,8 @@
   "scripts": {
     "prettier:check": "prettier --check \"**/*.{js,ts,tsx,vue,css,json,md}\"",
     "prettier:fix": "prettier --write \"**/*.{js,ts,tsx,css,vue,json,md}\"",
-    "eslint:check": "eslint --ext vue,ts,js **/*",
-    "eslint:fix": "eslint --ext vue,ts,js **/* --fix",
+    "eslint:check": "eslint --ext vue,ts,js .",
+    "eslint:fix": "eslint --ext vue,ts,js . --fix",
     "lint": "npm run prettier:check && npm run eslint:check",
     "lint:fix": "npm run prettier:fix && npm run eslint:fix",
     "openapi:generate": "node ./utils/generateAPITypes.js",
@@ -16,22 +16,23 @@
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
-    "@nuxtjs/tailwindcss": "^5.1.2",
     "@tailwindcss/forms": "^0.5.2",
     "@typescript-eslint/eslint-plugin": "^5.26.0",
     "@vue/eslint-config-airbnb": "^6.0.0",
+    "autoprefixer": "^10.4.7",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-vue": "^9.0.1",
-    "nuxt": "3.0.0-rc.3",
+    "nuxt": "^3.0.0-rc.3",
     "openapi-typescript-codegen": "^0.22.0",
+    "postcss": "^8.4.14",
     "prettier": "^2.6.2",
+    "tailwindcss": "^3.0.24",
     "typescript": "^4.7.2"
   },
   "dependencies": {
     "@heroicons/vue": "^1.0.6",
     "@pinia/nuxt": "^0.1.9",
-    "aria-ui-nuxt": "^1.1.14",
     "humps": "^2.0.1",
     "pinia": "^2.0.14"
   }
