@@ -28,12 +28,16 @@ export default defineNuxtConfig({
     pages: 'views',
   },
 
-  css: ['~/assets/css/tailwind.css'],
+  css: [
+    '~/assets/css/tailwind.css',
+    '~/assets/css/calendar.css',
+    '@vuepic/vue-datepicker/dist/main.css',
+  ],
 
   buildModules: ['@pinia/nuxt'],
 
   build: {
-    transpile: ['@heroicons/vue'],
+    transpile: ['@heroicons/vue', 'luxon'],
     postcss: {
       postcssOptions: {
         plugins: {
