@@ -24,7 +24,7 @@ interface DateObjType {
   isoWeeknumber: number
   month: number
   year: number
-  date: string
+  date: Date
   isToday: boolean
   isFirstDay: boolean
   isLastDay: boolean
@@ -54,6 +54,7 @@ interface CalendarDatePickerEmits {
 const emits = defineEmits<CalendarDatePickerEmits>()
 
 const date = ref(new Date())
+const today = new Date()
 
 const maxDate = DateTime.now().plus({ months: 2 }).toISO()
 
@@ -68,6 +69,7 @@ const onSelect = (dateObj: DateObjType) => {
       <DatePicker
         v-model="date"
         locale="no"
+        :min-date="today"
         :max-date="maxDate"
         @dayclick="(dateObj) => onSelect(dateObj)"
       >
