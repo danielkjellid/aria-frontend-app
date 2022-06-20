@@ -64,7 +64,7 @@ const onSelect = (dateObj: DateObjType) => {
 </script>
 
 <template>
-  <div class="block max-w-md">
+  <div class="block">
     <ClientOnly>
       <DatePicker
         v-model="date"

@@ -6,7 +6,7 @@ interface CalendarProps {
   isBookable: boolean
   bookableHourStart: number
   bookableHourEnd: number
-  isCompact: boolean
+  isCompact?: boolean
 }
 
 const props = defineProps<CalendarProps>()
@@ -34,9 +34,14 @@ const selectedDateToLuxon = computed(() =>
 </script>
 
 <template>
-  <div class="flex flex-col border border-gray-200 rounded-lg">
+  <div class="flex flex-col" :class="{ 'border border-gray-200 rounded-lg': !isCompact }">
     <header
-      class="bg-gray-50 relative z-20 flex items-center justify-between flex-none px-6 py-4 border-b border-gray-200 rounded-tl-lg rounded-tr-lg"
+      class="bg-gray-50 relative z-20 flex items-center justify-between flex-none"
+      :class="
+        isCompact
+          ? 'hidden'
+          : 'block px-6 py-4 border-b border-gray-200 rounded-tl-lg rounded-tr-lg'
+      "
     >
       <div>
         <h1 class="text-lg font-semibold leading-6 text-gray-900">
@@ -52,19 +57,23 @@ const selectedDateToLuxon = computed(() =>
         </p>
       </div>
     </header>
-    <div class="flex flex-auto overflow-hidden bg-white rounded-bl-lg rounded-br-lg">
-      <div class="flex flex-col flex-auto overflow-auto">
+    <div
+      :class="isCompact ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-3'"
+      class="grid overflow-hidden bg-white rounded-bl-lg rounded-br-lg"
+    >
+      <div class="md:col-span-2 flex flex-col order-2 overflow-auto">
         <div
-          class="ring-1 ring-black ring-opacity-5 top-0 z-10 flex-none p-6 text-xs text-gray-500 bg-white shadow"
-          :class="isCompact ? 'sticky' : 'md:hidden sticky'"
+          class="flex flex-auto w-full"
+          :class="
+            isCompact
+              ? 'border border-gray-200 rounded-lg mt-4'
+              : 'border-t border-gray-200 md:border-0'
+          "
         >
-          <CalendarDatePicker
-            :disabled-dates="[]"
-            @select="(dateObj) => (selectedDate = dateObj.date)"
-          />
-        </div>
-        <div class="flex flex-auto w-full">
-          <div class="w-14 ring-1 ring-gray-100 flex-none bg-white"></div>
+          <div
+            class="w-14 ring-1 ring-gray-200 flex-none bg-white"
+            :class="isCompact ? 'rounded-bl-lg rounded-tl-lg' : ''"
+          ></div>
           <div class="grid flex-auto grid-cols-1 grid-rows-1">
             <!-- Horizontal lines -->
             <div
@@ -91,49 +100,53 @@ const selectedDateToLuxon = computed(() =>
             >
               <CalendarAppointmentItem
                 :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-16T10:00:00"
-                appointment-end="2022-06-16T11:00:00"
+                appointment-start="2022-06-17T10:00:00"
+                appointment-end="2022-06-17T11:00:00"
               />
               <CalendarAppointmentItem
                 :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-16T11:00:00"
-                appointment-end="2022-06-16T12:00:00"
-              />
-              <CalendarAppointmentItem
-                is-booked
-                :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-16T12:00:00"
-                appointment-end="2022-06-16T13:00:00"
-              />
-              <CalendarAppointmentItem
-                :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-16T13:00:00"
-                appointment-end="2022-06-16T14:00:00"
-              />
-              <CalendarAppointmentItem
-                :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-16T14:00:00"
-                appointment-end="2022-06-16T15:00:00"
+                appointment-start="2022-06-17T11:00:00"
+                appointment-end="2022-06-17T12:00:00"
               />
               <CalendarAppointmentItem
                 is-booked
                 :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-16T15:00:00"
-                appointment-end="2022-06-16T16:00:00"
+                appointment-start="2022-06-17T12:00:00"
+                appointment-end="2022-06-17T13:00:00"
+              />
+              <CalendarAppointmentItem
+                :calendar-bookable-start-time="bookableIntervalStart"
+                appointment-start="2022-06-17T13:00:00"
+                appointment-end="2022-06-17T14:00:00"
+              />
+              <CalendarAppointmentItem
+                :calendar-bookable-start-time="bookableIntervalStart"
+                appointment-start="2022-06-17T14:00:00"
+                appointment-end="2022-06-17T15:00:00"
               />
               <CalendarAppointmentItem
                 is-booked
                 :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-16T16:00:00"
-                appointment-end="2022-06-16T17:00:00"
+                appointment-start="2022-06-17T15:00:00"
+                appointment-end="2022-06-17T16:00:00"
+              />
+              <CalendarAppointmentItem
+                is-booked
+                :calendar-bookable-start-time="bookableIntervalStart"
+                appointment-start="2022-06-17T16:00:00"
+                appointment-end="2022-06-17T17:00:00"
               />
             </ol>
           </div>
         </div>
       </div>
       <div
-        class="flex-none w-1/2 max-w-md px-8 py-6 border-l border-gray-100"
-        :class="isCompact ? 'hidden' : 'hidden md:block'"
+        class="col-span-1"
+        :class="
+          isCompact
+            ? 'block order-1 px-px'
+            : 'md:order-2 px-8 py-6 order-1 border-l border-gray-100'
+        "
       >
         <CalendarDatePicker
           :disabled-dates="[]"
