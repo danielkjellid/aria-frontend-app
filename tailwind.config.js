@@ -9,7 +9,7 @@ module.exports = {
     'app.vue',
     'error.vue',
   ],
-  safelist: ['grid', 'grid-cols-4'],
+  safelist: ['grid', 'grid-cols-4', 'fuck'],
   theme: {
     extend: {
       colors: {

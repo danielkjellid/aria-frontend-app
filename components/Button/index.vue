@@ -35,11 +35,8 @@ const variant = computed(() => (props.variant ? props.variant : 'primary'))
 const alignSelf = computed(() => (props.alignSelf ? props.alignSelf : 'center'))
 
 const elem = computed(() => {
-  if (props.to) {
-    if (props.as) return resolveComponent(props.as)
-
-    return resolveComponent('NuxtLink')
-  }
+  if (props.as) return props.as
+  if (props.to) return resolveComponent('NuxtLink')
 
   return 'button'
 })

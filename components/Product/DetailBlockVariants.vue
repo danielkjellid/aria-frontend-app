@@ -19,11 +19,14 @@ interface VariantType {
  ***********/
 
 interface ProductDetailBlockVariantsProps {
+  title?: string
   loaded: boolean
   variants: VariantType[]
 }
 
-defineProps<ProductDetailBlockVariantsProps>()
+const props = defineProps<ProductDetailBlockVariantsProps>()
+
+const title = computed(() => (props.title ? props.title : 'Varianter'))
 
 /***********
  ** State **
@@ -84,7 +87,7 @@ const closeModal = () => {
             >
               <div
                 v-if="selectedVariant && selectedVariant.colorHex"
-                :style="`background-color: ${selectedVariant.colorHex} width: 380px; height: 575px;`"
+                :style="`background-color: ${selectedVariant.colorHex}; height: 505px; width: 380px;`"
               />
               <img
                 v-else-if="selectedVariant && selectedVariant.thumbnail"
@@ -108,7 +111,7 @@ const closeModal = () => {
     </div>
 
     <div v-if="variants && variants.length">
-      <CollapsableSection title="Varianter">
+      <CollapsableSection :title="title">
         <div class="sm:grid-cols-5 md:grid-cols-6 grid grid-cols-3 gap-5 mt-6">
           <article v-for="variant in variants" :key="variant.name" class="group relative">
             <div class="group-hover:opacity-80 text-center">
