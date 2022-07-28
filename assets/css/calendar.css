@@ -109,7 +109,7 @@
 }
 
 .vc-day.is-today .vc-highlight {
-  background-color: #2563EB !important;
+  background-color: #2563eb !important;
 }
 
 .vc-day.is-not-in-month * {
@@ -121,7 +121,7 @@
 }
 
 .vc-day.is-today * {
-  color: #2563EB;
+  color: #2563eb;
   font-weight: 700;
 }
 
@@ -218,7 +218,6 @@
   cursor: pointer;
   width: 100%;
   box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px) rgb(229 231 235);
-
 }
 .vc-day-content:hover {
   background-color: #ccd6e04d;
