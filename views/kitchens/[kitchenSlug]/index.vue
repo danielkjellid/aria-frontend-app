@@ -65,13 +65,46 @@ const metaTitle = computed(() => (kitchenLoaded.value ? kitchen.value.name : und
               </Text>
               <SkeletonLoader v-else loading width="w-60" height="h-10" />
             </div>
-            <Calendar
+            <div v-if="kitchenLoaded">
+              <Text variant="body2">
+                Hos oss finner du kjøkken, bad, garderobe, lamper, og italienske fliser under samme
+                tak.
+              </Text>
+              <Text class="mt-2" variant="body2">
+                Du får profesjonell veiledning og god hjelp gjennom hele prosessen fra idéfasen frem
+                til ferdigstilling av prosjektet.
+              </Text>
+              <Text class="mt-2" variant="body2">
+                Bestill ett gratis møte til en uforpliktende samtale om hvordan vi kan gjøre
+                hverdagen din lettere.
+              </Text>
+              <Button
+                as="a"
+                href="https://jke-design.com/no/booking/velg-tidspunkt/?sId=2784"
+                target="_blank"
+                rel="noopener norefferer"
+                class="mt-5"
+                fluid
+                >Bestill en uforpliktende tegnetime</Button
+              >
+            </div>
+            <div v-else>
+              <SkeletonLoader loading />
+              <SkeletonLoader loading width="w-2/3" />
+              <SkeletonLoader loading class="mt-2" />
+              <SkeletonLoader loading width="w-2/3" />
+              <SkeletonLoader loading width="w-4/5" />
+              <SkeletonLoader loading class="mt-2" />
+              <SkeletonLoader loading width="w-2/3" />
+              <SkeletonLoader loading class="mt-5" height="h-10" />
+            </div>
+            <!-- <Calendar
               allow-detail-expand
               is-bookable
               :bookable-hour-start="10"
               :bookable-hour-end="17"
               is-compact
-            />
+            /> -->
           </div>
           <div
             class="lg:pb-16 lg:col-start-1 xl:col-span-3 lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8 order-1 pb-10"
@@ -85,16 +118,12 @@ const metaTitle = computed(() => (kitchenLoaded.value ? kitchen.value.name : und
                   <article class="text-sm text-gray-900" v-html="kitchen.description" />
                   <div v-if="kitchen.exampleFromPrice" class="mt-8">
                     <div class="bg-gray-50 rounded-md">
-                      <div class="xl:grid-cols-2 grid grid-cols-1">
+                      <div class="sm:grid-cols-2 grid grid-cols-1">
                         <div>
                           <img
-                            class="example-image-container rounded-tr-md rounded-tl-md xl:rounded-tr-none xl:rounded-l-md object-cover"
+                            class="rounded-tr-md rounded-tl-md sm:rounded-tr-none sm:rounded-l-md h-64"
                             src="https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/example/example_550x300.jpg"
                             alt="Image of example set up"
-                            srcset="
-                              https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/example/example_460x250.jpg 460w,
-                              https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/example/example_550x300.jpg 550w
-                            "
                           />
                         </div>
                         <div class="sm:px-6 xl:px-8 px-5 py-6">
@@ -160,28 +189,3 @@ const metaTitle = computed(() => (kitchenLoaded.value ? kitchen.value.name : und
     </main>
   </div>
 </template>
-
-<style scoped>
-.example-image-container {
-  height: 200px;
-  width: 100%;
-}
-
-@media (min-width: 640px) {
-  .example-image-container {
-    height: 250px;
-  }
-}
-
-@media (min-width: 768px) {
-  .example-image-container {
-    height: 300px;
-  }
-}
-
-@media (min-width: 1280px) {
-  .example-image-container {
-    height: 250px;
-  }
-}
-</style>

@@ -24,11 +24,10 @@ const bookableStartDiff = computed(
 
 <template>
   <li
-    class="relative flex mt-px"
+    class="relative flex mt-px cursor-pointer"
     :style="`grid-row: ${2 + bookableStartDiff * 12} / span ${appointmentRowSpan}`"
   >
-    <a
-      href="#"
+    <div
       class="group inset-1 absolute flex flex-col p-2 overflow-y-auto text-xs leading-5 rounded-lg"
       :class="
         isBooked
@@ -61,7 +60,7 @@ const bookableStartDiff = computed(
           {{ appointmentEndToLuxon.toFormat('HH:mm') }}
         </time>
       </p>
-    </a>
+    </div>
     <span
       v-if="isBooked"
       aria-hidden="true"

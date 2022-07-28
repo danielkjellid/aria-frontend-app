@@ -36,7 +36,7 @@ const variant = computed(() => (props.variant ? props.variant : 'danger'))
 
 <template>
   <div
-    class="bg-red-50 p-4 rounded-md"
+    class="p-4 rounded-md"
     :class="{
       'bg-red-50': variant === 'danger',
       'bg-yellow-50': variant === 'warning',

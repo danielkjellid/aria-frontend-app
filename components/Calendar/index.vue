@@ -100,41 +100,41 @@ const selectedDateToLuxon = computed(() =>
             >
               <CalendarAppointmentItem
                 :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-17T10:00:00"
-                appointment-end="2022-06-17T11:00:00"
+                appointment-start="2022-06-20T10:00:00"
+                appointment-end="2022-06-20T11:00:00"
               />
               <CalendarAppointmentItem
                 :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-17T11:00:00"
-                appointment-end="2022-06-17T12:00:00"
-              />
-              <CalendarAppointmentItem
-                is-booked
-                :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-17T12:00:00"
-                appointment-end="2022-06-17T13:00:00"
-              />
-              <CalendarAppointmentItem
-                :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-17T13:00:00"
-                appointment-end="2022-06-17T14:00:00"
-              />
-              <CalendarAppointmentItem
-                :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-17T14:00:00"
-                appointment-end="2022-06-17T15:00:00"
+                appointment-start="2022-06-20T11:00:00"
+                appointment-end="2022-06-20T12:00:00"
               />
               <CalendarAppointmentItem
                 is-booked
                 :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-17T15:00:00"
-                appointment-end="2022-06-17T16:00:00"
+                appointment-start="2022-06-20T12:00:00"
+                appointment-end="2022-06-20T13:00:00"
+              />
+              <CalendarAppointmentItem
+                :calendar-bookable-start-time="bookableIntervalStart"
+                appointment-start="2022-06-20T13:00:00"
+                appointment-end="2022-06-20T14:00:00"
+              />
+              <CalendarAppointmentItem
+                :calendar-bookable-start-time="bookableIntervalStart"
+                appointment-start="2022-06-20T14:00:00"
+                appointment-end="2022-06-20T15:00:00"
               />
               <CalendarAppointmentItem
                 is-booked
                 :calendar-bookable-start-time="bookableIntervalStart"
-                appointment-start="2022-06-17T16:00:00"
-                appointment-end="2022-06-17T17:00:00"
+                appointment-start="2022-06-20T15:00:00"
+                appointment-end="2022-06-20T16:00:00"
+              />
+              <CalendarAppointmentItem
+                is-booked
+                :calendar-bookable-start-time="bookableIntervalStart"
+                appointment-start="2022-06-20T16:00:00"
+                appointment-end="2022-06-20T17:00:00"
               />
             </ol>
           </div>

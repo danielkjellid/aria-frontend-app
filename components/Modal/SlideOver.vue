@@ -40,7 +40,7 @@ const onClose = () => {
   <div class="relative z-50" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
     <ModalBackDrop :active="active" @close="onClose" />
     <div class="absolute inset-0 overflow-hidden">
-      <div class="fixed inset-y-0 right-0 flex max-w-full">
+      <div class="fixed inset-y-0 right-0 z-40 flex max-w-full">
         <Transition
           enter-active-class="sm:duration-700 transition duration-500 ease-in-out transform"
           enter-from-class="translate-x-full"
