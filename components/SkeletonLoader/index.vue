@@ -45,6 +45,7 @@ const loaderShape = props.shape ? props.shape : 'square'
   >
     <div
       v-for="i in loaderCount"
+      v-bind="$attrs"
       :key="i"
       class="skeleton animate-loading w-full h-full"
       :class="[

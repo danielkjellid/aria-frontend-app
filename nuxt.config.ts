@@ -4,6 +4,8 @@ import { defineNuxtConfig } from 'nuxt'
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
+      SITE_ID: process.env.SITE_ID,
+
       BASE_URL: process.env.BASE_URL,
       BRAND_NAME: process.env.BRAND_NAME,
       LEGAL_NAME: process.env.LEGAL_NAME,
