@@ -116,26 +116,26 @@ fetchSupplierList()
               <div class="flex flex-row items-start gap-2">
                 <ClockIcon class="w-6 h-6 text-gray-500" />
                 <div>
-                  <table class="w">
+                  <table class="w-full">
                     <tr class="sr-only">
                       <th>Dager</th>
                       <th>Åpningstider</th>
                     </tr>
-                    <template v-if="openingHoursLoaded">
-                      <tr
-                        v-for="openingHour in openingHours.humanReadableTimeSlots"
-                        :key="openingHour.days"
-                      >
-                        <td class="w-40">
-                          <Text variant="body2" color="text-gray-600">{{ openingHour.days }}</Text>
-                        </td>
-                        <td class="text-right">
-                          <Text variant="body2" color="text-gray-600">{{
-                            !openingHour.isClosed ? openingHour.timeSlot : 'Stengt'
-                          }}</Text>
-                        </td>
-                      </tr>
-                    </template>
+                    <tr
+                      v-for="openingHour in openingHours.humanReadableTimeSlots"
+                      :key="openingHour.days"
+                    >
+                      <td class="w-40">
+                        <Text as="span" variant="body2" color="text-gray-600">
+                          {{ openingHour.days }}
+                        </Text>
+                      </td>
+                      <td class="text-right">
+                        <Text as="span" variant="body2" color="text-gray-600">
+                          {{ !openingHour.isClosed ? openingHour.timeSlot : 'Stengt' }}
+                        </Text>
+                      </td>
+                    </tr>
                   </table>
                 </div>
               </div>
@@ -161,7 +161,6 @@ fetchSupplierList()
             />
           </div>
         </section>
-
         <section
           v-else
           class="md:grid-cols-2 lg:gap-12 lg:px-0 grid grid-cols-1 gap-8 px-4 mx-auto"
