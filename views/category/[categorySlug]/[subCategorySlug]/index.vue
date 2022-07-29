@@ -74,11 +74,9 @@ const categoryProductsLoading = computed(() => !products.value)
 const fetchedProducts = ref<CategoryProductListOutput[]>(null)
 
 const fetchProducts = async () => {
-  const res = await performGet<CategoryProductListOutput[]>(
+  fetchedProducts.value = await performGet<CategoryProductListOutput[]>(
     `categories/category/${currentCategorySlug.value}/products/`
   )
-  console.log(res)
-  fetchedProducts.value = res
 }
 
 fetchProducts()

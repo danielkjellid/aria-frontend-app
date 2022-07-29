@@ -115,7 +115,7 @@ fetchSupplierList()
             <div class="mt-6 space-y-4">
               <div class="flex flex-row items-start gap-2">
                 <ClockIcon class="w-6 h-6 text-gray-500" />
-                <div>
+                <div class="-mt-1">
                   <table class="w-full">
                     <tr class="sr-only">
                       <th>Dager</th>
