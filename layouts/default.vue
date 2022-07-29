@@ -27,6 +27,9 @@ const metaDescription = ref(
       <Meta name="og:site_name" content="FK-JKE Design" />
       <Meta name="og:locale" content="no_NO" />
       <Meta name="og:url" :content="route.fullPath" />
+
+      <Script src="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js" />
+      <Link href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css" rel="stylesheet" />
     </Head>
     <div class="content relative min-h-screen">
       <div class="relative min-h-screen">

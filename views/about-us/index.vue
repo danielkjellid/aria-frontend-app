@@ -69,14 +69,8 @@ fetchSupplierList()
     </Head>
     <main>
       <section>
-        <article class="map-container relative overflow-hidden">
-          <iframe
-            width="100%"
-            height="100%"
-            src="https://api.mapbox.com/styles/v1/dexento/cjujsu10w07p81fnz7vcdjvg3.html?title=false&access_token=pk.eyJ1IjoiZGV4ZW50byIsImEiOiJjanR4NTljcG4wNDlnNGNyM2duNms3cXo4In0.q4G3Zzgf1zQ8MQFZzwMPQA&zoomwheel=false#16.07/59.963386/11.064797"
-            title="Mapbox Basic Template"
-            style="border: none"
-          ></iframe>
+        <article class="relative overflow-hidden">
+          <MapboxMap />
         </article>
       </section>
       <Container>
