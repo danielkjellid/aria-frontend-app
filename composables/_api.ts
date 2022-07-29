@@ -3,7 +3,9 @@ import { $fetch } from 'ohmyfetch'
 import { Setter } from './types'
 
 const baseURL =
-  process.env.NODE_ENV !== 'production' ? 'http://127.0.0.1:8000/api/' : 'https://api.flis.no/api/'
+  process.env.NODE_ENV !== 'production'
+    ? 'http://127.0.0.1:8000/api/'
+    : 'https://api.staging.flis.no/api/'
 
 export const apiService = $fetch.create({
   baseURL,
