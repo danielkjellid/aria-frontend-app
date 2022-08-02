@@ -49,10 +49,13 @@ const loading = computed(() => store.navbarCategories === null)
           </ListBlock>
         </template>
       </NavbarMenuItemFlyout>
-      <NavbarMenuItem to="/kitchens/" :render-transparent="isTransparent"> Kjøkken </NavbarMenuItem>
-      <NavbarMenuItem to="/about-us/" :render-transparent="isTransparent"> Om oss </NavbarMenuItem>
+      <NavbarMenuItem to="/kitchens/" :render-transparent="isTransparent">Kjøkken</NavbarMenuItem>
+      <NavbarMenuItem to="/about-us/" :render-transparent="isTransparent">Om oss</NavbarMenuItem>
       <NavbarMenuItem to="/contact-us/" :render-transparent="isTransparent">
         Kontakt
+      </NavbarMenuItem>
+      <NavbarMenuItem to="/products/discounts/" :render-transparent="isTransparent">
+        På tilbud
       </NavbarMenuItem>
     </template>
 

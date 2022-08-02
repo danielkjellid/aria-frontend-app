@@ -30,7 +30,7 @@ const props = defineProps<ContainerProps>()
  ** State **
  ***********/
 
-const elem = props.as ? props.as : 'div'
+const elem = computed(() => (props.as ? props.as : 'div'))
 </script>
 
 <template>
