@@ -249,7 +249,7 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
         </Breadcrumbs>
 
         <Spacer spacing="md" />
-        <p>Test {{ foundCategories }}</p>
+
         <div
           class="mx-auto lg:grid lg:grid-cols-3 xl:grid-cols-5 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8"
         >

@@ -29,17 +29,23 @@ const props = defineProps<ProductListCardProps>()
 const route = useRoute()
 
 const currentParentCategorySlug = computed(() => {
-  if (typeof route.params.categorySlug === 'string') {
-    return route.params.categorySlug
+  if (route.params.categorySlug) {
+    if (typeof route.params.categorySlug === 'string') {
+      return route.params.categorySlug
+    }
+    return route.params.categorySlug[0]
   }
-  return route.params.categorySlug[0]
+  return null
 })
 
 const currentChildCategorySlug = computed(() => {
-  if (typeof route.params.subCategorySlug === 'string') {
-    return route.params.subCategorySlug
+  if (route.params.subCategorySlug) {
+    if (typeof route.params.subCategorySlug === 'string') {
+      return route.params.subCategorySlug
+    }
+    return route.params.subCategorySlug[0]
   }
-  return route.params.subCategorySlug[0]
+  return null
 })
 
 /**************
@@ -119,7 +125,7 @@ const campaignFeatureFlag = ref<boolean>(false)
   >
     <NuxtLink
       :to="{
-        name: 'categories-categorySlug-subCategorySlug-productSlug',
+        name: 'products-productSlug',
         params: {
           productSlug: slug,
           routeParentCategorySlug: currentParentCategorySlug ? currentParentCategorySlug : null,
