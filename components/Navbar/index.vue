@@ -30,7 +30,7 @@ const loading = computed(() => store.navbarCategories === null)
           <ListBlock
             v-for="menuItem in store.navbarCategories"
             :key="menuItem.id"
-            :to="`/category/${menuItem.slug}/`"
+            :to="`/categories/${menuItem.slug}/`"
             :label="menuItem.name"
             label-class="hover:text-brand-700"
             :loading="loading"
@@ -39,7 +39,7 @@ const loading = computed(() => store.navbarCategories === null)
             <ListBlockItem
               v-for="childItem in menuItem.children"
               :key="childItem.slug"
-              :to="`/category/${menuItem.slug}/${childItem.slug}/`"
+              :to="`/categories/${menuItem.slug}/${childItem.slug}/`"
               :loading="loading"
               class="hover:text-brand-900"
               @click="flyoutActive = false"

@@ -111,7 +111,7 @@ const kitchenImages = {
           :loading="false"
           :images="category.images"
         >
-          <Button variant="outlined" :to="`/category/${category.slug}/`">
+          <Button variant="outlined" :to="`/categories/${category.slug}/`">
             {{ category.name }}
           </Button>
         </Image>

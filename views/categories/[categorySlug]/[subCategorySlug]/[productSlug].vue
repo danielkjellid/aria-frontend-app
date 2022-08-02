@@ -4,8 +4,8 @@ import {
   ProductDetailOutput,
   ProductSizeOutput,
   ProductVariantOutput,
+  ProductCategoryOutput,
 } from '~~/@types/generated/dist'
-import useCategoriesStore from '~~/store/categories'
 import image80x80 from '~~/assets/images/default_80x80.jpeg'
 import image380x575 from '~~/assets/images/default_380x575.jpeg'
 
@@ -22,17 +22,24 @@ const config = useRuntimeConfig().public
 const route = useRoute()
 
 const currentParentCategorySlug = computed(() => {
-  if (typeof route.params.categorySlug === 'string') {
-    return route.params.categorySlug
+  if (route.params.routeParentCategorySlug) {
+    if (typeof route.params.routeParentCategorySlug === 'string') {
+      return route.params.routeParentCategorySlug
+    }
+    return route.params.routeParentCategorySlug[0]
   }
-  return route.params.categorySlug[0]
+
+  return null
 })
 
 const currentChildCategorySlug = computed(() => {
-  if (typeof route.params.subCategorySlug === 'string') {
-    return route.params.subCategorySlug
+  if (route.params.routeChildCategorySlug) {
+    if (typeof route.params.routeChildCategorySlug === 'string') {
+      return route.params.routeChildCategorySlug
+    }
+    return route.params.routeChildCategorySlug[0]
   }
-  return route.params.subCategorySlug[0]
+  return null
 })
 
 const currentProductSlug = computed(() => {
@@ -41,38 +48,6 @@ const currentProductSlug = computed(() => {
   }
   return route.params.productSlug[0]
 })
-
-/***********
- ** Store **
- ***********/
-
-const store = useCategoriesStore()
-
-/***********************
- ** State: Categories **
- ***********************/
-
-// Get current visited parent and child category, and check if we already
-// have fetched it at some point. if so, retrieve it from pinia instead
-// of calling the api on every site render.
-const currenParentCategoryObj = computed(() => {
-  if (!store.getCategory(currentParentCategorySlug.value)) {
-    store.fetchCategory(currentParentCategorySlug.value)
-  }
-
-  return store.getCategory(currentParentCategorySlug.value)
-})
-
-const currentChildCategoryObj = computed(() => {
-  if (!store.getCategory(currentChildCategorySlug.value)) {
-    store.fetchCategory(currentChildCategorySlug.value)
-  }
-
-  return store.getCategory(currentChildCategorySlug.value)
-})
-
-const currentParentCategoryObjLoaded = computed(() => !!currenParentCategoryObj.value)
-const currentChildCategoryObjLoaded = computed(() => !!currentChildCategoryObj.value)
 
 /*********************
  ** State: Products **
@@ -88,6 +63,58 @@ const fetchedProduct = async () => {
 }
 
 fetchedProduct()
+
+/***********************
+ ** State: Categories **
+ ***********************/
+
+const foundCategories = computed(() => {
+  // A product can be connected to multiple categories, and
+  // therefore multiple of the same parent categories.
+  let foundParent
+  // We're only interested in 1 particular child, even though
+  // the product may be connected to multiple.
+  let foundChild
+
+  if (productLoaded.value) {
+    // Check if we have a previous route to find and append.
+    if (currentParentCategorySlug.value && currentChildCategorySlug.value) {
+      foundChild = product.value.categories.find(
+        (category: ProductCategoryOutput) => category.slug === currentChildCategorySlug.value
+      )
+
+      if (foundChild.parents.length) {
+        foundParent = foundChild.parents.find(
+          (parent: ProductCategoryOutput) => parent.slug === currentParentCategorySlug.value
+        )
+      }
+      // If we don't have any previous route params to append from,
+      // just chose the first option if available.
+    } else if (product.value.categories.length) {
+      ;[foundChild] = product.value.categories
+
+      if (foundChild.parents.length) {
+        ;[foundParent] = foundChild.parents
+      }
+      // If there are no categories connected to the product, give up.
+    } else {
+      return null
+    }
+
+    return {
+      parent: { name: foundParent.name, slug: foundParent.slug },
+      child: { name: foundChild.name, slug: foundChild.slug },
+    }
+  }
+  return null
+})
+
+const foundParentCategory = computed(() =>
+  foundCategories.value && foundCategories.value.parent ? foundCategories.value.parent : null
+)
+const foundChildCategory = computed(() =>
+  foundCategories.value && foundCategories.value.child ? foundCategories.value.child : null
+)
 
 /****************************
  ** State: Product options **
@@ -189,18 +216,29 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
       />
       <Image v-else loading />
       <Container>
-        <Breadcrumbs
-          v-if="productLoaded && currentParentCategoryObjLoaded && currentChildCategoryObjLoaded"
-        >
+        <Breadcrumbs v-if="productLoaded">
           <BreadcrumbsItem to="/">{{ config.BRAND_NAME }}</BreadcrumbsItem>
-          <BreadcrumbsItem :to="`/category/${currenParentCategoryObj.slug}/`">
-            {{ currenParentCategoryObj.name }}
-          </BreadcrumbsItem>
-          <BreadcrumbsItem
-            :to="`/category/${currenParentCategoryObj.slug}/${currentChildCategoryObj.slug}/`"
-          >
-            {{ currentChildCategoryObj.name }}
-          </BreadcrumbsItem>
+          <template v-if="foundParentCategory && foundChildCategory">
+            <BreadcrumbsItem
+              :to="{
+                name: 'categories-categorySlug',
+                params: { categorySlug: foundParentCategory.slug },
+              }"
+            >
+              {{ foundParentCategory.name }}
+            </BreadcrumbsItem>
+            <BreadcrumbsItem
+              :to="{
+                name: 'categories-categorySlug-subCategorySlug',
+                params: {
+                  categorySlug: foundParentCategory.slug,
+                  subCategorySlug: foundChildCategory.slug,
+                },
+              }"
+            >
+              {{ foundChildCategory.name }}
+            </BreadcrumbsItem>
+          </template>
           <BreadcrumbsItem to="#" active>{{ product.name }}</BreadcrumbsItem>
         </Breadcrumbs>
         <Breadcrumbs v-else>
@@ -211,7 +249,7 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
         </Breadcrumbs>
 
         <Spacer spacing="md" />
-
+        <p>Test {{ foundCategories }}</p>
         <div
           class="mx-auto lg:grid lg:grid-cols-3 xl:grid-cols-5 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8"
         >

@@ -92,7 +92,7 @@ const childrenLoading = computed(() => childCategories.value.length <= 0)
       <Container>
         <Breadcrumbs>
           <BreadcrumbsItem to="/">FK JKE Design</BreadcrumbsItem>
-          <BreadcrumbsItem :to="`/category/${currentCategory}/`" active>
+          <BreadcrumbsItem :to="`/categories/${currentCategory}/`" active>
             {{ metaTitle }}
           </BreadcrumbsItem>
         </Breadcrumbs>
@@ -118,7 +118,7 @@ const childrenLoading = computed(() => childCategories.value.length <= 0)
           :loading="childrenLoading"
           :images="child.listImages"
           :reverse="index % 2 == 0"
-          :to="`/category/${currentCategory}/${child.slug}/`"
+          :to="`/categories/${currentCategory}/${child.slug}/`"
           link-label="Se produkter"
         />
       </CollectionList>
