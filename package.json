@@ -34,7 +34,7 @@
   "dependencies": {
     "@heroicons/vue": "^1.0.6",
     "@pinia/nuxt": "^0.1.9",
-    "@vuepic/vue-datepicker": "^3.2.2",
+    "@vuepic/vue-datepicker": "^3.4.1",
     "humps": "^2.0.1",
     "luxon": "^2.4.0",
     "mapbox-gl": "^2.9.2",
