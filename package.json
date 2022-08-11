@@ -38,7 +38,7 @@
     "humps": "^2.0.1",
     "luxon": "^2.4.0",
     "mapbox-gl": "^2.9.2",
-    "pinia": "^2.0.14",
+    "pinia": "^2.0.18",
     "v-calendar": "^3.0.0-alpha.8"
   }
 }
