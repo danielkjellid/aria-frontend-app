@@ -81,7 +81,7 @@ const fetchedProducts = ref<CategoryProductListOutput[]>(null)
 
 const fetchProducts = async () => {
   fetchedProducts.value = await performGet<CategoryProductListOutput[]>(
-    `categories/category/${currentCategorySlug.value}/products/`
+    `products/category/${currentCategorySlug.value}/`
   )
 }
 
@@ -98,7 +98,7 @@ const searchEndpoint = async () => {
 
   try {
     fetchedProducts.value = await performGet<CategoryProductListOutput[]>(
-      `categories/category/${currentCategorySlug.value}/products/?search=${query.value}`
+      `products/category/${currentCategorySlug.value}/?search=${query.value}`
     )
     searchLoadingState.value = 'success'
   } catch (error) {
