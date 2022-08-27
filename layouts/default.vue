@@ -32,7 +32,7 @@ const metaDescription = ref(
       <Link href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css" rel="stylesheet" />
     </Head>
     <div class="content relative min-h-screen">
-      <div class="relative min-h-screen">
+      <div class="relative min-h-screen mb-12">
         <Navbar />
         <slot class="relative" />
       </div>

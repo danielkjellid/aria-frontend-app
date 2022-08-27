@@ -78,7 +78,12 @@ const foundCategories = computed(() => {
 
   if (productLoaded.value) {
     // Check if we have a previous route to find and append.
-    if (currentParentCategorySlug.value && currentChildCategorySlug.value) {
+    if (
+      currentParentCategorySlug.value &&
+      currentChildCategorySlug.value &&
+      product.value.categories &&
+      product.value.categories.length
+    ) {
       foundChild = product.value.categories.find(
         (category: ProductCategoryOutput) => category.slug === currentChildCategorySlug.value
       )
@@ -90,7 +95,7 @@ const foundCategories = computed(() => {
       }
       // If we don't have any previous route params to append from,
       // just chose the first option if available.
-    } else if (product.value.categories.length) {
+    } else if (product.value.categories && product.value.categories.length) {
       ;[foundChild] = product.value.categories
 
       if (foundChild.parents.length) {
