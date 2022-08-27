@@ -193,6 +193,89 @@ const selectedOption = computed(() => {
   return undefined
 })
 
+// Function for selecting an option when the page loads.
+const selectOptionOnLoad = () => {
+  if (
+    product.value &&
+    productLoaded.value &&
+    product.value.options &&
+    product.value.options.length
+  ) {
+    let foundOption
+    const discountedOptions = product.value.options.filter(
+      (option) => option.discount && option.discount.isDiscounted
+    )
+
+    if (discountedOptions.length) {
+      foundOption = discountedOptions.reduce((prev, curr) =>
+        curr.discount.discountedGrossPrice < prev.discount.discountedGrossPrice ? curr : prev
+      )
+    } else {
+      foundOption = product.value.options.reduce((prev, curr) =>
+        curr.grossPrice < prev.grossPrice ? curr : prev
+      )
+    }
+
+    console.log(foundOption)
+
+    selectedVariant.value = foundOption.variant
+    selectedSize.value = foundOption.size
+  }
+}
+
+// Select appropriate option on page load.
+watch(
+  () => product.value,
+  (_oldValue, _newValue) => {
+    selectOptionOnLoad()
+  },
+  { deep: true }
+)
+
+/******************************
+ ** State: Product discounts **
+ ******************************/
+
+interface FromPriceObj {
+  grossDisplayPrice: number
+  isDiscounted: boolean
+  grossDiscountedPrice?: number
+}
+
+const renderFromPrice = computed((): FromPriceObj => {
+  if (productLoaded.value) {
+    if (selectedOption.value) {
+      return {
+        grossDisplayPrice: selectedOption.value.grossPrice,
+        isDiscounted: !!selectedOption.value.discount,
+        grossDiscountedPrice: selectedOption.value.discount
+          ? selectedOption.value.discount.discountedGrossPrice
+          : null,
+      }
+    }
+
+    if (product.value.displayPrice) {
+      return {
+        grossDisplayPrice: product.value.fromPrice,
+        isDiscounted: false,
+        grossDiscountedPrice: null,
+      }
+    }
+  }
+
+  return null
+})
+
+const showPrice = computed(
+  (): boolean =>
+    !!(
+      product.value &&
+      productLoaded.value &&
+      renderFromPrice.value &&
+      (renderFromPrice.value.isDiscounted || product.value.displayPrice)
+    )
+)
+
 /***************
  ** Page meta **
  ***************/
@@ -266,14 +349,30 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
           <!-- Options -->
           <div class="lg:mt-0 lg:row-span-3 xl:col-span-2 lg:col-span-1 mt-4">
             <h2 class="sr-only">Produktinformasjon</h2>
-            <div v-if="product && product.displayPrice">
-              <Text v-if="productLoaded" variant="title2" class="font-normal">
-                Fra kr 599,00
-                <span class="text-gray-600">{{ product.unit }}</span>
-              </Text>
+            <div v-if="showPrice">
+              <div v-if="productLoaded">
+                <div v-if="renderFromPrice.isDiscounted">
+                  <Text variant="title2" color="text-red-600" class="font-normal">
+                    Fra kr {{ $formatPrice(renderFromPrice.grossDiscountedPrice) }}
+                    <span class="text-gray-500">{{ product.unit }}</span>
+                  </Text>
+                  <Text variant="title3" class="mt-1 font-normal">
+                    <s>
+                      Fra kr {{ $formatPrice(renderFromPrice.grossDisplayPrice) }}
+                      <span class="text-gray-500">{{ product.unit }}</span>
+                    </s>
+                  </Text>
+                </div>
+                <div v-else>
+                  <Text variant="title2" class="font-normal">
+                    Fra kr {{ $formatPrice(renderFromPrice.grossDisplayPrice) }}
+                    <span class="text-gray-500">{{ product.unit }}</span>
+                  </Text>
+                </div>
+              </div>
               <SkeletonLoader v-else loading width="w-60" height="h-10" />
             </div>
-            <form :class="product && product.displayPrice ? 'mt-6' : 'mt-0'">
+            <form :class="showPrice ? 'mt-6' : 'mt-0'">
               <!-- Colors -->
               <div>
                 <h3 v-if="productLoaded" class="text-sm font-medium text-gray-900">Varianter</h3>
@@ -357,13 +456,13 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
                         :aria-labelledby="`size-choice-${size.id}-label`"
                         @input="selectedSize = size"
                       />
-                      <span :id="`size-choice-${size.id}-label`" class="shrink-0">{{
-                        size.name
-                      }}</span>
+                      <span :id="`size-choice-${size.id}-label`" class="shrink-0">
+                        {{ size.name }}
+                      </span>
                       <span
                         class="-inset-px absolute rounded-md pointer-events-none"
                         aria-hidden="true"
-                      ></span>
+                      />
                     </label>
                   </div>
                   <div v-else class="sm:grid-cols-4 lg:grid-cols-2 grid grid-cols-2 gap-4 mt-1">
