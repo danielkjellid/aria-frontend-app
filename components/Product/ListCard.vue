@@ -81,7 +81,7 @@ const indexToShowBasedOnBreakpoint = computed(() => {
   if (currentBreakpoint.w <= 1280) return 6
   if (currentBreakpoint.w <= 1536) return 7
 
-  return 7
+  return 6
 })
 
 /*********************
@@ -136,19 +136,14 @@ const canBePurchasedOnline = ref<boolean>(false)
         },
       }"
     >
-      <div
-        class="product-card sm:h-auto sm:aspect-w-2 sm:aspect-h-3 relative w-full overflow-hidden rounded-md"
-      >
+      <div class="sm:h-auto sm:aspect-w-2 sm:aspect-h-3 relative w-full overflow-hidden rounded-md">
         <img
           :src="imageThumbnail"
           :alt="`Image of ${name}`"
           loading="lazy"
           class="object-cover w-full"
         />
-        <div
-          v-if="!showVariants && (currentlyDiscounted || canBePurchasedOnline)"
-          class="absolute top-0 right-0 mt-6"
-        >
+        <div v-if="currentlyDiscounted || canBePurchasedOnline" class="absolute top-0 right-0 mt-6">
           <div
             v-if="canBePurchasedOnline"
             class="bg-brand-900 py-1 pl-3 pr-2 text-sm font-medium text-white bg-opacity-75 rounded-l-full"
@@ -159,7 +154,9 @@ const canBePurchasedOnline = ref<boolean>(false)
             v-if="currentlyDiscounted"
             class="inline-block float-right py-1 pl-3 pr-2 mt-2 text-sm font-medium text-right text-white bg-red-400 rounded-l-full"
           >
-            -20%
+            <span class="flex items-center" v-if="discount.discountedGrossPercentage">
+              - {{ 100 * discount.discountedGrossPercentage }}%
+            </span>
           </div>
         </div>
       </div>
@@ -180,7 +177,7 @@ const canBePurchasedOnline = ref<boolean>(false)
                 Fra kr {{ discount.discountedGrossPrice }}
                 <span class="text-gray-500">{{ unit }}</span>
               </p>
-              <p>
+              <p class="mt-1 text-sm font-normal">
                 <s>
                   Fra kr {{ fromPrice }} <span class="text-gray-500">{{ unit }}</span>
                 </s>
@@ -213,14 +210,3 @@ const canBePurchasedOnline = ref<boolean>(false)
     </NuxtLink>
   </article>
 </template>
-
-<style scoped>
-.product-card {
-  min-height: 440px;
-}
-
-.product-media {
-  height: auto;
-  width: 100%;
-}
-</style>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import useCategoriesStore from '~~/store/categories'
 import { FilterIcon } from '@heroicons/vue/outline'
-import { CategoryProductListOutput } from '~~/@types/generated/dist'
+import { ProductListOutput } from '~~/@types/generated/dist'
 import { ButtonProps } from '~~/components/Button/index.vue'
 
 /************
@@ -77,10 +77,10 @@ const categoryProductsLoading = computed(() => !products.value)
  ** State: Products **
  *********************/
 
-const fetchedProducts = ref<CategoryProductListOutput[]>(null)
+const fetchedProducts = ref<ProductListOutput[]>(null)
 
 const fetchProducts = async () => {
-  fetchedProducts.value = await performGet<CategoryProductListOutput[]>(
+  fetchedProducts.value = await performGet<ProductListOutput[]>(
     `products/category/${currentCategorySlug.value}/`
   )
 }
@@ -97,7 +97,7 @@ const searchEndpoint = async () => {
   searchLoadingState.value = 'loading'
 
   try {
-    fetchedProducts.value = await performGet<CategoryProductListOutput[]>(
+    fetchedProducts.value = await performGet<ProductListOutput[]>(
       `products/category/${currentCategorySlug.value}/?search=${query.value}`
     )
     searchLoadingState.value = 'success'

@@ -1,9 +1,24 @@
 <script setup lang="ts">
+import { DiscountsActiveListOutput } from '~~/@types/generated/dist'
+
 /************
  ** Config **
  ************/
 
 const config = useRuntimeConfig().public
+
+/**********************
+ ** State: Discounts **
+ *********************/
+
+const discounts = ref<DiscountsActiveListOutput[]>()
+const discountsLoaded = computed((): boolean => !!discounts.value)
+
+const fetchDiscounts = async () => {
+  discounts.value = await performGet<DiscountsActiveListOutput[]>('discounts/active/')
+}
+
+fetchDiscounts()
 </script>
 
 <template>
@@ -21,11 +36,16 @@ const config = useRuntimeConfig().public
             <BreadcrumbsItem to="/">{{ config.BRAND_NAME }}</BreadcrumbsItem>
             <BreadcrumbsItem to="#" active>Tilbudsvarer</BreadcrumbsItem>
           </Breadcrumbs>
-
-          <Spacer spacing="md" />
-
-          <CollapsableSection title="20% på blandebatterier">
-            <p>Inside section</p>
+        </Container>
+      </section>
+      <section>
+        <Container :y-padding="null">
+          <CollapsableSection
+            v-for="discount in discounts"
+            :key="discount.id"
+            :title="discount.name"
+          >
+            <ProductList :loading="!discountsLoaded" :products="discount.products" />
           </CollapsableSection>
         </Container>
       </section>
