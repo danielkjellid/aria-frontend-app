@@ -132,7 +132,7 @@ const filteredProducts = computed(() => {
   }
   return []
 })
-
+console.log(aggregatedFilters.value)
 const mobileFilterMenuActive = ref<boolean>(false)
 
 const openMobileFilterMenu = () => {
