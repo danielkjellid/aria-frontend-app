@@ -20,7 +20,7 @@
     "@types/luxon": "^2.3.2",
     "@typescript-eslint/eslint-plugin": "^5.35.1",
     "@vue/eslint-config-airbnb": "^6.0.0",
-    "autoprefixer": "^10.4.7",
+    "autoprefixer": "^10.4.8",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-vue": "^9.4.0",
