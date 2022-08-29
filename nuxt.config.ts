@@ -36,7 +36,7 @@ export default defineNuxtConfig({
     '@vuepic/vue-datepicker/dist/main.css',
   ],
 
-  buildModules: ['@pinia/nuxt'],
+  modules: ['@pinia/nuxt'],
 
   build: {
     transpile: ['@heroicons/vue', 'luxon'],
