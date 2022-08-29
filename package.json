@@ -37,7 +37,7 @@
     "@vuepic/vue-datepicker": "^3.4.6",
     "humps": "^2.0.1",
     "luxon": "^2.4.0",
-    "mapbox-gl": "^2.9.2",
+    "mapbox-gl": "^2.10.0",
     "pinia": "^2.0.21",
     "v-calendar": "^3.0.0-alpha.8"
   }
