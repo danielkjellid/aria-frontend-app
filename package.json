@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@heroicons/vue": "^1.0.6",
-    "@pinia/nuxt": "^0.4.1",
+    "@pinia/nuxt": "^0.1.9",
     "@vuepic/vue-datepicker": "^3.2.2",
     "humps": "^2.0.1",
     "luxon": "^2.4.0",
