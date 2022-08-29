@@ -4,7 +4,7 @@ import useCategoriesStore from '~~/store/categories'
 /***********
  ** Store **
  ***********/
-
+const c = useRuntimeConfig().public
 const store = useCategoriesStore()
 store.fetchParentCategories()
 
@@ -19,6 +19,11 @@ const loading = computed(() => {
 
   return true
 })
+
+const throwError = () => {
+  console.log('Clicked')
+  throw new Error('Sentry Error')
+}
 
 const headerImages = {
   applyFilter: false,
@@ -120,5 +125,6 @@ const kitchenImages = {
         </Image>
       </section>
     </main>
+    <button type="button" @click="throwError">Throw new error for {{ c.ENVIRONMENT }}</button>
   </div>
 </template>
