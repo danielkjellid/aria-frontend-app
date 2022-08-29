@@ -15,6 +15,7 @@ const config = useRuntimeConfig().public
  ************/
 
 const route = useRoute()
+const router = useRouter()
 
 const currentParentCategorySlug = computed(() => {
   if (route.params.categorySlug) {
@@ -90,6 +91,14 @@ fetchProducts()
 const products = computed(() => (fetchedProducts.value ? fetchedProducts.value : null))
 const productsLoading = computed(() => !products.value)
 
+/**********************
+ ** State: Querying **
+ *********************/
+
+interface SearchQueryParamsObj {
+  [x: string]: string
+}
+
 const query = ref('')
 const searchLoadingState = ref<ButtonProps['loadingState']>('initial')
 
@@ -101,6 +110,9 @@ const searchEndpoint = async () => {
       `products/category/${currentCategorySlug.value}/?search=${query.value}`
     )
     searchLoadingState.value = 'success'
+
+    // Update route with query params.
+    router.push({ path: route.path, query: { search: query.value } })
   } catch (error) {
     searchLoadingState.value = 'error'
     console.log('error')
@@ -109,9 +121,18 @@ const searchEndpoint = async () => {
   }
 }
 
+// Function to set query based on existing query param.
+const setQueryFromQueryParamsOnLoad = () => {
+  const queryParams = route.query as SearchQueryParamsObj
+
+  query.value = queryParams.search
+}
+
+setQueryFromQueryParamsOnLoad()
+
 /**********************
  ** State: Filtering **
- *********************/
+ **********************/
 
 const aggregatedFilters = ref([])
 
@@ -132,7 +153,7 @@ const filteredProducts = computed(() => {
   }
   return []
 })
-console.log(aggregatedFilters.value)
+
 const mobileFilterMenuActive = ref<boolean>(false)
 
 const openMobileFilterMenu = () => {
@@ -144,6 +165,19 @@ const closeMobileFilterMenu = () => {
   mobileFilterMenuActive.value = false
   document.body.classList.remove('overflow-hidden')
 }
+
+/**************
+ ** Watchers **
+ **************/
+
+watch(
+  () => productsLoading.value,
+  (_oldValue, _newValue) => {
+    if (query.value) {
+      searchEndpoint()
+    }
+  }
+)
 </script>
 
 <template>
