@@ -86,7 +86,7 @@ fetchDiscounts()
       <section v-else class="lg:mb-12">
         <Container>
           <NoData
-            class="h-96"
+            class="h-96 mb-12"
             error-message="Vi har dessverre ingen tilbud for øyeblikket. Vennligst prøv igjen senere."
           />
         </Container>
