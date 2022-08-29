@@ -17,7 +17,7 @@
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^10.0.0",
     "@tailwindcss/forms": "^0.5.2",
-    "@types/luxon": "^2.3.2",
+    "@types/luxon": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.35.1",
     "@vue/eslint-config-airbnb": "^6.0.0",
     "autoprefixer": "^10.4.8",
@@ -36,7 +36,7 @@
     "@pinia/nuxt": "^0.4.1",
     "@vuepic/vue-datepicker": "^3.4.6",
     "humps": "^2.0.1",
-    "luxon": "^2.4.0",
+    "luxon": "^3.0.2",
     "mapbox-gl": "^2.10.0",
     "pinia": "^2.0.21",
     "v-calendar": "^3.0.0-alpha.8"
