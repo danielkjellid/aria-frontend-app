@@ -4,8 +4,6 @@ import { defineNuxtConfig } from 'nuxt'
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      SITE_ID: process.env.SITE_ID,
-
       SENTRY_DSN: process.env.SENTRY_DSN,
       ENVIRONMENT: process.env.ENVIRONMENT,
 

@@ -2,23 +2,17 @@
 /* eslint-disable vue/no-v-for-template-key */
 import { LocationMarkerIcon, PhoneIcon, AtSymbolIcon, ClockIcon } from '@heroicons/vue/outline'
 import {
-  OpeningHoursOutputSchema,
+  OpeningHoursOutput,
   EmployeeListOutput,
   SupplierListOutput,
 } from '~~/@types/generated/dist'
 import storeImg from '~~/assets/images/store.jpeg'
 
-/************
- ** Config **
- ************/
-
-const config = useRuntimeConfig().public
-
 /**************************
  ** State: Opening hours **
  **************************/
 
-const openingHours = ref<OpeningHoursOutputSchema>()
+const openingHours = ref<OpeningHoursOutput>()
 const openingHoursLoaded = computed(
   (): boolean =>
     !!openingHours.value &&
@@ -27,9 +21,7 @@ const openingHoursLoaded = computed(
 )
 
 const fetchOpeningHours = async () => {
-  openingHours.value = await performGet<OpeningHoursOutputSchema>(
-    `front/opening-hours/${config.SITE_ID}/`
-  )
+  openingHours.value = await performGet<OpeningHoursOutput>(`front/opening-hours/`)
 }
 
 fetchOpeningHours()
@@ -42,7 +34,7 @@ const employeesList = ref<EmployeeListOutput[]>()
 const employeesListLoaded = computed((): boolean => !!employeesList.value)
 
 const fetchEmployeeList = async () => {
-  employeesList.value = await performGet<EmployeeListOutput[]>(`employees/${config.SITE_ID}/`)
+  employeesList.value = await performGet<EmployeeListOutput[]>(`employees/`)
 }
 
 fetchEmployeeList()
