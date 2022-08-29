@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import { CategoryProductListOutput } from '~~/@types/generated/dist'
+import { ProductListOutput } from '~~/@types/generated/dist'
+
+/***********
+ ** Routes **
+ ***********/
+
+const route = useRoute()
+const router = useRouter()
 
 /***********
  ** Props **
  ***********/
 
 interface ProductFiltersProps {
-  products?: CategoryProductListOutput[]
-  filteredProducts: CategoryProductListOutput[]
+  products?: ProductListOutput[]
+  filteredProducts: ProductListOutput[]
   loading?: boolean
   mobileMenuActive?: boolean
 }
@@ -104,6 +111,49 @@ const handleFilterSelect = (val: string, arr: string[]) => {
   }
 }
 
+/******************
+ ** Query params **
+ ******************/
+
+interface QueryParamsObj {
+  [x: string]: string
+}
+
+// Update the url path with appropriate query params on filter
+// selection.
+const updateQueryParams = () => {
+  const queryParams = {} as QueryParamsObj
+
+  filters.forEach((filter) => {
+    if (filter.selectedData.length) {
+      queryParams[filter.key] = filter.selectedData.join(',')
+    }
+  })
+
+  router.push({ path: route.path, query: queryParams })
+}
+
+// If linked to a site that already has some filtering, we
+// want to set those properties on page load.
+const setFiltersFromQueryParamsOnLoad = () => {
+  const queryParams = route.query as QueryParamsObj
+
+  Object.entries(queryParams).forEach(([key, value]) => {
+    const data = value.split(',')
+
+    filters.forEach((filter) => {
+      if (filter.key === key) {
+        // eslint-disable-next-line no-param-reassign
+        filter.selectedData = data
+      }
+    })
+  })
+
+  emits('change', aggregatedFilters.value)
+}
+
+setFiltersFromQueryParamsOnLoad()
+
 /***********
  ** Emits **
  ***********/
@@ -123,6 +173,7 @@ watch(
   () => aggregatedFilters,
   (_, newValue) => {
     emits('change', newValue.value)
+    updateQueryParams()
   },
   { deep: true }
 )
