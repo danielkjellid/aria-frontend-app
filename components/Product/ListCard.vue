@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import image380x575 from '~~/assets/images/default_380x575.jpeg'
 import image80x80 from '~~/assets/images/default_80x80.jpeg'
-import { CategoryProductListVariantOutput } from '~~/@types/generated/dist'
+import { ProductVariantOutput, ProductDiscountOutput } from '~~/@types/generated/dist'
 import breakpointData from '~~/utils/breakpoints'
 
 /***********
@@ -13,14 +13,41 @@ interface ProductListCardProps {
   name: string
   slug: string
   thumbnail?: string
+  discount?: ProductDiscountOutput
   displayPrice?: boolean
   fromPrice: number
   unit: string
-  variants?: CategoryProductListVariantOutput[]
+  variants?: ProductVariantOutput[]
   supplierName: string
 }
 
 const props = defineProps<ProductListCardProps>()
+
+/***********
+ ** Routes **
+ ***********/
+
+const route = useRoute()
+
+const currentParentCategorySlug = computed(() => {
+  if (route.params.categorySlug) {
+    if (typeof route.params.categorySlug === 'string') {
+      return route.params.categorySlug
+    }
+    return route.params.categorySlug[0]
+  }
+  return null
+})
+
+const currentChildCategorySlug = computed(() => {
+  if (route.params.subCategorySlug) {
+    if (typeof route.params.subCategorySlug === 'string') {
+      return route.params.subCategorySlug
+    }
+    return route.params.subCategorySlug[0]
+  }
+  return null
+})
 
 /**************
  ** Defaults **
@@ -54,7 +81,7 @@ const indexToShowBasedOnBreakpoint = computed(() => {
   if (currentBreakpoint.w <= 1280) return 6
   if (currentBreakpoint.w <= 1536) return 7
 
-  return 7
+  return 6
 })
 
 /*********************
@@ -76,11 +103,13 @@ const slicedVariants = computed(() =>
     ? props.variants.slice(0, indexToShowBasedOnBreakpoint.value)
     : []
 )
-/*******************************
- ** State: Experimental flags **
- *******************************/
+/**********************
+ ** State: Discounts **
+ **********************/
 
-const campaignFeatureFlag = ref<boolean>(false)
+const currentlyDiscounted = computed(() => props.discount && props.discount.isDiscounted)
+
+const canBePurchasedOnline = ref<boolean>(false)
 </script>
 
 <template>
@@ -99,24 +128,35 @@ const campaignFeatureFlag = ref<boolean>(false)
   >
     <NuxtLink
       :to="{
-        name: 'category-categorySlug-subCategorySlug-productSlug',
-        params: { productSlug: slug },
+        name: 'products-productSlug',
+        params: {
+          productSlug: slug,
+          routeParentCategorySlug: currentParentCategorySlug ? currentParentCategorySlug : null,
+          routeChildCategorySlug: currentChildCategorySlug ? currentChildCategorySlug : null,
+        },
       }"
     >
-      <div
-        class="product-card sm:h-auto sm:aspect-w-2 sm:aspect-h-3 relative w-full overflow-hidden rounded-md"
-      >
-        <img :src="imageThumbnail" :alt="`Image of ${name}`" loading="lazy" class="object-cover" />
-        <div v-if="!showVariants && campaignFeatureFlag" class="absolute top-0 right-0 mt-6">
+      <div class="sm:h-auto sm:aspect-w-2 sm:aspect-h-3 relative w-full overflow-hidden rounded-md">
+        <img
+          :src="imageThumbnail"
+          :alt="`Image of ${name}`"
+          loading="lazy"
+          class="object-cover w-full"
+        />
+        <div v-if="currentlyDiscounted || canBePurchasedOnline" class="absolute top-0 right-0 mt-6">
           <div
+            v-if="canBePurchasedOnline"
             class="bg-brand-900 py-1 pl-3 pr-2 text-sm font-medium text-white bg-opacity-75 rounded-l-full"
           >
             Kan kjøpes på nett
           </div>
           <div
+            v-if="currentlyDiscounted"
             class="inline-block float-right py-1 pl-3 pr-2 mt-2 text-sm font-medium text-right text-white bg-red-400 rounded-l-full"
           >
-            -20%
+            <span v-if="discount.discountedGrossPercentage" class="flex items-center">
+              - {{ 100 * discount.discountedGrossPercentage }}%
+            </span>
           </div>
         </div>
       </div>
@@ -126,18 +166,18 @@ const campaignFeatureFlag = ref<boolean>(false)
             <h3 class="mr-2 truncate">{{ name }}</h3>
             <p class="mt-1 text-sm italic font-normal text-gray-500">{{ supplierName }}</p>
           </div>
-          <template v-if="displayPrice">
-            <div v-if="!campaignFeatureFlag" class="shrink-0 font-normal text-right">
+          <template v-if="displayPrice || currentlyDiscounted">
+            <div v-if="!currentlyDiscounted" class="shrink-0 font-normal text-right">
               <p>
                 Fra kr {{ fromPrice }} <span class="text-gray-500">{{ unit }}</span>
               </p>
             </div>
             <div v-else class="shrink-0 font-normal text-right">
               <p class="text-red-600">
-                Fra kr {{ Math.floor(fromPrice / 1.2) }}
+                Fra kr {{ discount.discountedGrossPrice }}
                 <span class="text-gray-500">{{ unit }}</span>
               </p>
-              <p>
+              <p class="mt-1 text-sm font-normal">
                 <s>
                   Fra kr {{ fromPrice }} <span class="text-gray-500">{{ unit }}</span>
                 </s>
@@ -170,14 +210,3 @@ const campaignFeatureFlag = ref<boolean>(false)
     </NuxtLink>
   </article>
 </template>
-
-<style scoped>
-.product-card {
-  min-height: 440px;
-}
-
-.product-media {
-  height: auto;
-  width: 100%;
-}
-</style>

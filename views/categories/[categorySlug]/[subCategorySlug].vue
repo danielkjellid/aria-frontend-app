@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import useCategoriesStore from '~~/store/categories'
 import { FilterIcon } from '@heroicons/vue/outline'
-import { CategoryProductListOutput } from '~~/@types/generated/dist'
+import { ProductListOutput } from '~~/@types/generated/dist'
 import { ButtonProps } from '~~/components/Button/index.vue'
 
 /************
@@ -15,19 +15,26 @@ const config = useRuntimeConfig().public
  ************/
 
 const route = useRoute()
+const router = useRouter()
 
 const currentParentCategorySlug = computed(() => {
-  if (typeof route.params.categorySlug === 'string') {
-    return route.params.categorySlug
+  if (route.params.categorySlug) {
+    if (typeof route.params.categorySlug === 'string') {
+      return route.params.categorySlug
+    }
+    return route.params.categorySlug[0]
   }
-  return route.params.categorySlug[0]
+  return null
 })
 
 const currentCategorySlug = computed(() => {
-  if (typeof route.params.subCategorySlug === 'string') {
-    return route.params.subCategorySlug
+  if (route.params.subCategorySlug) {
+    if (typeof route.params.subCategorySlug === 'string') {
+      return route.params.subCategorySlug
+    }
+    return route.params.subCategorySlug[0]
   }
-  return route.params.subCategorySlug[0]
+  return null
 })
 
 /***********
@@ -71,11 +78,11 @@ const categoryProductsLoading = computed(() => !products.value)
  ** State: Products **
  *********************/
 
-const fetchedProducts = ref<CategoryProductListOutput[]>(null)
+const fetchedProducts = ref<ProductListOutput[]>(null)
 
 const fetchProducts = async () => {
-  fetchedProducts.value = await performGet<CategoryProductListOutput[]>(
-    `categories/category/${currentCategorySlug.value}/products/`
+  fetchedProducts.value = await performGet<ProductListOutput[]>(
+    `products/category/${currentCategorySlug.value}/`
   )
 }
 
@@ -84,17 +91,53 @@ fetchProducts()
 const products = computed(() => (fetchedProducts.value ? fetchedProducts.value : null))
 const productsLoading = computed(() => !products.value)
 
+/*********************
+ ** State: Querying **
+ *********************/
+
+interface SearchQueryParamsObj {
+  [x: string]: string
+}
+
 const query = ref('')
+const showQueryTag = ref<boolean>(false)
 const searchLoadingState = ref<ButtonProps['loadingState']>('initial')
 
 const searchEndpoint = async () => {
   searchLoadingState.value = 'loading'
 
   try {
-    fetchedProducts.value = await performGet<CategoryProductListOutput[]>(
-      `categories/category/${currentCategorySlug.value}/products/?search=${query.value}`
+    fetchedProducts.value = await performGet<ProductListOutput[]>(
+      `products/category/${currentCategorySlug.value}/?search=${query.value}`
     )
     searchLoadingState.value = 'success'
+
+    // Update route with query params.
+    router.push({ path: route.path, query: { search: query.value } })
+
+    showQueryTag.value = true
+  } catch (error) {
+    searchLoadingState.value = 'error'
+    console.log('error')
+    showQueryTag.value = false
+  } finally {
+    searchLoadingState.value = 'initial'
+  }
+}
+
+const clearSearch = async () => {
+  query.value = undefined
+
+  try {
+    fetchedProducts.value = await performGet<ProductListOutput[]>(
+      `products/category/${currentCategorySlug.value}/`
+    )
+    searchLoadingState.value = 'success'
+
+    // Update route with query params.
+    router.push({ path: route.path, query: { search: query.value } })
+
+    showQueryTag.value = false
   } catch (error) {
     searchLoadingState.value = 'error'
     console.log('error')
@@ -103,9 +146,18 @@ const searchEndpoint = async () => {
   }
 }
 
+// Function to set query based on existing query param.
+const setQueryFromQueryParamsOnLoad = () => {
+  const queryParams = route.query as SearchQueryParamsObj
+
+  query.value = queryParams.search
+}
+
+setQueryFromQueryParamsOnLoad()
+
 /**********************
  ** State: Filtering **
- *********************/
+ **********************/
 
 const aggregatedFilters = ref([])
 
@@ -138,6 +190,19 @@ const closeMobileFilterMenu = () => {
   mobileFilterMenuActive.value = false
   document.body.classList.remove('overflow-hidden')
 }
+
+/**************
+ ** Watchers **
+ **************/
+
+watch(
+  () => productsLoading.value,
+  (_oldValue, _newValue) => {
+    if (query.value) {
+      searchEndpoint()
+    }
+  }
+)
 </script>
 
 <template>
@@ -185,10 +250,12 @@ const closeMobileFilterMenu = () => {
               <FilterIcon class="w-5 h-5 text-gray-500" />
             </template>
           </Button>
-          <form class="lg:flex items-center hidden mt-1 space-x-3" @submit.prevent="searchEndpoint">
+          <form class="lg:hidden flex items-center mt-2 space-x-3" @submit.prevent="searchEndpoint">
             <Input
               id="search-1"
+              v-model.trim="query"
               label="Søk"
+              :value="query"
               :hidden-label="true"
               placeholder="Søk etter tusenvis av varer..."
               class="w-full"
@@ -202,6 +269,9 @@ const closeMobileFilterMenu = () => {
               Søk
             </Button>
           </form>
+          <div class="lg:hidden flex items-center mt-4 space-x-3">
+            <Tag v-if="showQueryTag && query" size="lg" @remove="clearSearch">{{ query }}</Tag>
+          </div>
         </div>
 
         <!-- Filtering and search on lg+ -->
@@ -215,6 +285,7 @@ const closeMobileFilterMenu = () => {
             @modal-close="closeMobileFilterMenu"
           />
           <form class="lg:flex items-center hidden mt-1 space-x-3" @submit.prevent="searchEndpoint">
+            <Tag v-if="showQueryTag && query" size="lg" @remove="clearSearch">{{ query }}</Tag>
             <Input
               id="search-2"
               v-model.trim="query"

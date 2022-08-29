@@ -4,8 +4,8 @@ import {
   ProductDetailOutput,
   ProductSizeOutput,
   ProductVariantOutput,
+  ProductCategoryOutput,
 } from '~~/@types/generated/dist'
-import useCategoriesStore from '~~/store/categories'
 import image80x80 from '~~/assets/images/default_80x80.jpeg'
 import image380x575 from '~~/assets/images/default_380x575.jpeg'
 
@@ -22,17 +22,24 @@ const config = useRuntimeConfig().public
 const route = useRoute()
 
 const currentParentCategorySlug = computed(() => {
-  if (typeof route.params.categorySlug === 'string') {
-    return route.params.categorySlug
+  if (route.params.routeParentCategorySlug) {
+    if (typeof route.params.routeParentCategorySlug === 'string') {
+      return route.params.routeParentCategorySlug
+    }
+    return route.params.routeParentCategorySlug[0]
   }
-  return route.params.categorySlug[0]
+
+  return null
 })
 
 const currentChildCategorySlug = computed(() => {
-  if (typeof route.params.subCategorySlug === 'string') {
-    return route.params.subCategorySlug
+  if (route.params.routeChildCategorySlug) {
+    if (typeof route.params.routeChildCategorySlug === 'string') {
+      return route.params.routeChildCategorySlug
+    }
+    return route.params.routeChildCategorySlug[0]
   }
-  return route.params.subCategorySlug[0]
+  return null
 })
 
 const currentProductSlug = computed(() => {
@@ -41,38 +48,6 @@ const currentProductSlug = computed(() => {
   }
   return route.params.productSlug[0]
 })
-
-/***********
- ** Store **
- ***********/
-
-const store = useCategoriesStore()
-
-/***********************
- ** State: Categories **
- ***********************/
-
-// Get current visited parent and child category, and check if we already
-// have fetched it at some point. if so, retrieve it from pinia instead
-// of calling the api on every site render.
-const currenParentCategoryObj = computed(() => {
-  if (!store.getCategory(currentParentCategorySlug.value)) {
-    store.fetchCategory(currentParentCategorySlug.value)
-  }
-
-  return store.getCategory(currentParentCategorySlug.value)
-})
-
-const currentChildCategoryObj = computed(() => {
-  if (!store.getCategory(currentChildCategorySlug.value)) {
-    store.fetchCategory(currentChildCategorySlug.value)
-  }
-
-  return store.getCategory(currentChildCategorySlug.value)
-})
-
-const currentParentCategoryObjLoaded = computed(() => !!currenParentCategoryObj.value)
-const currentChildCategoryObjLoaded = computed(() => !!currentChildCategoryObj.value)
 
 /*********************
  ** State: Products **
@@ -88,6 +63,63 @@ const fetchedProduct = async () => {
 }
 
 fetchedProduct()
+
+/***********************
+ ** State: Categories **
+ ***********************/
+
+const foundCategories = computed(() => {
+  // A product can be connected to multiple categories, and
+  // therefore multiple of the same parent categories.
+  let foundParent
+  // We're only interested in 1 particular child, even though
+  // the product may be connected to multiple.
+  let foundChild
+
+  if (productLoaded.value) {
+    // Check if we have a previous route to find and append.
+    if (
+      currentParentCategorySlug.value &&
+      currentChildCategorySlug.value &&
+      product.value.categories &&
+      product.value.categories.length
+    ) {
+      foundChild = product.value.categories.find(
+        (category: ProductCategoryOutput) => category.slug === currentChildCategorySlug.value
+      )
+
+      if (foundChild.parents.length) {
+        foundParent = foundChild.parents.find(
+          (parent: ProductCategoryOutput) => parent.slug === currentParentCategorySlug.value
+        )
+      }
+      // If we don't have any previous route params to append from,
+      // just chose the first option if available.
+    } else if (product.value.categories && product.value.categories.length) {
+      ;[foundChild] = product.value.categories
+
+      if (foundChild.parents.length) {
+        ;[foundParent] = foundChild.parents
+      }
+      // If there are no categories connected to the product, give up.
+    } else {
+      return null
+    }
+
+    return {
+      parent: { name: foundParent.name, slug: foundParent.slug },
+      child: { name: foundChild.name, slug: foundChild.slug },
+    }
+  }
+  return null
+})
+
+const foundParentCategory = computed(() =>
+  foundCategories.value && foundCategories.value.parent ? foundCategories.value.parent : null
+)
+const foundChildCategory = computed(() =>
+  foundCategories.value && foundCategories.value.child ? foundCategories.value.child : null
+)
 
 /****************************
  ** State: Product options **
@@ -161,6 +193,89 @@ const selectedOption = computed(() => {
   return undefined
 })
 
+// Function for selecting an option when the page loads.
+const selectOptionOnLoad = () => {
+  if (
+    product.value &&
+    productLoaded.value &&
+    product.value.options &&
+    product.value.options.length
+  ) {
+    let foundOption
+    const discountedOptions = product.value.options.filter(
+      (option) => option.discount && option.discount.isDiscounted
+    )
+
+    if (discountedOptions.length) {
+      foundOption = discountedOptions.reduce((prev, curr) =>
+        curr.discount.discountedGrossPrice < prev.discount.discountedGrossPrice ? curr : prev
+      )
+    } else {
+      foundOption = product.value.options.reduce((prev, curr) =>
+        curr.grossPrice < prev.grossPrice ? curr : prev
+      )
+    }
+
+    console.log(foundOption)
+
+    selectedVariant.value = foundOption.variant
+    selectedSize.value = foundOption.size
+  }
+}
+
+// Select appropriate option on page load.
+watch(
+  () => product.value,
+  (_oldValue, _newValue) => {
+    selectOptionOnLoad()
+  },
+  { deep: true }
+)
+
+/******************************
+ ** State: Product discounts **
+ ******************************/
+
+interface FromPriceObj {
+  grossDisplayPrice: number
+  isDiscounted: boolean
+  grossDiscountedPrice?: number
+}
+
+const renderFromPrice = computed((): FromPriceObj => {
+  if (productLoaded.value) {
+    if (selectedOption.value) {
+      return {
+        grossDisplayPrice: selectedOption.value.grossPrice,
+        isDiscounted: !!selectedOption.value.discount,
+        grossDiscountedPrice: selectedOption.value.discount
+          ? selectedOption.value.discount.discountedGrossPrice
+          : null,
+      }
+    }
+
+    if (product.value.displayPrice) {
+      return {
+        grossDisplayPrice: product.value.fromPrice,
+        isDiscounted: false,
+        grossDiscountedPrice: null,
+      }
+    }
+  }
+
+  return null
+})
+
+const showPrice = computed(
+  (): boolean =>
+    !!(
+      product.value &&
+      productLoaded.value &&
+      renderFromPrice.value &&
+      (renderFromPrice.value.isDiscounted || product.value.displayPrice)
+    )
+)
+
 /***************
  ** Page meta **
  ***************/
@@ -189,18 +304,29 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
       />
       <Image v-else loading />
       <Container>
-        <Breadcrumbs
-          v-if="productLoaded && currentParentCategoryObjLoaded && currentChildCategoryObjLoaded"
-        >
+        <Breadcrumbs v-if="productLoaded">
           <BreadcrumbsItem to="/">{{ config.BRAND_NAME }}</BreadcrumbsItem>
-          <BreadcrumbsItem :to="`/category/${currenParentCategoryObj.slug}/`">
-            {{ currenParentCategoryObj.name }}
-          </BreadcrumbsItem>
-          <BreadcrumbsItem
-            :to="`/category/${currenParentCategoryObj.slug}/${currentChildCategoryObj.slug}/`"
-          >
-            {{ currentChildCategoryObj.name }}
-          </BreadcrumbsItem>
+          <template v-if="foundParentCategory && foundChildCategory">
+            <BreadcrumbsItem
+              :to="{
+                name: 'categories-categorySlug',
+                params: { categorySlug: foundParentCategory.slug },
+              }"
+            >
+              {{ foundParentCategory.name }}
+            </BreadcrumbsItem>
+            <BreadcrumbsItem
+              :to="{
+                name: 'categories-categorySlug-subCategorySlug',
+                params: {
+                  categorySlug: foundParentCategory.slug,
+                  subCategorySlug: foundChildCategory.slug,
+                },
+              }"
+            >
+              {{ foundChildCategory.name }}
+            </BreadcrumbsItem>
+          </template>
           <BreadcrumbsItem to="#" active>{{ product.name }}</BreadcrumbsItem>
         </Breadcrumbs>
         <Breadcrumbs v-else>
@@ -223,14 +349,30 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
           <!-- Options -->
           <div class="lg:mt-0 lg:row-span-3 xl:col-span-2 lg:col-span-1 mt-4">
             <h2 class="sr-only">Produktinformasjon</h2>
-            <div v-if="product && product.displayPrice">
-              <Text v-if="productLoaded" variant="title2" class="font-normal">
-                Fra kr 599,00
-                <span class="text-gray-600">{{ product.unit }}</span>
-              </Text>
+            <div v-if="showPrice">
+              <div v-if="productLoaded">
+                <div v-if="renderFromPrice.isDiscounted">
+                  <Text variant="title2" color="text-red-600" class="font-normal">
+                    Fra kr {{ $formatPrice(renderFromPrice.grossDiscountedPrice) }}
+                    <span class="text-gray-500">{{ product.unit }}</span>
+                  </Text>
+                  <Text variant="title3" class="mt-1 font-normal">
+                    <s>
+                      Fra kr {{ $formatPrice(renderFromPrice.grossDisplayPrice) }}
+                      <span class="text-gray-500">{{ product.unit }}</span>
+                    </s>
+                  </Text>
+                </div>
+                <div v-else>
+                  <Text variant="title2" class="font-normal">
+                    Fra kr {{ $formatPrice(renderFromPrice.grossDisplayPrice) }}
+                    <span class="text-gray-500">{{ product.unit }}</span>
+                  </Text>
+                </div>
+              </div>
               <SkeletonLoader v-else loading width="w-60" height="h-10" />
             </div>
-            <form :class="product && product.displayPrice ? 'mt-6' : 'mt-0'">
+            <form :class="showPrice ? 'mt-6' : 'mt-0'">
               <!-- Colors -->
               <div>
                 <h3 v-if="productLoaded" class="text-sm font-medium text-gray-900">Varianter</h3>
@@ -314,13 +456,13 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
                         :aria-labelledby="`size-choice-${size.id}-label`"
                         @input="selectedSize = size"
                       />
-                      <span :id="`size-choice-${size.id}-label`" class="shrink-0">{{
-                        size.name
-                      }}</span>
+                      <span :id="`size-choice-${size.id}-label`" class="shrink-0">
+                        {{ size.name }}
+                      </span>
                       <span
                         class="-inset-px absolute rounded-md pointer-events-none"
                         aria-hidden="true"
-                      ></span>
+                      />
                     </label>
                   </div>
                   <div v-else class="sm:grid-cols-4 lg:grid-cols-2 grid grid-cols-2 gap-4 mt-1">

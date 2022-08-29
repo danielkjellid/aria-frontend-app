@@ -28,7 +28,7 @@ const collapsed = ref<boolean>(false)
 <template>
   <section>
     <div
-      class="bg-brand-50 text-brand-900 px-4 py-3 text-sm font-medium rounded-lg cursor-pointer"
+      class="bg-brand-100 text-brand-900 px-4 py-3 text-sm font-medium rounded-lg cursor-pointer"
       :class="{ 'flex items-center justify-between': !disableCollapse }"
       @click="collapsed = !collapsed"
     >

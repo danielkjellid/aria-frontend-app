@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { CategoryProductListOutput } from '~~/@types/generated/dist'
+import { ProductListOutput } from '~~/@types/generated/dist'
 
 interface ProductListProps {
-  products: CategoryProductListOutput[]
+  products: ProductListOutput[]
   loading?: boolean
 }
 defineProps<ProductListProps>()
@@ -31,6 +31,7 @@ defineProps<ProductListProps>()
       :name="p.name"
       :slug="p.slug"
       :thumbnail="p.thumbnail"
+      :discount="p.discount"
       :display-price="p.displayPrice"
       :from-price="p.fromPrice"
       :unit="p.unit"
