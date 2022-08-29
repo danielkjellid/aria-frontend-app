@@ -91,7 +91,7 @@ fetchProducts()
 const products = computed(() => (fetchedProducts.value ? fetchedProducts.value : null))
 const productsLoading = computed(() => !products.value)
 
-/**********************
+/*********************
  ** State: Querying **
  *********************/
 
