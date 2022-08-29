@@ -6,6 +6,9 @@ export default defineNuxtConfig({
     public: {
       SITE_ID: process.env.SITE_ID,
 
+      SENTRY_DSN: process.env.SENTRY_DSN,
+      ENVIRONMENT: process.env.ENVIRONMENT,
+
       BASE_URL: process.env.BASE_URL,
       BRAND_NAME: process.env.BRAND_NAME,
       LEGAL_NAME: process.env.LEGAL_NAME,

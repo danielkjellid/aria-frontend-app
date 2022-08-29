@@ -19,7 +19,7 @@ jobs:
           restore-keys: |
             node-${{ runner.os }}-
       - run: npm install
-      - run: npm run build
+      - run: npm run build:production
 
   js-lint:
     runs-on: ubuntu-20.04
@@ -48,7 +48,7 @@ jobs:
       - run: ${{ matrix.target }}
 
   ci-done:
-    # Gather job which delpoy workflow can wait on.
+    # Gather job which deploy workflow can wait on.
     name: CI done
     needs:
       - js-build

@@ -47,7 +47,7 @@ const config = useRuntimeConfig().public
         </div>
         <div class="md:mt-0 md:order-1 mt-8">
           <p class="text-brand-600 text-base leading-6 text-center">
-            &copy; 202 {{ config.LEGAL_NAME }}. Alle rettigheter reservert.
+            &copy; 2020 {{ config.LEGAL_NAME }}. Alle rettigheter reservert.
           </p>
         </div>
       </div>

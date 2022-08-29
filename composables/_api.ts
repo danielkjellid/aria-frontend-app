@@ -2,13 +2,8 @@
 import { $fetch } from 'ohmyfetch'
 import { Setter } from './types'
 
-const baseURL =
-  process.env.NODE_ENV !== 'production'
-    ? 'http://127.0.0.1:8000/api/'
-    : 'https://api.staging.flis.no/api/'
-
 export const apiService = $fetch.create({
-  baseURL,
+  // baseURL,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -22,11 +17,13 @@ export const apiService = $fetch.create({
 })
 
 export async function getter<T>(url: string, options: any = {}): Promise<T> {
+  const config = useRuntimeConfig().public
+
   if (!url) {
     throw new Error('Url was not provided.')
   }
 
-  const response = await apiService(url, {
+  const response = await apiService(`${config.BASE_URL}${url}`, {
     ...options,
     headers: {
       Authorization: process.client ? `Bearer ${localStorage.getItem('access_token')}` : null,
@@ -35,7 +32,7 @@ export async function getter<T>(url: string, options: any = {}): Promise<T> {
   })
 
   if (!response.ok) {
-    // do stuff
+    // do stuff.
   }
 
   return response
@@ -44,9 +41,10 @@ export async function getter<T>(url: string, options: any = {}): Promise<T> {
 export const setter =
   (method: string): Setter =>
   <T>(url: string, data: unknown, options: any = {}) => {
+    const config = useRuntimeConfig().public
     const payload = JSON.stringify(data)
 
-    return getter<T>(url, {
+    return getter<T>(`${config.BASE_URL}${url}`, {
       body: payload,
       method,
       ...options,
