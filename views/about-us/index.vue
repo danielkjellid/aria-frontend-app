@@ -2,7 +2,7 @@
 /* eslint-disable vue/no-v-for-template-key */
 import { LocationMarkerIcon, PhoneIcon, AtSymbolIcon, ClockIcon } from '@heroicons/vue/outline'
 import {
-  OpeningHoursOutput,
+  OpeningHoursOutputSchema,
   EmployeeListOutput,
   SupplierListOutput,
 } from '~~/@types/generated/dist'
@@ -18,7 +18,7 @@ const config = useRuntimeConfig().public
  ** State: Opening hours **
  **************************/
 
-const openingHours = ref<OpeningHoursOutput>()
+const openingHours = ref<OpeningHoursOutputSchema>()
 const openingHoursLoaded = computed(
   (): boolean =>
     !!openingHours.value &&
@@ -27,7 +27,7 @@ const openingHoursLoaded = computed(
 )
 
 const fetchOpeningHours = async () => {
-  openingHours.value = await performGet<OpeningHoursOutput>(
+  openingHours.value = await performGet<OpeningHoursOutputSchema>(
     `front/opening-hours/${config.SITE_ID}/`
   )
 }
