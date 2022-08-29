@@ -154,7 +154,7 @@ const canBePurchasedOnline = ref<boolean>(false)
             v-if="currentlyDiscounted"
             class="inline-block float-right py-1 pl-3 pr-2 mt-2 text-sm font-medium text-right text-white bg-red-400 rounded-l-full"
           >
-            <span class="flex items-center" v-if="discount.discountedGrossPercentage">
+            <span v-if="discount.discountedGrossPercentage" class="flex items-center">
               - {{ 100 * discount.discountedGrossPercentage }}%
             </span>
           </div>
