@@ -216,8 +216,6 @@ const selectOptionOnLoad = () => {
       )
     }
 
-    console.log(foundOption)
-
     selectedVariant.value = foundOption.variant
     selectedSize.value = foundOption.size
   }
