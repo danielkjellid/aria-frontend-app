@@ -11,6 +11,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
+          Authorization: process.client ? `Bearer ${localStorage.getItem('access_token')}` : null,
         },
         async onRequestError({ request, options, error }) {
           await showError({ statusCode: 500 })

@@ -20,24 +20,25 @@ const config = useRuntimeConfig().public
  ************/
 
 const route = useRoute()
+const { history } = useRouter().options
 
 const currentParentCategorySlug = computed(() => {
-  if (route.params.routeParentCategorySlug) {
-    if (typeof route.params.routeParentCategorySlug === 'string') {
-      return route.params.routeParentCategorySlug
+  if (history.state.routeParentCategorySlug) {
+    if (typeof history.state.routeParentCategorySlug === 'string') {
+      return history.state.routeParentCategorySlug
     }
-    return route.params.routeParentCategorySlug[0]
+    return history.state.routeParentCategorySlug[0]
   }
 
   return null
 })
 
 const currentChildCategorySlug = computed(() => {
-  if (route.params.routeChildCategorySlug) {
-    if (typeof route.params.routeChildCategorySlug === 'string') {
-      return route.params.routeChildCategorySlug
+  if (history.state.routeChildCategorySlug) {
+    if (typeof history.state.routeChildCategorySlug === 'string') {
+      return history.state.routeChildCategorySlug
     }
-    return route.params.routeChildCategorySlug[0]
+    return history.state.routeChildCategorySlug[0]
   }
   return null
 })

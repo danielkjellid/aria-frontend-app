@@ -129,8 +129,8 @@ const canBePurchasedOnline = ref<boolean>(false)
     <NuxtLink
       :to="{
         name: 'products-productSlug',
-        params: {
-          productSlug: slug,
+        params: { productSlug: slug },
+        state: {
           routeParentCategorySlug: currentParentCategorySlug ? currentParentCategorySlug : null,
           routeChildCategorySlug: currentChildCategorySlug ? currentChildCategorySlug : null,
         },

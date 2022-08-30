@@ -10,7 +10,6 @@ export async function getter<T>(url: string, options: any = {}): Promise<T> {
   const response = await nuxtApp.$apiService(url, {
     ...options,
     headers: {
-      Authorization: process.client ? `Bearer ${localStorage.getItem('access_token')}` : null,
       ...options.headers,
     },
   })
