@@ -1,6 +1,7 @@
 <script setup lang="ts">
 /* eslint-disable vue/no-v-html */
 import { KitchenDetailOutput } from '~~/@types/generated/dist'
+import { publicUrls } from '~~/endpoints'
 
 /************
  ** Layout **
@@ -10,22 +11,37 @@ definePageMeta({
   layout: 'default',
 })
 
+/************
+ ** Config **
+ ************/
+
 const config = useRuntimeConfig().public
 
-const kitchenSlug = useSlug('kitchenSlug')
+/******************
+ ** State: slugs **
+ ******************/
 
+const kitchenSlug = useSlug('kitchenSlug')
 const currentKitchenSlug = computed(() => kitchenSlug)
+
+/***********
+ ** State **
+ ***********/
 
 const kitchen = ref<KitchenDetailOutput>()
 const kitchenLoaded = computed((): boolean => !!kitchen.value)
 
 const fetchKitchen = async () => {
   kitchen.value = await performGet<KitchenDetailOutput>(
-    `kitchens/kitchen/${currentKitchenSlug.value}/`
+    publicUrls.kitchens.detail(currentKitchenSlug.value)
   )
 }
 
 fetchKitchen()
+
+/***************
+ ** Page meta **
+ ***************/
 
 const metaTitle = computed(() => (kitchenLoaded.value ? kitchen.value.name : undefined))
 </script>

@@ -8,6 +8,7 @@ import {
 } from '~~/@types/generated/dist'
 import image80x80 from '~~/assets/images/default_80x80.jpeg'
 import image380x575 from '~~/assets/images/default_380x575.jpeg'
+import { publicUrls } from '~~/endpoints'
 
 /************
  ** Layout **
@@ -67,7 +68,7 @@ const productLoaded = computed((): boolean => !!product.value)
 
 const fetchedProduct = async () => {
   product.value = await performGet<ProductDetailOutput>(
-    `products/product/${currentProductSlug.value}/`
+    publicUrls.products.detail(currentProductSlug.value)
   )
 }
 

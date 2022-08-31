@@ -1,5 +1,6 @@
 import { KitchenListOutput } from '~~/@types/generated/dist'
 import { defineStore } from 'pinia'
+import { publicUrls } from '~~/endpoints'
 
 const useKitchensStore = defineStore('kitchens', {
   state: () => ({
@@ -7,7 +8,7 @@ const useKitchensStore = defineStore('kitchens', {
   }),
   actions: {
     async fetchKitchens() {
-      this.kitchens = await performGet<KitchenListOutput[]>('kitchens/')
+      this.kitchens = await performGet<KitchenListOutput[]>(publicUrls.kitchens.list())
     },
   },
   getters: {

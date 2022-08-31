@@ -3,6 +3,7 @@ import useCategoriesStore from '~~/store/categories'
 import { FilterIcon } from '@heroicons/vue/outline'
 import { ProductListOutput } from '~~/@types/generated/dist'
 import { ButtonProps } from '~~/components/Button/index.vue'
+import { publicUrls } from '~~/endpoints'
 
 /************
  ** Layout **
@@ -90,7 +91,7 @@ const fetchedProducts = ref<ProductListOutput[]>(null)
 
 const fetchProducts = async () => {
   fetchedProducts.value = await performGet<ProductListOutput[]>(
-    `products/category/${currentCategorySlug.value}/`
+    publicUrls.products.list(currentCategorySlug.value)
   )
 }
 
@@ -115,8 +116,10 @@ const searchEndpoint = async () => {
   searchLoadingState.value = 'loading'
 
   try {
+    const listUrl = publicUrls.products.list(currentCategorySlug.value)
+
     fetchedProducts.value = await performGet<ProductListOutput[]>(
-      `products/category/${currentCategorySlug.value}/?search=${query.value}`
+      `${listUrl}?search=${query.value}`
     )
     searchLoadingState.value = 'success'
 
@@ -138,7 +141,7 @@ const clearSearch = async () => {
 
   try {
     fetchedProducts.value = await performGet<ProductListOutput[]>(
-      `products/category/${currentCategorySlug.value}/`
+      publicUrls.products.list(currentCategorySlug.value)
     )
     searchLoadingState.value = 'success'
 

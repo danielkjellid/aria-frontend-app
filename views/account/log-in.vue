@@ -3,7 +3,7 @@ import { TokensObtainInput, TokensObtainOutput } from '~~/@types/generated/dist'
 import { ButtonProps } from '~~/components/Button/index.vue'
 import useNotificationsStore from '~~/store/notifications'
 import useUsersStore from '~~/store/users'
-import endpoint from '~~/endpoints'
+import { publicUrls } from '~~/endpoints'
 import { storeToRefs } from 'pinia'
 
 /***********
@@ -65,7 +65,7 @@ const logIn = async () => {
   formSubmissionState.value = 'loading'
 
   try {
-    const data = await performPost<TokensObtainOutput>(endpoint.obtainTokens(), {
+    const data = await performPost<TokensObtainOutput>(publicUrls.auth.obtainTokens(), {
       email: email.value,
       password: password.value,
     } as TokensObtainInput)

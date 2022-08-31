@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DiscountsActiveListOutput } from '~~/@types/generated/dist'
-
+import { publicUrls } from 'endpoints'
 /************
  ** Layout **
  ************/
@@ -23,7 +23,7 @@ const discounts = ref<DiscountsActiveListOutput[]>()
 const discountsLoaded = computed((): boolean => !!discounts.value)
 
 const fetchDiscounts = async () => {
-  discounts.value = await performGet<DiscountsActiveListOutput[]>('discounts/active/')
+  discounts.value = await performGet<DiscountsActiveListOutput[]>(publicUrls.discounts.active())
 }
 
 fetchDiscounts()
