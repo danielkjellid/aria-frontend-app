@@ -2,6 +2,14 @@
 /* eslint-disable vuejs-accessibility/media-has-caption */
 import useKitchensStore from '~~/store/kitchens'
 
+/************
+ ** Layout **
+ ************/
+
+definePageMeta({
+  layout: 'default',
+})
+
 /***********
  ** Store **
  ***********/

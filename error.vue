@@ -13,11 +13,9 @@ interface ErrorProps {
   error: ErrorType
 }
 
-const props = defineProps<ErrorProps>()
+defineProps<ErrorProps>()
 
 const handleError = () => clearError({ redirect: '/' })
-
-console.log(props.error.statusCode === (404 || '404'))
 </script>
 
 <template>

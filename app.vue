@@ -13,7 +13,17 @@ const isDevEnvironment = computed(() => {
 
 <template>
   <div>
-    <NuxtLayout name="default">
+    <NotificationHandler>
+      <Notification
+        title="Test notification asdasd asdas asd asdasd as"
+        subtitle="testing asdasd asdasd asda asd asd as  asd asdasdasd a asdasasddasdasdasdasdasds"
+      />
+      <Notification
+        title="Test notification asdasd asdas asd asdasd as"
+        subtitle="testing asdasd asdasd asda asd asd as  asd asdasdasd a asdasasddasdasdasdasdasds"
+      />
+    </NotificationHandler>
+    <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
     <div

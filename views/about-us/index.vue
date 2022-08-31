@@ -8,6 +8,14 @@ import {
 } from '~~/@types/generated/dist'
 import storeImg from '~~/assets/images/store.jpeg'
 
+/************
+ ** Layout **
+ ************/
+
+definePageMeta({
+  layout: 'default',
+})
+
 /**************************
  ** State: Opening hours **
  **************************/

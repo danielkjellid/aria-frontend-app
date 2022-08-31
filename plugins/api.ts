@@ -17,7 +17,9 @@ export default defineNuxtPlugin((nuxtApp) => {
           await showError({ statusCode: 500 })
         },
         async onResponseError({ request, response, options }) {
-          await showError({ statusCode: response.status, statusMessage: response.statusText })
+          if (response.status === 404) {
+            await showError({ statusCode: response.status, statusMessage: response.statusText })
+          }
         },
       }),
     },

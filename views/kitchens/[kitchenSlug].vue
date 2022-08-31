@@ -2,6 +2,14 @@
 /* eslint-disable vue/no-v-html */
 import { KitchenDetailOutput } from '~~/@types/generated/dist'
 
+/************
+ ** Layout **
+ ************/
+
+definePageMeta({
+  layout: 'default',
+})
+
 const config = useRuntimeConfig().public
 
 const kitchenSlug = useSlug('kitchenSlug')

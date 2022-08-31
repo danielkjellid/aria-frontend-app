@@ -5,6 +5,14 @@ import { ProductListOutput } from '~~/@types/generated/dist'
 import { ButtonProps } from '~~/components/Button/index.vue'
 
 /************
+ ** Layout **
+ ************/
+
+definePageMeta({
+  layout: 'default',
+})
+
+/************
  ** Config **
  ************/
 
@@ -260,14 +268,7 @@ watch(
               placeholder="Søk etter tusenvis av varer..."
               class="w-full"
             />
-            <Button
-              type="submit"
-              primary
-              :loading-state="searchLoadingState"
-              @click="searchEndpoint"
-            >
-              Søk
-            </Button>
+            <Button type="submit" primary :loading-state="searchLoadingState"> Søk </Button>
           </form>
           <div class="lg:hidden flex items-center mt-4 space-x-3">
             <Tag v-if="showQueryTag && query" size="lg" @remove="clearSearch">{{ query }}</Tag>

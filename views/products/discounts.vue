@@ -2,6 +2,14 @@
 import { DiscountsActiveListOutput } from '~~/@types/generated/dist'
 
 /************
+ ** Layout **
+ ************/
+
+definePageMeta({
+  layout: 'default',
+})
+
+/************
  ** Config **
  ************/
 

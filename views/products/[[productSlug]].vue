@@ -10,6 +10,14 @@ import image80x80 from '~~/assets/images/default_80x80.jpeg'
 import image380x575 from '~~/assets/images/default_380x575.jpeg'
 
 /************
+ ** Layout **
+ ************/
+
+definePageMeta({
+  layout: 'default',
+})
+
+/************
  ** Config **
  ************/
 
