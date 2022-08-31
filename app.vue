@@ -2,11 +2,23 @@
 import useCategoriesStore from '~~/store/categories'
 import useUsersStore from './store/users'
 
+/***********************
+ ** Store: categories **
+ ***********************/
+
 const categoriesStore = useCategoriesStore()
 categoriesStore.fetchNavbarCategories()
 
+/******************
+ ** Store: users **
+ ******************/
+
 const usersStore = useUsersStore()
 usersStore.fetchCurrentUser()
+
+/***********
+ ** State **
+ ***********/
 
 const isDevEnvironment = computed(() => {
   if (process.env.NODE_ENV !== 'production') return true

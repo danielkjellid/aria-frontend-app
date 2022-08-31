@@ -61,7 +61,7 @@ const metaDescription = ref(
             url(${auth1920x1080}) 1x,
             url(${auth2560x1440}) 2x
           );`"
-        class="bg-center bg-no-repeat bg-cover"
+        class="md:block hidden bg-center bg-no-repeat bg-cover"
       >
         <div class="md:bg-transparent bg-white">
           <div class="md:m-0 lg:max-w-md max-w-sm min-h-screen px-5 py-6 m-auto bg-white">

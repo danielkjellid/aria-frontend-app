@@ -1,4 +1,7 @@
 <script setup lang="ts">
+/***********
+ ** Props **
+ ***********/
 interface TabItemProps {
   to: string
   active?: boolean

@@ -2,7 +2,15 @@
 import { storeToRefs } from 'pinia'
 import useNotificationsStore from '~~/store/notifications'
 
+/***********
+ ** Store **
+ ***********/
+
 const store = useNotificationsStore()
+
+/***********
+ ** State **
+ ***********/
 
 const { unhandledNotifications } = storeToRefs(store)
 </script>
