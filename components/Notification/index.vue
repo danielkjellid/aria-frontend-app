@@ -7,6 +7,10 @@ import {
   XIcon,
 } from '@heroicons/vue/outline'
 
+/***********
+ ** Props **
+ ***********/
+
 interface NotificationProps {
   /**
    * Title of the notification.
@@ -15,7 +19,7 @@ interface NotificationProps {
   /**
    * Subtitle of the notification.
    */
-  subtitle?: string
+  text?: string
   /**
    * The notification variant.
    */
@@ -26,29 +30,38 @@ const props = defineProps<NotificationProps>()
 
 const variant = computed(() => (props.variant ? props.variant : 'success'))
 
-const onCloseNotification = (): void => {}
+/***********
+ ** Emits **
+ ***********/
 
-const closeAfterThreeSeconds = (): void => {
-  setTimeout(() => {
-    onCloseNotification()
-  }, 3000)
+interface NotificationEmits {
+  (e: 'dismiss'): void
 }
 
-const displayNotification = ref<boolean>(true)
+const emits = defineEmits<NotificationEmits>()
 
-// setTimeout(() => {
-//   displayNotification.value = true
-// }, 500)
+/***********
+ ** State **
+ ***********/
+
+const dismissNotification = (): void => {
+  emits('dismiss')
+}
+
+const dismissAutomatically = (): void => {
+  setTimeout(() => {
+    dismissNotification()
+  }, 4000)
+}
+
+dismissAutomatically()
 </script>
 
 <template>
-  <div
-    v-if="displayNotification"
-    class="w-full max-w-sm bg-white rounded-lg shadow-lg pointer-events-auto"
-  >
+  <div class="relative w-full max-w-sm bg-white rounded-lg shadow-lg pointer-events-auto">
     <div class="overflow-hidden rounded-lg shadow-xs">
       <div class="p-4">
-        <div class="flex" :class="subtitle ? 'items-start' : 'items-center'">
+        <div class="flex" :class="text ? 'items-start' : 'items-center'">
           <div class="shrink-0">
             <XCircleIcon v-if="variant === 'danger'" class="w-6 h-6 text-red-400" />
             <ExclamationCircleIcon
@@ -60,13 +73,13 @@ const displayNotification = ref<boolean>(true)
           </div>
           <div class="flex-1 ml-3">
             <Text variant="subtitle1" class="w-64 truncate">{{ title }}</Text>
-            <Text v-if="subtitle" variant="body2">{{ subtitle }}</Text>
+            <Text v-if="text" variant="body2">{{ text }}</Text>
           </div>
           <div class="shrink-0 flex ml-4">
             <button
               type="button"
               class="focus:outline-none focus:text-gray-600 hover:bg-gray-200 inline-flex p-1 text-gray-500 transition duration-150 ease-in-out rounded-full"
-              @click="displayNotification = false"
+              @click="dismissNotification"
             >
               <XIcon class="w-5 h-5" />
             </button>

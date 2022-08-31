@@ -1,37 +1,86 @@
 <script setup lang="ts">
 import { TokensObtainInput, TokensObtainOutput } from '~~/@types/generated/dist'
 import { ButtonProps } from '~~/components/Button/index.vue'
+import useNotificationsStore from '~~/store/notifications'
+import useUsersStore from '~~/store/users'
+import endpoint from '~~/endpoints'
+import { storeToRefs } from 'pinia'
 
 definePageMeta({
   layout: false,
 })
 
-const email = ref('')
+const router = useRouter()
+
+const email = ref<string>('')
 const password = ref<string>('')
 
 const formSubmissionState = ref<ButtonProps['loadingState']>('initial')
+
+const notificationsStore = useNotificationsStore()
+const usersStore = useUsersStore()
+
+const { currentUser } = storeToRefs(usersStore)
 
 const logIn = async () => {
   formSubmissionState.value = 'loading'
 
   try {
-    const data = await performPost<TokensObtainOutput>('auth/tokens/obtain/', {
+    const data = await performPost<TokensObtainOutput>(endpoint.obtainTokens(), {
       email: email.value,
       password: password.value,
     } as TokensObtainInput)
 
     formSubmissionState.value = 'success'
 
-    if (process.browser) {
+    if (process.client) {
       localStorage.setItem('accessToken', data.accessToken)
       localStorage.setItem('refreshToken', data.refreshToken)
+
+      const user = usersStore.fetchCurrentUser()
+
+      if (!user) {
+        notificationsStore.create({
+          title: 'Noe gikk galt',
+          text: 'Vi har problemer med å hente brukeren din. Vennligst prøv igjen senere.',
+          type: 'danger',
+        })
+      }
+
+      router.push('/')
+
+      notificationsStore.create({
+        title: 'Logget inn',
+        text: 'Velkommen tilbake!',
+        type: 'success',
+      })
     }
   } catch (error) {
     formSubmissionState.value = 'error'
-    console.log(error)
+
+    notificationsStore.create({
+      title: 'Noe gikk galt',
+      text: error.data.message,
+      type: 'danger',
+    })
+
+    email.value = ''
+    password.value = ''
   } finally {
-    // formSubmissionState.value = 'initial'
+    formSubmissionState.value = 'initial'
   }
+}
+
+const logOut = () => {
+  usersStore.logOut()
+
+  notificationsStore.create({
+    title: 'Logget ut!',
+    text: 'Du er nå logget ut.',
+    type: 'success',
+  })
+
+  router.push('/')
 }
 </script>
 
@@ -46,23 +95,25 @@ const logIn = async () => {
       </template>
       <template #heading>
         <Text variant="title4">Velkommen tilbake!</Text>
-        <Text class="mt-1" variant="body2">
+        <Text v-if="!usersStore.currentUser" class="mt-1" variant="body2">
           Har du ikke en konto? <ButtonLink to="/">Lag en her</ButtonLink>
         </Text>
+        <div v-else class="mt-1">
+          <Text variant="body2">
+            Du er allerede logget inn som {{ currentUser.profile.fullName }}.
+          </Text>
+          <ButtonLink is="button" type="button" class="block mt-1" @click="logOut">
+            Logg ut
+          </ButtonLink>
+        </div>
       </template>
       <template #content>
-        <form class="max-w-sm m-auto" @submit.prevent="logIn">
+        <form v-if="!currentUser" class="max-w-sm m-auto" @submit.prevent="logIn">
           <div>
-            <Input id="id_email" v-model.trim="email" label="E-post" :value="email" type="email" />
+            <Input id="id_email" v-model="email" label="E-post" type="email" />
           </div>
           <div class="mt-5">
-            <Input
-              id="id_email"
-              v-model.trim="password"
-              label="Passord"
-              :value="password"
-              type="password"
-            />
+            <Input id="id_email" v-model="password" label="Passord" type="password" />
           </div>
           <div class="mt-4 mb-4 text-center">
             <ButtonLink to="/">Glemt passord?</ButtonLink>

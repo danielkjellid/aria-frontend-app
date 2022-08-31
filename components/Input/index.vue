@@ -22,7 +22,7 @@ interface InputProps {
   /**
    * The value of the input itself, usually set by v-model.
    */
-  value?: string
+  modelValue?: string
   /**
    * Type of input: https://www.w3schools.com/html/html_form_input_types.asp.
    */
@@ -67,7 +67,7 @@ defineEmits(['update:modelValue'])
       </div>
       <input
         :id="id"
-        :value="value"
+        :value="modelValue"
         :class="{
           'pl-10': existingIcon,
           'pr-10 border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red':

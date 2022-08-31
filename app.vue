@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import useCategoriesStore from '~~/store/categories'
+import useUsersStore from './store/users'
 
 const categoriesStore = useCategoriesStore()
 categoriesStore.fetchNavbarCategories()
+
+const usersStore = useUsersStore()
+usersStore.fetchCurrentUser()
 
 const isDevEnvironment = computed(() => {
   if (process.env.NODE_ENV !== 'production') return true
@@ -13,16 +17,7 @@ const isDevEnvironment = computed(() => {
 
 <template>
   <div>
-    <NotificationHandler>
-      <Notification
-        title="Test notification asdasd asdas asd asdasd as"
-        subtitle="testing asdasd asdasd asda asd asd as  asd asdasdasd a asdasasddasdasdasdasdasds"
-      />
-      <Notification
-        title="Test notification asdasd asdas asd asdasd as"
-        subtitle="testing asdasd asdasd asda asd asd as  asd asdasdasd a asdasasddasdasdasdasdasds"
-      />
-    </NotificationHandler>
+    <NotificationHandler />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

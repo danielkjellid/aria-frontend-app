@@ -1,16 +1,16 @@
 <script setup lang="ts">
-const dummyNotifications = ref([])
+import { storeToRefs } from 'pinia'
+import useNotificationsStore from '~~/store/notifications'
 
-const t = () => {
-  dummyNotifications.value.push({ text: 'Test 789', subtitle: 'asdasdas' })
-  console.log('click')
-}
+const store = useNotificationsStore()
+
+const { unhandledNotifications } = storeToRefs(store)
 </script>
 
 <template>
   <div>
     <div
-      class="sm:p-6 sm:items-start sm:justify-end absolute top-0 right-0 z-50 flex-1 max-w-md px-4 py-6 space-y-3 overflow-hidden bg-red-400 pointer-events-none"
+      class="sm:p-6 sm:items-start sm:justify-end absolute top-0 right-0 z-50 flex-1 max-w-md px-4 py-6 space-y-3 overflow-hidden pointer-events-none"
     >
       <TransitionGroup
         enter-active-class="transition duration-500 ease-in-out transform"
@@ -21,13 +21,14 @@ const t = () => {
         leave-to-class="sm:translate-y-0 sm:translate-x-2 translate-y-2 opacity-0"
       >
         <Notification
-          v-for="n in dummyNotifications"
-          :key="n.text"
-          :title="n.text"
-          :subtitle="n.subtitle"
+          v-for="(notification, index) in unhandledNotifications"
+          :key="`${notification.title}-${index}`"
+          :title="notification.title"
+          :text="notification.text"
+          :variant="notification.type"
+          @dismiss="store.handle(notification.id)"
         />
       </TransitionGroup>
     </div>
-    <button type="button" class="absolute z-50 bg-red-900" @click="t">TEST</button>
   </div>
 </template>
