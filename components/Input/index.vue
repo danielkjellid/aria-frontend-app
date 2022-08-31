@@ -53,7 +53,7 @@ defineEmits(['update:modelValue'])
   <div :class="{ 'mb-8': error }">
     <label
       :for="id"
-      :class="{ 'sr-only': hiddenLabel, 'mb-1': label }"
+      :class="{ 'sr-only': hiddenLabel, 'mb-1': label, 'text-red-600': error }"
       class="block text-sm font-semibold leading-5 text-gray-700"
     >
       {{ label }}
