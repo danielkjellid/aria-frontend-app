@@ -4,13 +4,17 @@ import useNotificationsStore from '~~/store/notifications'
 import useUsersStore from '~~/store/users'
 import { publicUrls } from '~~/endpoints'
 
-/************
- ** Routes **
- ************/
+/***************
+ ** Page meta **
+ ***************/
 
 definePageMeta({
   layout: false,
 })
+
+/************
+ ** Routes **
+ ************/
 
 const router = useRouter()
 

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ExclamationCircleIcon } from '@heroicons/vue/outline'
 
+/***********
+ ** Props **
+ ***********/
+
 interface SelectProps {
   /**
    * Id field of the element.
@@ -22,11 +26,23 @@ interface SelectProps {
 
 const props = defineProps<SelectProps>()
 
+/*******************
+ ** Prop defaults **
+ *******************/
+
 const hiddenLabel = computed(() => (props.hiddenLabel ? props.hiddenLabel : false))
 
-const slots = useSlots()
+/***********
+ ** Slots **
+ ***********/
 
+const slots = useSlots()
 const existingIcon = computed(() => !!slots.icon)
+
+/***********
+ ** Emits **
+ ***********/
+
 defineEmits(['update:modelValue'])
 </script>
 

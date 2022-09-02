@@ -5,13 +5,17 @@ import useNotificationsStore from '~~/store/notifications'
 import { publicUrls } from '~~/endpoints'
 import { ApiError } from '~~/@types'
 
-/************
- ** Routes **
- ************/
+/***************
+ ** Page meta **
+ ***************/
 
 definePageMeta({
   layout: false,
 })
+
+/************
+ ** Routes **
+ ************/
 
 const router = useRouter()
 

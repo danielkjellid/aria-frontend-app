@@ -5,9 +5,9 @@ import { ProductListOutput } from '~~/@types'
 import { ButtonProps } from '~~/components/Button/index.vue'
 import { publicUrls } from '~~/endpoints'
 
-/************
- ** Layout **
- ************/
+/***************
+ ** Page meta **
+ ***************/
 
 definePageMeta({
   layout: 'default',

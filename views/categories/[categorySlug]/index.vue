@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import useCategoriesStore from '~~/store/categories'
 
-/************
- ** Layout **
- ************/
+/***************
+ ** Page meta **
+ ***************/
 
 definePageMeta({
   layout: 'default',

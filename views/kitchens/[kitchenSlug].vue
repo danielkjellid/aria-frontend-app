@@ -3,9 +3,9 @@
 import { KitchenDetailOutput } from '~~/@types'
 import { publicUrls } from '~~/endpoints'
 
-/************
- ** Layout **
- ************/
+/***************
+ ** Page meta **
+ ***************/
 
 definePageMeta({
   layout: 'default',

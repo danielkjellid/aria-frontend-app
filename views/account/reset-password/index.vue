@@ -4,13 +4,17 @@ import { ButtonProps } from '~~/components/Button/index.vue'
 import useNotificationsStore from '~~/store/notifications'
 import { publicUrls } from '~~/endpoints'
 
-/************
- ** Routes **
- ************/
+/***************
+ ** Page meta **
+ ***************/
 
 definePageMeta({
   layout: false,
 })
+
+/************
+ ** Routes **
+ ************/
 
 const router = useRouter()
 

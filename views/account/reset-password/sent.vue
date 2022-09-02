@@ -1,7 +1,7 @@
 <script setup lang="ts">
-/************
- ** Routes **
- ************/
+/***************
+ ** Page meta **
+ ***************/
 
 definePageMeta({
   layout: false,

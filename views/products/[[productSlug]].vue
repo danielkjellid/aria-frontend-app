@@ -10,9 +10,9 @@ import image80x80 from '~~/assets/images/default_80x80.jpeg'
 import image380x575 from '~~/assets/images/default_380x575.jpeg'
 import { publicUrls } from '~~/endpoints'
 
-/************
- ** Layout **
- ************/
+/***************
+ ** Page meta **
+ ***************/
 
 definePageMeta({
   layout: 'default',

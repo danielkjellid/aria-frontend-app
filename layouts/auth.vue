@@ -24,8 +24,16 @@ const metaDescription = ref(
   'FK-JKE Design er en totalleverandør av markedes mest spennende utvalg innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken fra noen av verdens mest spennende produsenter.'
 )
 
+/***********
+ ** Store **
+ ***********/
+
 const notificationsStore = useNotificationsStore()
 const usersStore = useUsersStore()
+
+/***********
+ ** State **
+ ***********/
 
 const { currentUser } = storeToRefs(usersStore)
 
@@ -40,7 +48,7 @@ const logOut = () => {
     type: 'success',
   })
 
-  router.push('/')
+  router.push({ name: 'index' })
 }
 </script>
 

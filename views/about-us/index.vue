@@ -5,9 +5,9 @@ import { OpeningHoursOutput, EmployeeListOutput, SupplierListOutput } from '~~/@
 import storeImg from '~~/assets/images/store.jpeg'
 import { publicUrls } from '~~/endpoints'
 
-/************
- ** Layout **
- ************/
+/***************
+ ** Page meta **
+ ***************/
 
 definePageMeta({
   layout: 'default',
