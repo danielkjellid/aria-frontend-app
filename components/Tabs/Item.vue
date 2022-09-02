@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { RouteLocationRaw } from 'vue-router'
+
 /***********
  ** Props **
  ***********/
 
 interface TabItemProps {
-  to: string
+  to: RouteLocationRaw
   active?: boolean
 }
 

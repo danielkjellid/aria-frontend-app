@@ -146,14 +146,15 @@ const createAccount = async () => {
     <NuxtLayout name="auth">
       <template #tabs>
         <Tabs>
-          <TabsItem to="#">Logg inn</TabsItem>
+          <TabsItem :to="{ name: 'account-log-in' }">Logg inn</TabsItem>
           <TabsItem to="#" active>Opprett konto</TabsItem>
         </Tabs>
       </template>
       <template #heading>
         <Text variant="title4">Kom i gang med å handle!</Text>
         <Text class="mt-1" variant="body2">
-          Har du allerede en konto? <ButtonLink to="/">Logg inn her</ButtonLink>
+          Har du allerede en konto?
+          <ButtonLink :to="{ name: 'account-log-in' }">Logg inn her</ButtonLink>
         </Text>
       </template>
       <template #content>

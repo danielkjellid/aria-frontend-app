@@ -113,13 +113,14 @@ const logIn = async () => {
       <template #tabs>
         <Tabs>
           <TabsItem to="#" active>Logg inn</TabsItem>
-          <TabsItem to="#">Opprett konto</TabsItem>
+          <TabsItem :to="{ name: 'account-register' }">Opprett konto</TabsItem>
         </Tabs>
       </template>
       <template #heading>
         <Text variant="title4">Velkommen tilbake!</Text>
         <Text class="mt-1" variant="body2">
-          Har du ikke en konto? <ButtonLink to="/">Lag en her</ButtonLink>
+          Har du ikke en konto?
+          <ButtonLink :to="{ name: 'account-register' }">Lag en her</ButtonLink>
         </Text>
       </template>
       <template #content>
@@ -149,7 +150,7 @@ const logIn = async () => {
             />
           </div>
           <div class="mt-4 mb-4 text-center">
-            <ButtonLink to="/">Glemt passord?</ButtonLink>
+            <ButtonLink :to="{ name: 'account-reset-password' }">Glemt passord?</ButtonLink>
           </div>
           <Button type="submit" fluid :loading-state="formSubmissionState">Logg inn</Button>
         </form>

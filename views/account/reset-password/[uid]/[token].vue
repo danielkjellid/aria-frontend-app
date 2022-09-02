@@ -71,6 +71,8 @@ const setNewPassword = async () => {
     })
 
     router.push({ name: 'account-log-in' })
+
+    formSubmissionState.value = 'initial'
   } catch (e) {
     formSubmissionState.value = 'error'
 
