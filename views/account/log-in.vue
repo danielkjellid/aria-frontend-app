@@ -131,7 +131,7 @@ const logIn = async () => {
           </div>
           <div class="mt-5">
             <Input
-              id="id_email"
+              id="id_password"
               v-model="password"
               label="Passord"
               type="password"

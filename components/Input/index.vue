@@ -50,7 +50,7 @@ defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <div :class="{ 'mb-8': error }">
+  <div>
     <label
       :for="id"
       :class="{ 'sr-only': hiddenLabel, 'mb-1': label, 'text-red-600': error }"
@@ -86,6 +86,6 @@ defineEmits(['update:modelValue'])
         <ExclamationCircleIcon class="w-5 h-5 text-red-500" />
       </div>
     </div>
-    <p v-if="error" class="absolute mt-1 text-sm text-red-600">{{ error }}</p>
+    <p v-if="error" class="relative mt-1 text-sm text-red-600">{{ error }}</p>
   </div>
 </template>

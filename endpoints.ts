@@ -38,6 +38,8 @@ const publicEndpoints = {
     requestUser: () => 'users/me/',
     create: () => 'users/create/',
     verifyConfirm: () => 'users/verify/confirm/',
+    passwordReset: () => 'users/password/reset/',
+    passwordResetConfirm: () => 'users/password/reset/confirm/',
   },
 }
 
