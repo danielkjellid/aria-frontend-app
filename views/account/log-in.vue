@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TokensObtainInput, TokensObtainOutput } from '~~/@types/generated/dist'
+import { TokensObtainInput, TokensObtainOutput, ApiError } from '~~/@types'
 import { ButtonProps } from '~~/components/Button/index.vue'
 import useNotificationsStore from '~~/store/notifications'
 import useUsersStore from '~~/store/users'
@@ -7,7 +7,7 @@ import { publicUrls } from '~~/endpoints'
 
 /************
  ** Routes **
- ***********/
+ ************/
 
 definePageMeta({
   layout: false,
@@ -34,15 +34,6 @@ const formSubmissionState = ref<ButtonProps['loadingState']>('initial')
 /*******************
  ** State: errors **
  *******************/
-
-interface ApiErrorExtra {
-  [x: string]: string
-}
-
-interface ApiError {
-  message: string
-  extra?: ApiErrorExtra
-}
 
 const error = ref<ApiError | null>(null)
 const errorMessage = computed(() => (error.value.message ? error.value.message : null))

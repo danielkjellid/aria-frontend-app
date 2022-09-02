@@ -3,7 +3,7 @@ import {
   CategoryDetailOutput,
   CategoryListOutput,
   CategoryParentListOutput,
-} from '~~/@types/generated/dist'
+} from '~~/@types'
 
 import { defineStore } from 'pinia'
 import performGet from '~~/composables/performGet'

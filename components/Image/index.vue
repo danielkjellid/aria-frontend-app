@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BaseHeaderImageRecord } from '~~/@types/generated/dist'
+import { BaseHeaderImageRecord } from '~~/@types'
 import { ChevronDownIcon } from '@heroicons/vue/outline'
 import image512x512 from '~~/assets/images/default_512x512.jpeg'
 import image640x275 from '~~/assets/images/default_640x275.jpeg'

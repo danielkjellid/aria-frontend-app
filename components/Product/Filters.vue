@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ProductListOutput } from '~~/@types/generated/dist'
+import { ProductListOutput } from '~~/@types'
 
 /***********
  ** Routes **

@@ -3,6 +3,10 @@ import { $fetch } from 'ohmyfetch'
 import { Setter } from './types'
 
 const apiService = $fetch.create({
+  async onRequest({ request, options }) {
+    await console.log('REQUEST', Math.random())
+    await console.log(request)
+  },
   async onRequestError({ request, options, error }) {
     await showError({ statusCode: 500 })
   },

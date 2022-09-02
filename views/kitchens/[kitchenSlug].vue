@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /* eslint-disable vue/no-v-html */
-import { KitchenDetailOutput } from '~~/@types/generated/dist'
+import { KitchenDetailOutput } from '~~/@types'
 import { publicUrls } from '~~/endpoints'
 
 /************

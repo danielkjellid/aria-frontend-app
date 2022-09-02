@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import useCategoriesStore from '~~/store/categories'
 import { FilterIcon } from '@heroicons/vue/outline'
-import { ProductListOutput } from '~~/@types/generated/dist'
+import { ProductListOutput } from '~~/@types'
 import { ButtonProps } from '~~/components/Button/index.vue'
 import { publicUrls } from '~~/endpoints'
 

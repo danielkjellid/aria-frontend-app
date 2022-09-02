@@ -1,4 +1,4 @@
-import { KitchenListOutput } from '~~/@types/generated/dist'
+import { KitchenListOutput } from '~~/@types'
 import { defineStore } from 'pinia'
 import { publicUrls } from '~~/endpoints'
 

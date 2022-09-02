@@ -3,10 +3,11 @@ import { ButtonProps } from '~~/components/Button/index.vue'
 import useUsersStore from '~~/store/users'
 import useNotificationsStore from '~~/store/notifications'
 import { publicUrls } from '~~/endpoints'
+import { ApiError } from '~~/@types'
 
 /************
  ** Routes **
- ***********/
+ ************/
 
 definePageMeta({
   layout: false,
@@ -24,15 +25,6 @@ const usersStore = useUsersStore()
 /*******************
  ** State: errors **
  *******************/
-
-interface ApiErrorExtra {
-  [x: string]: string
-}
-
-interface ApiError {
-  message: string
-  extra?: ApiErrorExtra
-}
 
 const error = ref<ApiError | null>(null)
 const errorMessage = computed(() => (error.value.message ? error.value.message : null))

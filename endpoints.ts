@@ -37,6 +37,7 @@ const publicEndpoints = {
   users: {
     requestUser: () => 'users/me/',
     create: () => 'users/create/',
+    verifyConfirm: () => 'users/verify/confirm/',
   },
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ProductShapeOutput } from '~~/@types/generated/dist'
+import { ProductShapeOutput } from '~~/@types'
 
 /***********
  ** Props **

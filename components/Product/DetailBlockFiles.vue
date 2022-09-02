@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ProductFileOutput } from '~~/@types/generated/dist'
+import { ProductFileOutput } from '~~/@types'
 import { PaperClipIcon } from '@heroicons/vue/outline'
 
 /***********

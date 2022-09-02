@@ -3,7 +3,7 @@ import {
   TokensObtainInput,
   TokensObtainOutput,
   UserRequestOutput,
-} from '~~/@types/generated/dist'
+} from '~~/@types'
 
 import { defaultHeaders } from '~~/composables/_api'
 import { defineStore } from 'pinia'
@@ -69,6 +69,9 @@ const useUsersStore = defineStore('users', {
 
       return null
     },
+  },
+  getters: {
+    currentUserLoggedIn: (state) => Object.keys(state.currentUser).length > 0,
   },
 })
 

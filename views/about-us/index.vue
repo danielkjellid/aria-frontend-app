@@ -1,11 +1,7 @@
 <script setup lang="ts">
 /* eslint-disable vue/no-v-for-template-key */
 import { LocationMarkerIcon, PhoneIcon, AtSymbolIcon, ClockIcon } from '@heroicons/vue/outline'
-import {
-  OpeningHoursOutput,
-  EmployeeListOutput,
-  SupplierListOutput,
-} from '~~/@types/generated/dist'
+import { OpeningHoursOutput, EmployeeListOutput, SupplierListOutput } from '~~/@types'
 import storeImg from '~~/assets/images/store.jpeg'
 import { publicUrls } from '~~/endpoints'
 

@@ -5,7 +5,7 @@ import {
   ProductSizeOutput,
   ProductVariantOutput,
   ProductCategoryOutput,
-} from '~~/@types/generated/dist'
+} from '~~/@types'
 import image80x80 from '~~/assets/images/default_80x80.jpeg'
 import image380x575 from '~~/assets/images/default_380x575.jpeg'
 import { publicUrls } from '~~/endpoints'

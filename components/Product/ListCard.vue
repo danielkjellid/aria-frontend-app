@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import image380x575 from '~~/assets/images/default_380x575.jpeg'
 import image80x80 from '~~/assets/images/default_80x80.jpeg'
-import { ProductVariantOutput, ProductDiscountOutput } from '~~/@types/generated/dist'
+import { ProductVariantOutput, ProductDiscountOutput } from '~~/@types'
 import breakpointData from '~~/utils/breakpoints'
 
 /***********

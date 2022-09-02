@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ProductSizeOutput } from '~~/@types/generated/dist'
+import { ProductSizeOutput } from '~~/@types'
 
 /***********
  ** Props **
