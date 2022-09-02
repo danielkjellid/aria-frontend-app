@@ -68,5 +68,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div />
+  <div>
+    <Head>
+      <Title>Bekreft kontoen din</Title>
+    </Head>
+  </div>
 </template>

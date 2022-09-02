@@ -71,6 +71,9 @@ const dispatchResetPassword = async () => {
 
 <template>
   <div>
+    <Head>
+      <Title>Nullstill passordet ditt</Title>
+    </Head>
     <NuxtLayout name="auth">
       <template #heading>
         <Text variant="title4">Har du glemt passordet ditt?</Text>

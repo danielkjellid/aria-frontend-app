@@ -140,6 +140,9 @@ const createAccount = async () => {
 
 <template>
   <div>
+    <Head>
+      <Title>Opprett konto</Title>
+    </Head>
     <NuxtLayout name="auth">
       <template #tabs>
         <Tabs>

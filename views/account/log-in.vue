@@ -106,6 +106,9 @@ const logIn = async () => {
 
 <template>
   <div>
+    <Head>
+      <Title>Logg inn</Title>
+    </Head>
     <NuxtLayout name="auth">
       <template #tabs>
         <Tabs>

@@ -90,6 +90,9 @@ const setNewPassword = async () => {
 
 <template>
   <div>
+    <Head>
+      <Title>Lag nytt passord</Title>
+    </Head>
     <NuxtLayout name="auth">
       <template #heading>
         <Text variant="title4">Skriv inn det nye passordet ditt</Text>

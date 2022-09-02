@@ -10,6 +10,9 @@ definePageMeta({
 
 <template>
   <div>
+    <Head>
+      <Title>Passordet er sendt!</Title>
+    </Head>
     <NuxtLayout name="auth">
       <template #heading>
         <div class="space-y-5">
