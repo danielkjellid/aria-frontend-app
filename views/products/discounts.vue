@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DiscountsActiveListOutput } from '~~/@types/generated/dist'
-import { publicUrls } from 'endpoints'
+import { publicUrls } from '~~/endpoints'
 /************
  ** Layout **
  ************/

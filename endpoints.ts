@@ -36,6 +36,7 @@ const publicEndpoints = {
 
   users: {
     requestUser: () => 'users/me/',
+    create: () => 'users/create/',
   },
 }
 

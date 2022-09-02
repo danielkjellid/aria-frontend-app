@@ -4,9 +4,8 @@ import { ButtonProps } from '~~/components/Button/index.vue'
 import useNotificationsStore from '~~/store/notifications'
 import useUsersStore from '~~/store/users'
 import { publicUrls } from '~~/endpoints'
-import { storeToRefs } from 'pinia'
 
-/***********
+/************
  ** Routes **
  ***********/
 
@@ -59,8 +58,6 @@ const clearError = () => {
  ** State: auth **
  *****************/
 
-const { currentUser } = storeToRefs(usersStore)
-
 const logIn = async () => {
   formSubmissionState.value = 'loading'
 
@@ -110,18 +107,6 @@ const logIn = async () => {
     password.value = ''
   }
 }
-
-const logOut = () => {
-  usersStore.logOut()
-
-  notificationsStore.create({
-    title: 'Logget ut!',
-    text: 'Du er nå logget ut.',
-    type: 'success',
-  })
-
-  router.push('/')
-}
 </script>
 
 <template>
@@ -135,26 +120,20 @@ const logOut = () => {
       </template>
       <template #heading>
         <Text variant="title4">Velkommen tilbake!</Text>
-        <Text v-if="!usersStore.currentUser" class="mt-1" variant="body2">
+        <Text class="mt-1" variant="body2">
           Har du ikke en konto? <ButtonLink to="/">Lag en her</ButtonLink>
         </Text>
-        <div v-else class="mt-1">
-          <Text variant="body2">
-            Du er allerede logget inn som {{ currentUser.profile.fullName }}.
-          </Text>
-          <ButtonLink is="button" type="button" class="block mt-1" @click="logOut">
-            Logg ut
-          </ButtonLink>
-        </div>
       </template>
       <template #content>
-        <form v-if="!currentUser" class="max-w-sm m-auto" @submit.prevent="logIn">
+        <form class="max-w-sm m-auto" @submit.prevent="logIn">
           <div>
             <Input
               id="id_email"
               v-model="email"
               label="E-post"
               type="email"
+              autocomplete="email"
+              :model-value="email"
               :error="$parseApiError('email', error)"
               @input="clearError"
             />
@@ -165,6 +144,8 @@ const logOut = () => {
               v-model="password"
               label="Passord"
               type="password"
+              autocomplete="current-password"
+              :model-value="password"
               :error="$parseApiError('password', error)"
               @input="clearError"
             />

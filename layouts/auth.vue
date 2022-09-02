@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import auth2560x1440 from '~~/assets/images/auth_2560x1440.jpeg'
 import auth1920x1080 from '~~/assets/images/auth_1920x1080.jpeg'
+import useUsersStore from '~~/store/users'
+import useNotificationsStore from '~~/store/notifications'
 
 import { ChevronLeftIcon } from '@heroicons/vue/solid'
+import { storeToRefs } from 'pinia'
 
 /************
  ** Config **
@@ -15,10 +18,30 @@ const config = useRuntimeConfig().public
  ************/
 
 const route = useRoute()
+const router = useRouter()
 
 const metaDescription = ref(
   'FK-JKE Design er en totalleverandør av markedes mest spennende utvalg innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken fra noen av verdens mest spennende produsenter.'
 )
+
+const notificationsStore = useNotificationsStore()
+const usersStore = useUsersStore()
+
+const { currentUser } = storeToRefs(usersStore)
+
+const currentUserLoggedIn = computed(() => Object.keys(currentUser.value).length > 0)
+
+const logOut = () => {
+  usersStore.logOut()
+
+  notificationsStore.create({
+    title: 'Logget ut!',
+    text: 'Du er nå logget ut.',
+    type: 'success',
+  })
+
+  router.push('/')
+}
 </script>
 
 <template>
@@ -61,7 +84,7 @@ const metaDescription = ref(
             url(${auth1920x1080}) 1x,
             url(${auth2560x1440}) 2x
           );`"
-        class="md:block hidden bg-center bg-no-repeat bg-cover"
+        class="bg-center bg-no-repeat bg-cover"
       >
         <div class="md:bg-transparent bg-white">
           <div class="md:m-0 lg:max-w-md max-w-sm min-h-screen px-5 py-6 m-auto bg-white">
@@ -82,9 +105,20 @@ const metaDescription = ref(
                 <slot name="tabs" />
               </div>
               <div class="mb-8 text-center">
-                <slot name="heading" />
+                <slot v-if="!currentUserLoggedIn" name="heading" />
+                <div v-else>
+                  <Text variant="title4">Velkommen tilbake!</Text>
+                  <div class="mt-1">
+                    <Text variant="body2">
+                      Du er allerede logget inn som {{ currentUser.profile.fullName }}.
+                    </Text>
+                    <ButtonLink is="button" type="button" class="block mt-1" @click="logOut">
+                      Logg ut
+                    </ButtonLink>
+                  </div>
+                </div>
               </div>
-              <slot name="content" />
+              <slot v-if="!currentUserLoggedIn" name="content" />
             </div>
           </div>
         </div>

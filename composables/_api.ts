@@ -13,8 +13,9 @@ const apiService = $fetch.create({
   },
 })
 
-const defaultHeaders = {
+export const defaultHeaders = {
   'Content-Type': 'application/json',
+  'Accept-Language': 'no',
   Accept: 'application/json',
   Authorization: process.client ? `Bearer ${localStorage.getItem('accessToken')}` : null,
 }

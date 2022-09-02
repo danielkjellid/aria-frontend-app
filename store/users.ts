@@ -5,6 +5,7 @@ import {
   UserRequestOutput,
 } from '~~/@types/generated/dist'
 
+import { defaultHeaders } from '~~/composables/_api'
 import { defineStore } from 'pinia'
 import performGet from '~~/composables/performGet'
 import performPost from '~~/composables/performPost'
@@ -12,7 +13,7 @@ import { publicUrls } from '~~/endpoints'
 
 const useUsersStore = defineStore('users', {
   state: () => ({
-    currentUser: null,
+    currentUser: {} as UserRequestOutput,
   }),
   actions: {
     async logIn(payload: TokensObtainInput) {
@@ -25,12 +26,16 @@ const useUsersStore = defineStore('users', {
         if (tokens && process.client) {
           localStorage.setItem('accessToken', tokens.accessToken)
           localStorage.setItem('refreshToken', tokens.refreshToken)
+
+          defaultHeaders.Authorization = `Bearer ${tokens.accessToken}`
+
+          this.fetchCurrentUser()
         }
       } catch (error) {
         console.log(error)
-      } finally {
-        this.fetchCurrentUser()
       }
+
+      return null
     },
     async logOut() {
       const refreshToken = process.client ? localStorage.getItem('refreshToken') : null
