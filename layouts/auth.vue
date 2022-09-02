@@ -82,9 +82,6 @@ const logOut = () => {
         name="og:description"
         content="FK-JKE Design er en totalleverandør av markedes mest spennende utvalg innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken fra noen av verdens mest spennende produsenter."
       />
-
-      <Script src="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js" />
-      <Link href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css" rel="stylesheet" />
     </Head>
     <main class="h-screen">
       <div
