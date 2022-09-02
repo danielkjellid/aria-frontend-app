@@ -6,15 +6,15 @@ import useUsersStore from './store/users'
  ** Store: categories **
  ***********************/
 
-// const categoriesStore = useCategoriesStore()
-// categoriesStore.fetchNavbarCategories()
+const categoriesStore = useCategoriesStore()
+categoriesStore.fetchNavbarCategories()
 
 /******************
  ** Store: users **
  ******************/
 
-// const usersStore = useUsersStore()
-// usersStore.fetchCurrentUser()
+const usersStore = useUsersStore()
+usersStore.fetchCurrentUser()
 
 /***********
  ** State **
