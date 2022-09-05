@@ -32,6 +32,7 @@ const isDevEnvironment = computed(() => {
     <NotificationHandler />
     <NuxtLayout>
       <NuxtPage />
+      <CookieConsent />
     </NuxtLayout>
     <div
       v-if="isDevEnvironment"

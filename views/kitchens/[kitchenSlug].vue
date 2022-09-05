@@ -91,7 +91,7 @@ const metaTitle = computed(() => (kitchenLoaded.value ? kitchen.value.name : und
             </div>
             <div v-if="kitchenLoaded">
               <Text variant="body2">
-                Hos oss finner du kjøkken, bad, garderobe, lamper, og italienske fliser under samme
+                Hos oss finner du kjøkken, bad, garderobe, lamper og italienske fliser under samme
                 tak.
               </Text>
               <Text class="mt-2" variant="body2">
