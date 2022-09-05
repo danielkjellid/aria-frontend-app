@@ -33,6 +33,7 @@ const isDevEnvironment = computed(() => {
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
+    <CookieConsent />
     <div
       v-if="isDevEnvironment"
       class="dev-env-warning fixed bottom-0 left-0 right-0 z-50 py-1 text-center"
