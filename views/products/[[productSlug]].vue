@@ -357,6 +357,15 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
           <!-- Options -->
           <div class="lg:mt-0 lg:row-span-3 xl:col-span-2 lg:col-span-1 mt-4">
             <h2 class="sr-only">Produktinformasjon</h2>
+            <Callout
+              v-if="product && (!product.canBePurchasedOnline || !product.displayPrice)"
+              class="mb-6"
+              variant="info"
+              title="Kan ikke kjøpes på nett"
+            >
+              Dette produktet kan ikke kjøpes på nett direkte, men du kan ta kontakt med oss på
+              hei@flis.no, så hjepler vi deg mer enn gjerne. Konsultasjonen er ikke forpliktende.
+            </Callout>
             <div v-if="showPrice">
               <div v-if="productLoaded">
                 <div v-if="renderFromPrice.isDiscounted">
@@ -484,7 +493,7 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
                 </fieldset>
               </div>
 
-              <Callout
+              <!-- <Callout
                 v-if="product && !product.canBePurchasedOnline"
                 class="mt-6 mb-3"
                 variant="info"
@@ -493,8 +502,8 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
                 Dette produktet kan ikke kjøpes på nett direkte, men du kan fortsatt legge det til i
                 handlekurven og starte en online konsultasjon, så hjepler vi deg mer enn gjerne.
                 Konsultasjonen er ikke forpliktende.
-              </Callout>
-              <Button
+              </Callout> -->
+              <!-- <Button
                 v-if="productLoaded"
                 type="submit"
                 variant="primary"
@@ -507,7 +516,7 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
                   !selectedOption ? 'Gjør tilvalg før du legger til i kurven' : 'Legg til i kurven'
                 }}
               </Button>
-              <SkeletonLoader v-else loading height="h-12 mt-3" />
+              <SkeletonLoader v-else loading height="h-12 mt-3" /> -->
             </form>
           </div>
 
