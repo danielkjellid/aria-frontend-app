@@ -52,7 +52,7 @@ const closeMenu = () => {
                 </button>
               </div>
             </div>
-            <div class="mt-2">
+            <div class="mt-2 space-y-6">
               <slot />
             </div>
           </div>

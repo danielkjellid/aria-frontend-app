@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CubeTransparentIcon, MenuAlt2Icon, SearchIcon } from '@heroicons/vue/outline'
+import { CubeTransparentIcon, MenuAlt2Icon } from '@heroicons/vue/outline'
 
 /***********
  ** Props **
@@ -141,7 +141,7 @@ const renderBgClass = computed(() => {
                       />
                     </IconWrapper>
                   </div>
-                  <div class="lg:hidden flex">
+                  <!-- <div class="lg:hidden flex">
                     <IconWrapper
                       as="button"
                       type="button"
@@ -159,7 +159,7 @@ const renderBgClass = computed(() => {
                         "
                       />
                     </IconWrapper>
-                  </div>
+                  </div> -->
                 </div>
 
                 <!-- Logo (lg-) -->
