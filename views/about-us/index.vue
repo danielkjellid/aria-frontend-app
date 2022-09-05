@@ -1,12 +1,17 @@
 <script setup lang="ts">
 /* eslint-disable vue/no-v-for-template-key */
 import { LocationMarkerIcon, PhoneIcon, AtSymbolIcon, ClockIcon } from '@heroicons/vue/outline'
-import {
-  OpeningHoursOutput,
-  EmployeeListOutput,
-  SupplierListOutput,
-} from '~~/@types/generated/dist'
+import { OpeningHoursOutput, EmployeeListOutput, SupplierListOutput } from '~~/@types'
 import storeImg from '~~/assets/images/store.jpeg'
+import { publicUrls } from '~~/endpoints'
+
+/***************
+ ** Page meta **
+ ***************/
+
+definePageMeta({
+  layout: 'default',
+})
 
 /**************************
  ** State: Opening hours **
@@ -21,7 +26,7 @@ const openingHoursLoaded = computed(
 )
 
 const fetchOpeningHours = async () => {
-  openingHours.value = await performGet<OpeningHoursOutput>(`front/opening-hours/`)
+  openingHours.value = await performGet<OpeningHoursOutput>(publicUrls.front.openingHours())
 }
 
 fetchOpeningHours()
@@ -34,7 +39,7 @@ const employeesList = ref<EmployeeListOutput[]>()
 const employeesListLoaded = computed((): boolean => !!employeesList.value)
 
 const fetchEmployeeList = async () => {
-  employeesList.value = await performGet<EmployeeListOutput[]>(`employees/`)
+  employeesList.value = await performGet<EmployeeListOutput[]>(publicUrls.front.employeeList())
 }
 
 fetchEmployeeList()
@@ -47,7 +52,7 @@ const supplierList = ref<SupplierListOutput[]>()
 const supplierListLoaded = computed((): boolean => !!supplierList.value)
 
 const fetchSupplierList = async () => {
-  supplierList.value = await performGet<SupplierListOutput[]>(`suppliers/`)
+  supplierList.value = await performGet<SupplierListOutput[]>(publicUrls.suppliers.list())
 }
 
 fetchSupplierList()

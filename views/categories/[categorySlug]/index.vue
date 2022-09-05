@@ -5,6 +5,14 @@ import useCategoriesStore from '~~/store/categories'
  ** Page meta **
  ***************/
 
+definePageMeta({
+  layout: 'default',
+})
+
+/***************
+ ** Page meta **
+ ***************/
+
 const route = useRoute()
 
 const currentCategory = computed(() => {

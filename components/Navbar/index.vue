@@ -27,26 +27,28 @@ const loading = computed(() => store.navbarCategories === null)
       >
         Produkter
         <template #items>
-          <ListBlock
-            v-for="menuItem in store.navbarCategories"
-            :key="menuItem.id"
-            :to="`/categories/${menuItem.slug}/`"
-            :label="menuItem.name"
-            label-class="hover:text-brand-700"
-            :loading="loading"
-            @click="flyoutActive = false"
-          >
-            <ListBlockItem
-              v-for="childItem in menuItem.children"
-              :key="childItem.slug"
-              :to="`/categories/${menuItem.slug}/${childItem.slug}/`"
+          <ClientOnly>
+            <ListBlock
+              v-for="menuItem in store.navbarCategories"
+              :key="menuItem.id"
+              :to="`/categories/${menuItem.slug}/`"
+              :label="menuItem.name"
+              label-class="hover:text-brand-700"
               :loading="loading"
-              class="hover:text-brand-900"
               @click="flyoutActive = false"
             >
-              {{ childItem.name }}
-            </ListBlockItem>
-          </ListBlock>
+              <ListBlockItem
+                v-for="childItem in menuItem.children"
+                :key="childItem.slug"
+                :to="`/categories/${menuItem.slug}/${childItem.slug}/`"
+                :loading="loading"
+                class="hover:text-brand-900"
+                @click="flyoutActive = false"
+              >
+                {{ childItem.name }}
+              </ListBlockItem>
+            </ListBlock>
+          </ClientOnly>
         </template>
       </NavbarMenuItemFlyout>
       <NavbarMenuItem to="/kitchens/" :render-transparent="isTransparent">Kjøkken</NavbarMenuItem>

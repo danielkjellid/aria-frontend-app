@@ -43,6 +43,7 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-loss-of-precision': 'off',
+    'vuejs-accessibility/form-control-has-label': 'off',
   },
   overrides: [{
     files: ['views/**/*.vue', 'components/**/*.vue'],

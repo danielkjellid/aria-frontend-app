@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BaseHeaderImageRecord } from '~~/@types/generated/dist'
+import { BaseHeaderImageRecord } from '~~/@types'
 
 interface ImageCarouselProps {
   images?: BaseHeaderImageRecord[]

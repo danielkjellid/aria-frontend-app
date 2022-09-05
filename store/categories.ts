@@ -3,10 +3,11 @@ import {
   CategoryDetailOutput,
   CategoryListOutput,
   CategoryParentListOutput,
-} from '~~/@types/generated/dist'
+} from '~~/@types'
 
 import { defineStore } from 'pinia'
 import performGet from '~~/composables/performGet'
+import { publicUrls } from '~~/endpoints'
 
 const useCategoriesStore = defineStore('categories', {
   state: () => ({
@@ -19,14 +20,16 @@ const useCategoriesStore = defineStore('categories', {
   actions: {
     async fetchNavbarCategories() {
       try {
-        this.navbarCategories = await performGet<CategoryListOutput[]>('categories/')
+        this.navbarCategories = await performGet<CategoryListOutput[]>(publicUrls.categories.list())
       } catch (error) {
         console.log(error)
       }
     },
     async fetchParentCategories() {
       try {
-        this.parentCategories = await performGet<CategoryParentListOutput[]>('categories/parents/')
+        this.parentCategories = await performGet<CategoryParentListOutput[]>(
+          publicUrls.categories.parentList()
+        )
       } catch (error) {
         console.log(error)
       }
@@ -34,7 +37,7 @@ const useCategoriesStore = defineStore('categories', {
     async fetchChildCategories(parentSlug: string) {
       try {
         const childCategories = await performGet<CategoryChildrenListOutput[]>(
-          `categories/category/${parentSlug}/children/`
+          publicUrls.categories.childrenList(parentSlug)
         )
 
         if (childCategories.length > 0) {
@@ -60,7 +63,7 @@ const useCategoriesStore = defineStore('categories', {
     },
     async fetchCategory(slug: string) {
       try {
-        const category = await performGet<CategoryDetailOutput>(`categories/category/${slug}/`)
+        const category = await performGet<CategoryDetailOutput>(publicUrls.categories.detail(slug))
 
         const index = this.categories.findIndex((c) => c.slug === slug)
 

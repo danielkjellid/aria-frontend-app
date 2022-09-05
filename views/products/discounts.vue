@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { DiscountsActiveListOutput } from '~~/@types/generated/dist'
+import { DiscountsActiveListOutput } from '~~/@types'
+import { publicUrls } from '~~/endpoints'
+
+/***************
+ ** Page meta **
+ ***************/
+
+definePageMeta({
+  layout: 'default',
+})
 
 /************
  ** Config **
@@ -15,7 +24,7 @@ const discounts = ref<DiscountsActiveListOutput[]>()
 const discountsLoaded = computed((): boolean => !!discounts.value)
 
 const fetchDiscounts = async () => {
-  discounts.value = await performGet<DiscountsActiveListOutput[]>('discounts/active/')
+  discounts.value = await performGet<DiscountsActiveListOutput[]>(publicUrls.discounts.active())
 }
 
 fetchDiscounts()

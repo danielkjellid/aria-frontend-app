@@ -1,8 +1,17 @@
 <script setup lang="ts">
 import useCategoriesStore from '~~/store/categories'
 import { FilterIcon } from '@heroicons/vue/outline'
-import { ProductListOutput } from '~~/@types/generated/dist'
+import { ProductListOutput } from '~~/@types'
 import { ButtonProps } from '~~/components/Button/index.vue'
+import { publicUrls } from '~~/endpoints'
+
+/***************
+ ** Page meta **
+ ***************/
+
+definePageMeta({
+  layout: 'default',
+})
 
 /************
  ** Config **
@@ -82,7 +91,7 @@ const fetchedProducts = ref<ProductListOutput[]>(null)
 
 const fetchProducts = async () => {
   fetchedProducts.value = await performGet<ProductListOutput[]>(
-    `products/category/${currentCategorySlug.value}/`
+    publicUrls.products.list(currentCategorySlug.value)
   )
 }
 
@@ -107,8 +116,10 @@ const searchEndpoint = async () => {
   searchLoadingState.value = 'loading'
 
   try {
+    const listUrl = publicUrls.products.list(currentCategorySlug.value)
+
     fetchedProducts.value = await performGet<ProductListOutput[]>(
-      `products/category/${currentCategorySlug.value}/?search=${query.value}`
+      `${listUrl}?search=${query.value}`
     )
     searchLoadingState.value = 'success'
 
@@ -130,7 +141,7 @@ const clearSearch = async () => {
 
   try {
     fetchedProducts.value = await performGet<ProductListOutput[]>(
-      `products/category/${currentCategorySlug.value}/`
+      publicUrls.products.list(currentCategorySlug.value)
     )
     searchLoadingState.value = 'success'
 
@@ -260,14 +271,7 @@ watch(
               placeholder="Søk etter tusenvis av varer..."
               class="w-full"
             />
-            <Button
-              type="submit"
-              primary
-              :loading-state="searchLoadingState"
-              @click="searchEndpoint"
-            >
-              Søk
-            </Button>
+            <Button type="submit" primary :loading-state="searchLoadingState"> Søk </Button>
           </form>
           <div class="lg:hidden flex items-center mt-4 space-x-3">
             <Tag v-if="showQueryTag && query" size="lg" @remove="clearSearch">{{ query }}</Tag>

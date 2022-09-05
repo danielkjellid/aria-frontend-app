@@ -22,7 +22,7 @@ interface InputProps {
   /**
    * The value of the input itself, usually set by v-model.
    */
-  value?: string
+  modelValue?: string
   /**
    * Type of input: https://www.w3schools.com/html/html_form_input_types.asp.
    */
@@ -50,10 +50,10 @@ defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <div :class="{ 'mb-8': error }">
+  <div>
     <label
       :for="id"
-      :class="{ 'sr-only': hiddenLabel, 'mb-1': label }"
+      :class="{ 'sr-only': hiddenLabel, 'mb-1': label, 'text-red-600': error }"
       class="block text-sm font-semibold leading-5 text-gray-700"
     >
       {{ label }}
@@ -67,7 +67,7 @@ defineEmits(['update:modelValue'])
       </div>
       <input
         :id="id"
-        :value="value"
+        :value="modelValue"
         :class="{
           'pl-10': existingIcon,
           'pr-10 border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red':
@@ -86,6 +86,6 @@ defineEmits(['update:modelValue'])
         <ExclamationCircleIcon class="w-5 h-5 text-red-500" />
       </div>
     </div>
-    <p v-if="error" class="absolute mt-1 text-sm text-red-600">{{ error }}</p>
+    <p v-if="error" class="relative mt-1 text-sm text-red-600">{{ error }}</p>
   </div>
 </template>
