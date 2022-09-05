@@ -188,6 +188,7 @@ watch(
       title="Filter"
       :active="mobileMenuActive"
       max-width="max-w-sm"
+      padding-x="px-6 sm:px-8"
       @close="$emit('modalClose')"
     >
       <div v-for="filter in filters" :key="filter.label" class="mb-12">
