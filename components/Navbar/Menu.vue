@@ -141,7 +141,7 @@ const renderBgClass = computed(() => {
                       />
                     </IconWrapper>
                   </div>
-                  <div class="lg:hidden flex">
+                  <!-- <div class="lg:hidden flex">
                     <IconWrapper
                       as="button"
                       type="button"
@@ -159,7 +159,7 @@ const renderBgClass = computed(() => {
                         "
                       />
                     </IconWrapper>
-                  </div>
+                  </div> -->
                 </div>
 
                 <!-- Logo (lg-) -->

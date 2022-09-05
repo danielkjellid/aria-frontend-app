@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ShoppingBagIcon, UserCircleIcon, SearchIcon } from '@heroicons/vue/outline'
 import useCategoriesStore from '~~/store/categories'
+// import { ShoppingBagIcon, UserCircleIcon, SearchIcon } from '@heroicons/vue/outline'
 
 const flyoutActive = ref<boolean>(false)
 
@@ -53,15 +53,15 @@ const loading = computed(() => store.navbarCategories === null)
       </NavbarMenuItemFlyout>
       <NavbarMenuItem to="/kitchens/" :render-transparent="isTransparent">Kjøkken</NavbarMenuItem>
       <NavbarMenuItem to="/about-us/" :render-transparent="isTransparent">Om oss</NavbarMenuItem>
-      <NavbarMenuItem to="/contact-us/" :render-transparent="isTransparent">
+      <!-- <NavbarMenuItem to="/contact-us/" :render-transparent="isTransparent">
         Kontakt
-      </NavbarMenuItem>
+      </NavbarMenuItem> -->
       <NavbarMenuItem to="/products/discounts/" :render-transparent="isTransparent">
         På tilbud
       </NavbarMenuItem>
     </template>
 
-    <template #end="{ isTransparent }">
+    <!-- <template #end="{ isTransparent }">
       <div class="lg:space-x-8 flex space-x-4">
         <div class="lg:flex hidden">
           <IconWrapper
@@ -132,6 +132,6 @@ const loading = computed(() => store.navbarCategories === null)
           </span>
         </IconWrapper>
       </div>
-    </template>
+    </template> -->
   </NavbarMenu>
 </template>

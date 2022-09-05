@@ -23,7 +23,7 @@ const renderTransparent = computed(() =>
 <template>
   <NuxtLink
     :aria-current="active ? 'page' : undefined"
-    class="shrink-0 lg:z-10 lg:px-1 lg:py-1 lg:text-sm lg:border-b-2 lg:border-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 inline-flex items-center font-medium transition-colors duration-200 ease-out rounded-md"
+    class="shrink-0 lg:z-10 lg:px-1 lg:py-1 lg:text-sm lg:border-b-2 lg:border-transparent focus:outline-none focus:ring-2 focus:ring-offset-2 lg:inline-flex items-center block px-4 font-medium transition-colors duration-200 ease-out rounded-md"
     :class="[
       active && !renderTransparent ? 'lg:border-brand-800' : 'lg:border-transparent',
       active && renderTransparent ? 'lg:border-brand-100' : 'lg:border-transparent',
