@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CubeTransparentIcon, MenuAlt2Icon, SearchIcon } from '@heroicons/vue/outline'
+import { CubeTransparentIcon, MenuAlt2Icon } from '@heroicons/vue/outline'
 
 /***********
  ** Props **
