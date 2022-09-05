@@ -15,9 +15,12 @@ const publicEndpoints = {
     active: () => 'discounts/active/',
   },
 
+  employees: {
+    list: () => 'employees/',
+  },
+
   front: {
     openingHours: () => 'front/opening-hours/',
-    employeeList: () => 'front/employees/',
   },
 
   kitchens: {

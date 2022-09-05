@@ -39,7 +39,7 @@ const employeesList = ref<EmployeeListOutput[]>()
 const employeesListLoaded = computed((): boolean => !!employeesList.value)
 
 const fetchEmployeeList = async () => {
-  employeesList.value = await performGet<EmployeeListOutput[]>(publicUrls.front.employeeList())
+  employeesList.value = await performGet<EmployeeListOutput[]>(publicUrls.employees.list())
 }
 
 fetchEmployeeList()
