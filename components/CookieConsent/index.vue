@@ -26,9 +26,8 @@ const disableTracking = () => {
 
 // Set timeout to actually calculate survey state to avoid flickering behavior.
 setTimeout(() => {
-  surveyCompleted.value = !!(
-    process.client && JSON.parse(localStorage.getItem('userHasGivenCookieConsent'))
-  )
+  surveyCompleted.value =
+    process.client && localStorage.getItem('userHasGivenCookieConsent') !== undefined
 }, 300)
 </script>
 
