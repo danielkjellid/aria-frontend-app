@@ -371,19 +371,19 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
                 <div v-if="renderFromPrice.isDiscounted">
                   <Text variant="title2" color="text-red-600" class="font-normal">
                     Fra kr {{ $formatPrice(renderFromPrice.grossDiscountedPrice) }}
-                    <span class="text-gray-500">per {{ product.unit }}</span>
+                    <span class="text-gray-500">per <ProductUnitTag :unit="product.unit" /></span>
                   </Text>
                   <Text variant="title3" class="mt-1 font-normal">
                     <s>
                       Fra kr {{ $formatPrice(renderFromPrice.grossDisplayPrice) }}
-                      <span class="text-gray-500">per {{ product.unit }}</span>
+                      <span class="text-gray-500">per <ProductUnitTag :unit="product.unit" /></span>
                     </s>
                   </Text>
                 </div>
                 <div v-else>
                   <Text variant="title2" class="font-normal">
                     Fra kr {{ $formatPrice(renderFromPrice.grossDisplayPrice) }}
-                    <span class="text-gray-500">per {{ product.unit }}</span>
+                    <span class="text-gray-500">per <ProductUnitTag :unit="product.unit" /></span>
                   </Text>
                 </div>
               </div>
