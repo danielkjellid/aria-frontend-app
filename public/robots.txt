@@ -1,0 +1,10 @@
+User-agent: Googlebot
+Disallow: /admin
+
+User-agent: Bingbot
+Disallow: /admin
+
+User-agent: *
+Allow: /
+
+Sitemap: https://flis.no/sitemap.xml

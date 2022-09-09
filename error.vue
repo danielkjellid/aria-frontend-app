@@ -47,7 +47,8 @@ const handleError = () => clearError({ redirect: '/' })
                 </div>
                 <div class="sm:border-l sm:border-transparent sm:pl-6 flex mt-6 space-x-3">
                   <Button variant="secondary" @click="handleError">Gå tilbake til forsiden</Button>
-                  <Button to="/contact-us/" variant="outlined">Kontakt oss</Button>
+                  <!-- <Button to="/contact-us/" variant="outlined">Kontakt oss</Button> -->
+                  <Button as="a" href="mailto:hei@flis.no" variant="outlined">Kontakt oss</Button>
                 </div>
               </div>
             </div>
@@ -66,7 +67,8 @@ const handleError = () => clearError({ redirect: '/' })
                 </div>
                 <div class="sm:border-l sm:border-transparent sm:pl-6 flex mt-6 space-x-3">
                   <Button to="/" variant="secondary">Gå tilbake til forsiden</Button>
-                  <Button to="/contact-us/" variant="outlined">Kontakt oss</Button>
+                  <!-- <Button to="/contact-us/" variant="outlined">Kontakt oss</Button> -->
+                  <Button as="a" href="mailto:hei@flis.no" variant="outlined">Kontakt oss</Button>
                 </div>
               </div>
             </div>
