@@ -29,7 +29,8 @@ const publicEndpoints = {
   },
 
   products: {
-    list: (categorySlug: string) => `products/category/${categorySlug}/`,
+    listByCategory: (categorySlug: string) => `products/category/${categorySlug}/`,
+    list: () => 'products/',
     detail: (slug: string) => `products/product/${slug}/`,
   },
 
