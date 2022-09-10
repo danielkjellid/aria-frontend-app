@@ -257,7 +257,7 @@ fetchSupplierList()
         </section>
       </Container>
 
-      <section class="py-16 mx-auto mt-24 text-center bg-gray-800">
+      <section class="py-16 mx-auto mt-8 text-center bg-gray-800">
         <div class="lg:px-0 container max-w-screen-lg px-4 mx-auto">
           <div>
             <h1 class="mt-3 mb-4 text-2xl font-medium text-white">Vårt team</h1>

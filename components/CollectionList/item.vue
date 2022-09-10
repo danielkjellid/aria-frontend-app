@@ -72,23 +72,27 @@ const imageObj: ImageType = props.images ? props.images : defaultImageObj
       class="image-container shrink-0 relative col-span-3 overflow-hidden rounded-md"
       :class="reverse ? 'lg:order-2 order-1 lg:justify-self-end' : 'order-1 lg:justify-self-start'"
     >
-      <img
-        v-if="!loading"
-        :src="imageObj.image850x520"
-        alt=""
-        class="lg:self-end absolute inset-0 object-cover w-full h-full"
-        :srcset="`${imageObj.image500x305} 500w,
-                  ${imageObj.image660x400} 660w,
-                  ${imageObj.image850x520} 850w`"
-      />
+      <NuxtLink :to="to">
+        <img
+          v-if="!loading"
+          :src="imageObj.image850x520"
+          alt=""
+          class="lg:self-end absolute inset-0 object-cover w-full h-full"
+          :srcset="`${imageObj.image500x305} 500w,
+                    ${imageObj.image660x400} 660w,
+                    ${imageObj.image850x520} 850w`"
+        />
+      </NuxtLink>
       <SkeletonLoader :loading="loading" class="image-container" />
     </div>
     <div
-      class="justify-self-center lg:col-span-2 lg:max-w-md self-center order-1 w-full col-span-1"
+      class="justify-self-center lg:col-span-2 lg:max-w-md xl:px-12 self-center order-1 w-full col-span-1"
       :class="reverse ? 'order-2 lg:order-1' : 'order-2'"
     >
       <div class="flex items-center justify-between">
-        <Text v-if="!loading" tag="h1" variant="title4">{{ title }}</Text>
+        <NuxtLink v-if="!loading" :to="to">
+          <Text tag="h1" variant="title4">{{ title }}</Text>
+        </NuxtLink>
         <SkeletonLoader v-else :loading="loading" height="h-6" />
         <slot>
           <ButtonLink v-if="!loading" :to="to" class="lg:hidden">{{ linkLabel }}</ButtonLink>

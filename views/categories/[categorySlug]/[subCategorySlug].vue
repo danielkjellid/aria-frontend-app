@@ -242,7 +242,14 @@ watch(
       <Container>
         <Breadcrumbs v-if="currentCategoryObjLoaded && currentParentCategoryObjLoaded">
           <BreadcrumbsItem to="/">{{ config.BRAND_NAME }}</BreadcrumbsItem>
-          <BreadcrumbsItem to="/">{{ currentParentCategoryObj.name }}</BreadcrumbsItem>
+          <BreadcrumbsItem
+            :to="{
+              name: 'categories-categorySlug',
+              params: { categorySlug: currentParentCategoryObj.slug },
+            }"
+          >
+            {{ currentParentCategoryObj.name }}
+          </BreadcrumbsItem>
           <BreadcrumbsItem to="#" active>{{ currentCategoryObj.name }}</BreadcrumbsItem>
         </Breadcrumbs>
         <Breadcrumbs v-else>
@@ -311,9 +318,9 @@ watch(
         <div class="border-t border-gray-200">
           <Spacer spacing="md" />
           <Callout variant="info" title="Finner du ikke det du leter etter?">
-            Det hender at vi har varer som ikke ligger i nettbutikken, men vi har et bredt sortiment
-            fra alle våre leverandører. Ta kontakt med oss på hei@flis.no så hjelper vi deg videre
-            😊
+            Vi holder på å oppdatere sortimentet på nettiden. Det hender derfor at vi har varer som
+            ikke ligger i nettbutikken, for vi har et bredt sortiment fra alle våre leverandører. Ta
+            kontakt med oss på hei@flis.no så hjelper vi deg videre 😊
           </Callout>
         </div>
       </Container>
