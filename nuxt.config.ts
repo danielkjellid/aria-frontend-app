@@ -1,4 +1,5 @@
 import { defineNuxtConfig } from 'nuxt'
+import fetchDynamicRoutes from './utils/fetchDynamicRoutes'
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
@@ -37,7 +38,18 @@ export default defineNuxtConfig({
     '@vuepic/vue-datepicker/dist/main.css',
   ],
 
-  modules: ['@pinia/nuxt'],
+  modules: ['@pinia/nuxt', '@funken-studio/sitemap-nuxt-3'],
+
+  sitemap: {
+    hostname: 'https://flis.no',
+    cacheTime: 1,
+    routes: fetchDynamicRoutes,
+    defaults: {
+      changefreq: 'daily',
+      priority: 1,
+      lastmod: new Date().toISOString(),
+    },
+  },
 
   build: {
     transpile: ['@heroicons/vue', 'luxon'],

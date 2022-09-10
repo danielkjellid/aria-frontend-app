@@ -91,7 +91,7 @@ const fetchedProducts = ref<ProductListOutput[]>(null)
 
 const fetchProducts = async () => {
   fetchedProducts.value = await performGet<ProductListOutput[]>(
-    publicUrls.products.list(currentCategorySlug.value)
+    publicUrls.products.listByCategory(currentCategorySlug.value)
   )
 }
 
@@ -116,7 +116,7 @@ const searchEndpoint = async () => {
   searchLoadingState.value = 'loading'
 
   try {
-    const listUrl = publicUrls.products.list(currentCategorySlug.value)
+    const listUrl = publicUrls.products.listByCategory(currentCategorySlug.value)
 
     fetchedProducts.value = await performGet<ProductListOutput[]>(
       `${listUrl}?search=${query.value}`
@@ -141,7 +141,7 @@ const clearSearch = async () => {
 
   try {
     fetchedProducts.value = await performGet<ProductListOutput[]>(
-      publicUrls.products.list(currentCategorySlug.value)
+      publicUrls.products.listByCategory(currentCategorySlug.value)
     )
     searchLoadingState.value = 'success'
 
