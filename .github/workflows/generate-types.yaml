@@ -1,0 +1,63 @@
+name: Generate types
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 * * * 1-5'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: aria-frontend-app
+    continue-on-error: false
+
+    steps:
+      - name: Aria API
+        uses: actions/checkout@v3
+        with:
+          repository: danielkjellid/aria-api
+          path: aria-api
+
+      - name: Aria frontend
+        uses: actions/checkout@v3
+        with:
+          path: aria-frontend-app
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-verion-file: aria-frontend-app/.nvmrc
+          cache: npm
+          cache-dependency-path: aria-frontend-app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create pull request
+        id: create-pull-request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          path: aria-frontend-app
+          add-paths: '@types'
+          title: '[ariabot] Update types from schema'
+          body: 'Automated changes made by: `npm run openapi:genearate`'
+          commit-message: 'Update generated types'
+          branch: ariabot/generated-types
+          delete-branch: true
+
+      - name: Enable PR auto merge
+        if: steps.create-pull-request.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          path: aria-frontend-app
+          pull-request-number: ${{ steps.create-pull-request.outputs.pull-request-number }}
+          merge-method: squash
+
+      - name: Auto approve
+        if: steps.create-pull-request.outputs.pull-request-operation == 'created'
+        uses: juliangruber/approve-pull-request-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ steps.create-pull-request.outputs.pull-request-number }}
