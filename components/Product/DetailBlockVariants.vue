@@ -36,12 +36,7 @@ const modalActive = ref<boolean>(false)
 const selectedVariant = ref<VariantType | null>(null)
 
 const activateModal = (variant: VariantType) => {
-  if (variant.image) {
-    selectedVariant.value = variant
-  } else if (variant.colorHex) {
-    selectedVariant.value = variant
-  }
-
+  selectedVariant.value = variant
   modalActive.value = true
   document.body.classList.add('overflow-hidden')
 }
@@ -92,6 +87,12 @@ const closeModal = () => {
               <img
                 v-else-if="selectedVariant && selectedVariant.thumbnail"
                 :src="selectedVariant.thumbnail"
+                alt=""
+              />
+              <!-- Temporary fallback -->
+              <img
+                v-else-if="selectedVariant && selectedVariant.image"
+                :src="selectedVariant.image"
                 alt=""
               />
               <IconWrapper

@@ -21,11 +21,17 @@ interface NavbarEmits {
 
 const emits = defineEmits<NavbarEmits>()
 
-/***************************
- ** Environment variables **
- ***************************/
+/************
+ ** Config **
+ ************/
 
 const config = useRuntimeConfig().public
+
+/************
+ ** Routes **
+ ************/
+
+const route = useRoute()
 
 /****************
  ** Menu state **
@@ -82,6 +88,17 @@ const renderBgClass = computed(() => {
 
   return 'bg-white'
 })
+
+/**************
+ ** Watchers **
+ **************/
+
+watch(
+  () => route.fullPath,
+  (_oldValue, _newValue) => {
+    cleanupMenus()
+  }
+)
 </script>
 
 <template>
