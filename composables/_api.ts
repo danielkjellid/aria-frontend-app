@@ -4,11 +4,11 @@ import { Setter } from './types'
 
 const apiService = $fetch.create({
   async onRequestError({ request, options, error }) {
-    // await showError({ statusCode: 500 })
+    await showError({ statusCode: 500 })
   },
   async onResponseError({ request, response, options }) {
     if (response.status === 404) {
-      // await showError({ statusCode: response.status, statusMessage: response.statusText })
+      await showError({ statusCode: response.status, statusMessage: response.statusText })
     }
   },
 })
