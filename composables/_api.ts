@@ -22,6 +22,15 @@ export const defaultHeaders = {
 
 export async function getter<T>(url: string, options: any = {}): Promise<T> {
   const config = useRuntimeConfig().public
+  const baseURL = config.BASE_URL
+
+  if (!baseURL) {
+    throw new Error('BASE_URL not defined')
+  }
+
+  if (baseURL && baseURL.slice(-1) === '/') {
+    throw new Error('BASE_URL cannot end with a trailing /')
+  }
 
   if (!url) {
     throw new Error('Url was not provided.')
