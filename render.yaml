@@ -3,11 +3,14 @@ services:
     region: frankfurt
     plan: starter
     name: aria-frontend-prod
+    env: node
     buildCommand: 'npm install && npm run build:production'
     startCommand: 'npm start'
     autoDeploy: false
     envVars:
-      - fromGroup: frontend
+      - fromGroup: Frontend
+      - key: HOST
+        value: 0.0.0.0
       - key: ENVIRONMENT
         value: production
 
@@ -20,6 +23,8 @@ services:
     startCommand: 'npm start'
     autoDeploy: false
     envVars:
-      - fromGroup: frontend
+      - fromGroup: Frontend
+      - key: HOST
+        value: 0.0.0.0
       - key: ENVIRONMENT
         value: staging
