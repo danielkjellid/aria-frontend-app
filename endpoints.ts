@@ -30,7 +30,7 @@ const publicEndpoints = {
 
   products: {
     listByCategory: (categorySlug: string) => `/products/category/${categorySlug}/`,
-    list: () => 'products/',
+    list: () => '/products/',
     detail: (slug: string) => `/products/product/${slug}/`,
   },
 
