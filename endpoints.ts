@@ -35,7 +35,7 @@ const publicEndpoints = {
   },
 
   suppliers: {
-    list: () => 'suppliers/',
+    list: () => '/suppliers/',
   },
 
   users: {
