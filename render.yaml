@@ -7,7 +7,9 @@ services:
     startCommand: 'npm start'
     autoDeploy: false
     envVars:
-      - fromGroup: Frontend
+      - fromGroup: frontend
+      - key: ENVIRONMENT
+        value: production
 
   - type: web
     region: frankfurt
@@ -18,4 +20,6 @@ services:
     startCommand: 'npm start'
     autoDeploy: false
     envVars:
-      - fromGroup: Frontend
+      - fromGroup: frontend
+      - key: ENVIRONMENT
+        value: staging
