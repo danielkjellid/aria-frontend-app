@@ -17,4 +17,5 @@ services:
     buildCommand: 'npm install && npm run build:staging'
     startCommand: 'npm start'
     autoDeploy: false
+    envVars:
       - fromGroup: Frontend
