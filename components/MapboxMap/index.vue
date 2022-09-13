@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import mapboxgl from 'mapbox-gl'
+
 /*************************
  ** Mapbox configuraion **
  *************************/
@@ -9,22 +10,26 @@ mapboxgl.accessToken =
   'pk.eyJ1IjoiZGV4ZW50byIsImEiOiJjanR4NTljcG4wNDlnNGNyM2duNms3cXo4In0.q4G3Zzgf1zQ8MQFZzwMPQA'
 
 onMounted(() => {
-  const map = new mapboxgl.Map({
-    container: 'mapContainer', // container ID
-    style: 'mapbox://styles/dexento/cjujsu10w07p81fnz7vcdjvg3', // style URL
-    center: [11.064777, 59.963297], // starting position [lng, lat]
-    zoom: 15, // starting zoom
-    projection: 'globe',
-  })
+  setTimeout(() => {
+    const map = new mapboxgl.Map({
+      container: 'mapContainer', // container ID
+      style: 'mapbox://styles/dexento/cjujsu10w07p81fnz7vcdjvg3', // style URL
+      center: [11.064777, 59.963297], // starting position [lng, lat]
+      zoom: 15, // starting zoom
+      projection: 'globe',
+    })
 
-  const navControls = new mapboxgl.NavigationControl()
+    const navControls = new mapboxgl.NavigationControl()
 
-  map.addControl(navControls, 'bottom-right')
+    map.addControl(navControls, 'bottom-right')
+  }, 200)
 })
 </script>
 
 <template>
-  <div id="mapContainer" class="map-container" />
+  <div>
+    <div id="mapContainer" class="map-container" />
+  </div>
 </template>
 
 <style scoped>
@@ -50,13 +55,6 @@ onMounted(() => {
 @media (min-width: 1024px) {
   .map-container {
     height: 575px;
-    width: 100%;
-  }
-}
-
-@media (min-width: 1536px) {
-  .map-container {
-    height: 860px;
     width: 100%;
   }
 }
