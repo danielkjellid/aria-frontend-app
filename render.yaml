@@ -1,0 +1,20 @@
+services:
+  - type: web
+    region: frankfurt
+    plan: starter
+    name: aria-frontend-prod
+    buildCommand: 'npm install && npm run build:production'
+    startCommand: 'npm start'
+    autoDeploy: false
+    envVars:
+      - fromGroup: Frontend
+
+  - type: web
+    region: frankfurt
+    plan: free
+    name: aria-frontend-staging
+    env: node
+    buildCommand: 'npm install && npm run build:staging'
+    startCommand: 'npm start'
+    autoDeploy: false
+      - fromGroup: Frontend

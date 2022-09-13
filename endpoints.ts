@@ -1,37 +1,37 @@
 const publicEndpoints = {
   auth: {
-    obtainTokens: () => 'auth/tokens/obtain/',
-    blacklistTokens: () => 'auth/tokens/blacklist/',
+    obtainTokens: () => '/auth/tokens/obtain/',
+    blacklistTokens: () => '/auth/tokens/blacklist/',
   },
 
   categories: {
-    list: () => 'categories/',
-    detail: (slug: string) => `categories/category/${slug}/`,
-    parentList: () => 'categories/parents/',
-    childrenList: (slug: string) => `categories/category/${slug}/children/`,
+    list: () => '/categories/',
+    detail: (slug: string) => `/categories/category/${slug}/`,
+    parentList: () => '/categories/parents/',
+    childrenList: (slug: string) => `/categories/category/${slug}/children/`,
   },
 
   discounts: {
-    active: () => 'discounts/active/',
+    active: () => '/discounts/active/',
   },
 
   employees: {
-    list: () => 'employees/',
+    list: () => '/employees/',
   },
 
   front: {
-    openingHours: () => 'front/opening-hours/',
+    openingHours: () => '/front/opening-hours/',
   },
 
   kitchens: {
     list: () => 'kitchens/',
-    detail: (slug: string) => `kitchens/kitchen/${slug}/`,
+    detail: (slug: string) => `/kitchens/kitchen/${slug}/`,
   },
 
   products: {
-    listByCategory: (categorySlug: string) => `products/category/${categorySlug}/`,
+    listByCategory: (categorySlug: string) => `/products/category/${categorySlug}/`,
     list: () => 'products/',
-    detail: (slug: string) => `products/product/${slug}/`,
+    detail: (slug: string) => `/products/product/${slug}/`,
   },
 
   suppliers: {
@@ -39,11 +39,11 @@ const publicEndpoints = {
   },
 
   users: {
-    requestUser: () => 'users/me/',
-    create: () => 'users/create/',
-    verifyConfirm: () => 'users/verify/confirm/',
-    passwordReset: () => 'users/password/reset/',
-    passwordResetConfirm: () => 'users/password/reset/confirm/',
+    requestUser: () => '/users/me/',
+    create: () => '/users/create/',
+    verifyConfirm: () => '/users/verify/confirm/',
+    passwordReset: () => '/users/password/reset/',
+    passwordResetConfirm: () => '/users/password/reset/confirm/',
   },
 }
 
