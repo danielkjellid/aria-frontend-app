@@ -6,13 +6,13 @@ const publicEndpoints = {
 
   categories: {
     list: () => '/categories/',
-    detail: (slug: string) => `/categories/category/${slug}/`,
+    detail: (slug: string) => `/categories/${slug}/`,
     parentList: () => '/categories/parents/',
-    childrenList: (slug: string) => `/categories/category/${slug}/children/`,
+    childrenList: (slug: string) => `/categories/${slug}/children/`,
   },
 
   discounts: {
-    active: () => '/discounts/active/',
+    list: () => '/discounts/',
   },
 
   employees: {
@@ -25,13 +25,13 @@ const publicEndpoints = {
 
   kitchens: {
     list: () => '/kitchens/',
-    detail: (slug: string) => `/kitchens/kitchen/${slug}/`,
+    detail: (slug: string) => `/kitchens/${slug}/`,
   },
 
   products: {
     listByCategory: (categorySlug: string) => `/products/category/${categorySlug}/`,
     list: () => '/products/',
-    detail: (slug: string) => `/products/product/${slug}/`,
+    detail: (slug: string) => `/products/${slug}/`,
   },
 
   suppliers: {

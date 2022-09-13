@@ -24,7 +24,7 @@ const discounts = ref<DiscountsActiveListOutput[]>()
 const discountsLoaded = computed((): boolean => !!discounts.value)
 
 const fetchDiscounts = async () => {
-  discounts.value = await performGet<DiscountsActiveListOutput[]>(publicUrls.discounts.active())
+  discounts.value = await performGet<DiscountsActiveListOutput[]>(publicUrls.discounts.list())
 }
 
 fetchDiscounts()
