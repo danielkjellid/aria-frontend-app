@@ -29,9 +29,9 @@ const publicEndpoints = {
   },
 
   products: {
-    listByCategory: (categorySlug: string) => `/products/category/${categorySlug}/`,
+    listByCategory: (categorySlug: string) => `/v1/products/category/${categorySlug}/`,
     list: () => '/v1/products/',
-    detail: (slug: string) => `/products/${slug}/`,
+    detail: (slug: string) => `/v1/products/${slug}/`,
   },
 
   suppliers: {
