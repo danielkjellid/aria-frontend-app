@@ -66,6 +66,7 @@ onMounted(() => {
     >
       <span class="z-50 text-sm font-semibold text-yellow-900">Development environment</span>
     </div>
+    -->
   </div>
 </template>
 

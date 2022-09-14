@@ -45,7 +45,7 @@ const onTagRemove = () => {
       {
         'py-0.5 pl-2 pr-0.5 text-xs': size === 'sm',
         'py-0.5 pl-2.5 pr-1 text-sm': size === 'md',
-        'py-1 pl-2.5 pr-1 text-sm': size === 'lg',
+        'py-1.5 pl-2.5 pr-1 text-sm': size === 'lg',
       },
     ]"
   >

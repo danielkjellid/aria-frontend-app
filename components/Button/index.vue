@@ -7,7 +7,14 @@ import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/vue/20/solid'
 
 export interface ButtonProps {
   size?: 's' | 'm' | 'l'
-  variant?: 'primary' | 'primaryDanger' | 'secondary' | 'secondaryDanger' | 'outlined'
+  variant?:
+    | 'primary'
+    | 'primaryDanger'
+    | 'secondary'
+    | 'secondaryDanger'
+    | 'tertiary'
+    | 'outlined'
+    | 'transparent'
   to?: string
   as?: string
   loadingState?: 'initial' | 'loading' | 'error' | 'success'
@@ -62,6 +69,10 @@ const elem = computed(() => {
           variant === 'secondaryDanger' && !disabled,
         'hover:bg-black hover:bg-opacity-25 focus:ring-white focus:bg-opacity-25 text-white bg-transparent border-white':
           variant === 'outlined' && !disabled,
+        'hover:bg-gray-200 focus:ring-brand-800 text-gray-600 bg-gray-100 border-gray-200':
+          variant === 'tertiary' && !disabled,
+        'bg-white bg-opacity-20 hover:bg-opacity-10 border border-transparent focus:ring-transparent text-white focus:bg-opacity-10':
+          variant === 'transparent' && !disabled,
         'px-3 py-1.5': size === 's',
         'px-4 py-2': size === 'm',
         'px-5 py-3': size === 'l',
@@ -71,7 +82,9 @@ const elem = computed(() => {
         'self-center': alignSelf === 'center',
         'self-stretch': alignSelf === 'stretch',
         'self-baseline': alignSelf === 'baseline',
-        'bg-gray-100 text-gray-500 cursor-not-allowed': disabled,
+        'bg-white bg-opacity-5 border-transparent text-gray-100 cursor-not-allowed':
+          variant === 'transparent' && disabled,
+        'bg-gray-50 text-gray-400 cursor-not-allowed': disabled,
       },
     ]"
   >

@@ -46,6 +46,7 @@ const existingIcon = computed(() => !!slots.default)
 const hiddenLabel = computed(() => (props.hiddenLabel ? props.hiddenLabel : false))
 const type = computed(() => (props.type ? props.type : 'text'))
 const plain = computed(() => (props.plain ? props.plain : false))
+
 defineEmits(['update:modelValue'])
 </script>
 
