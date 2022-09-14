@@ -1,49 +1,49 @@
 const publicEndpoints = {
   auth: {
-    obtainTokens: () => '/auth/tokens/obtain/',
-    blacklistTokens: () => '/auth/tokens/blacklist/',
+    obtainTokens: () => '/v1/auth/tokens/obtain/',
+    blacklistTokens: () => '/v1/auth/tokens/blacklist/',
   },
 
   categories: {
-    list: () => '/categories/',
-    detail: (slug: string) => `/categories/${slug}/`,
-    parentList: () => '/categories/parents/',
-    childrenList: (slug: string) => `/categories/${slug}/children/`,
+    list: () => '/v1/categories/',
+    detail: (slug: string) => `/v1/categories/${slug}/`,
+    parentList: () => '/v1/categories/parents/',
+    childrenList: (slug: string) => `/v1/categories/${slug}/children/`,
   },
 
   discounts: {
-    list: () => '/discounts/',
+    list: () => '/v1/discounts/',
   },
 
   employees: {
-    list: () => '/employees/',
+    list: () => '/v1/employees/',
   },
 
   front: {
-    openingHours: () => '/front/opening-hours/',
+    openingHours: () => '/v1/front/opening-hours/',
   },
 
   kitchens: {
-    list: () => '/kitchens/',
+    list: () => '/v1/kitchens/',
     detail: (slug: string) => `/kitchens/${slug}/`,
   },
 
   products: {
     listByCategory: (categorySlug: string) => `/products/category/${categorySlug}/`,
-    list: () => '/products/',
+    list: () => '/v1/products/',
     detail: (slug: string) => `/products/${slug}/`,
   },
 
   suppliers: {
-    list: () => '/suppliers/',
+    list: () => '/v1/suppliers/',
   },
 
   users: {
-    requestUser: () => '/users/me/',
-    create: () => '/users/create/',
-    verifyConfirm: () => '/users/verify/confirm/',
-    passwordReset: () => '/users/password/reset/',
-    passwordResetConfirm: () => '/users/password/reset/confirm/',
+    requestUser: () => '/v1/users/me/',
+    create: () => '/v1/users/create/',
+    verifyConfirm: () => '/v1/users/verify/confirm/',
+    passwordReset: () => '/v1/users/password/reset/',
+    passwordResetConfirm: () => '/v1/users/password/reset/confirm/',
   },
 }
 
