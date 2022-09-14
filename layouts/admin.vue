@@ -1,4 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+definePageMeta({
+  meta: {
+    // authRequired: true,
+    // staffRequired: true,
+  },
+})
+</script>
 
 <template>
   <div>
