@@ -1,5 +1,8 @@
 <script setup lang="ts">
 definePageMeta({
+  authRequired: true,
+  staffRequired: true,
+  permissionsRequired: ['has_users_export', 'has_users_list'],
   layout: false,
 })
 </script>

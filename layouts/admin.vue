@@ -1,9 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
-  meta: {
-    // authRequired: true,
-    // staffRequired: true,
-  },
+  layout: false,
 })
 </script>
 
