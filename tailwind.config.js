@@ -31,10 +31,15 @@ module.exports = {
           '0%': { backgroundPosition: '100% 50%' },
           '100%': { backgroundPosition: '0 50%' },
         },
+        scroll: {
+          '0%': { opacity: 1 },
+          '100%': { opacity: 0, transform: 'translateY(-35%)' },
+        },
       },
       animation: {
         'bounce-slow': 'bounce 2s infinite',
         loading: 'loading 1.5s infinite',
+        'mouse-scroll': 'scroll 2s infinite',
       },
     },
   },

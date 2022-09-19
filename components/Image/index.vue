@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { BaseHeaderImageRecord } from '~~/@types'
-import { ChevronDownIcon } from '@heroicons/vue/24/outline'
 import image512x512 from '~~/assets/images/default_512x512.jpeg'
 import image640x275 from '~~/assets/images/default_640x275.jpeg'
 import image1024x1024 from '~~/assets/images/default_1024x1024.jpeg'
@@ -33,20 +32,6 @@ interface ImageProps {
 }
 
 const props = defineProps<ImageProps>()
-
-/***********
- ** Emits **
- ***********/
-
-interface ImageEmits {
-  (e: 'navigate-to-content'): void
-}
-
-const emits = defineEmits<ImageEmits>()
-
-const onNavigateToContent = () => {
-  emits('navigate-to-content')
-}
 
 /***********
  ** State **
@@ -105,9 +90,14 @@ const imageObj = computed(
       <!-- Defaults to a chevron bouncing up and down that navigates to content on click. -->
       <div class="absolute bottom-0 left-0 right-0 mb-8 text-center">
         <slot>
-          <IconWrapper as="button" transparent-bg @click="onNavigateToContent">
-            <ChevronDownIcon class="hover:text-gray-300 animate-bounce-slow w-12 h-12 text-white" />
-          </IconWrapper>
+          <div class="flex justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="54" viewBox="0 0 32 54">
+              <g fill="none" fill-rule="evenodd" transform="translate(1 1)">
+                <rect width="30" height="52" stroke="#fff" rx="15"></rect>
+                <circle class="animate-mouse-scroll" cx="15" cy="15" r="4" fill="#fff"></circle>
+              </g>
+            </svg>
+          </div>
         </slot>
       </div>
     </div>
