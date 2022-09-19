@@ -51,19 +51,19 @@ const formSubmissionState = ref<ButtonProps['loadingState']>('initial')
  *****************/
 
 const user = reactive({
-  email: 'dexento@gmail.com',
-  firstName: 'Test',
-  lastName: 'Bruker',
-  phoneNumber: '45276890',
+  email: '',
+  firstName: '',
+  lastName: '',
+  phoneNumber: '',
   birthDate: '',
-  streetAddress: 'Vitaminveien 22',
-  zipCode: '0483',
-  zipPlace: 'Oslo',
+  streetAddress: '',
+  zipCode: '',
+  zipPlace: '',
   subscribedToNewsletter: false,
   allowPersonalization: false,
   allowThirdPartyPersonalization: false,
-  password: '5K&4vvuF',
-  password2: '5K&4vvuF',
+  password: '',
+  password2: '',
 })
 
 const months = [
