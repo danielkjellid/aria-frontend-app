@@ -10,5 +10,5 @@ export class RequestError extends Error {
   }
 }
 
-export type Getter = <T>(url: string, options?: any) => Promise<T>
+export type Getter = <T>(url: string, options?: any, noBase?: boolean) => Promise<T>
 export type Setter = <T>(url: string, data: any, options?: any) => Promise<T>

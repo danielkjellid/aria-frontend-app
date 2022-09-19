@@ -281,7 +281,9 @@ watch(
             <Button type="submit" primary :loading-state="searchLoadingState"> Søk </Button>
           </form>
           <div class="lg:hidden flex items-center mt-4 space-x-3">
-            <Tag v-if="showQueryTag && query" size="lg" @remove="clearSearch">{{ query }}</Tag>
+            <Tag v-if="showQueryTag && query" size="lg" dismissible @remove="clearSearch">
+              {{ query }}
+            </Tag>
           </div>
         </div>
 
@@ -296,7 +298,9 @@ watch(
             @modal-close="closeMobileFilterMenu"
           />
           <form class="lg:flex items-center hidden mt-1 space-x-3" @submit.prevent="searchEndpoint">
-            <Tag v-if="showQueryTag && query" size="lg" @remove="clearSearch">{{ query }}</Tag>
+            <Tag v-if="showQueryTag && query" size="lg" dismissible @remove="clearSearch">
+              {{ query }}
+            </Tag>
             <Input
               id="search-2"
               v-model.trim="query"

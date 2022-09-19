@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { SearchIcon, DotsHorizontalIcon } from '@heroicons/vue/outline'
+/* eslint-disable vue/v-slot-style */
+/* eslint-disable vue/no-v-for-template-key */
+/* eslint-disable vuejs-accessibility/click-events-have-key-events */
+import { SearchIcon } from '@heroicons/vue/outline'
 
 export interface TableHeaderObj {
   label: string
@@ -8,13 +11,20 @@ export interface TableHeaderObj {
 }
 
 interface TableProps {
+  itemsLoading?: boolean
   headers: TableHeaderObj[]
   items: any[]
   showActions?: boolean
   showSearch?: boolean
   searchPlaceholder?: string
-  showPagination?: boolean
   selectable?: boolean
+  showPagination?: boolean
+  nextPageLink?: string
+  previousPageLink?: string
+  currentPage?: string | number
+  totalPages?: string | number
+  totalObjs?: string | number
+  currentRange?: string
 }
 
 const props = defineProps<TableProps>()
@@ -44,13 +54,28 @@ const selectItem = (item: any) => {
     selectedItems.value.push(item)
   }
 }
+
+interface TableEmits {
+  (e: 'nextPage'): void
+  (e: 'previousPage'): void
+}
+
+const emits = defineEmits<TableEmits>()
+
+const nextPage = () => {
+  emits('nextPage')
+}
+
+const previousPage = () => {
+  emits('previousPage')
+}
 </script>
 
 <template>
   <div>
     <form
       v-if="showSearch"
-      class="flex items-center w-full px-2 mb-4 space-x-5"
+      class="flex items-center w-full pl-2 pr-4 mb-4 space-x-5"
       @submit.prevent="emitQuery"
     >
       <Input
@@ -93,48 +118,37 @@ const selectItem = (item: any) => {
             </th>
           </tr>
         </thead>
-        <tbody v-if="items && items.length" class="bg-white">
-          <tr v-for="(item, index) in items" :key="index" class="group">
+        <tbody v-if="itemsLoading">
+          <tr>
             <td
-              v-if="selectable"
-              class="whitespace-nowrap rounded-l-md group-hover:bg-gray-50 px-6 py-3 text-sm leading-5 text-gray-900"
+              :colspan="selectable ? headers.length + 1 : headers.length"
+              class="table-content-placeholder py-12 mx-auto"
             >
-              <input
-                type="checkbox"
-                :checked="selectedItems.includes(item)"
-                class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent text-brand-800 w-4 h-4 rounded"
-                @change="selectItem(item)"
-              />
-            </td>
-            <td
-              v-for="(value, property, i) in item"
-              :key="i"
-              class="whitespace-nowrap group-hover:bg-gray-50 px-6 py-3 text-sm leading-5 text-gray-900"
-              :class="{
-                'rounded-l-md': i === 0 && !selectable,
-                'rounded-r-md': i === headers.length - 1 && !showActions,
-              }"
-            >
-              <!-- add slot to be able to style/edit each column according to content presented -->
-              <slot :name="property" :item="item">
-                {{ value }}
-              </slot>
-            </td>
-
-            <td
-              v-if="showActions"
-              class="whitespace-nowrap rounded-r-md group-hover:bg-gray-50 relative flex items-center justify-end px-6 py-3 text-right"
-            >
-              <button type="button">
-                <DotsHorizontalIcon class="w-5 h-5 text-gray-800" />
-              </button>
+              <LoadingSpinner class="mx-auto" height="h-20" width="w-20" />
             </td>
           </tr>
         </tbody>
+        <tbody v-else-if="!itemsLoading && items && items.length" class="bg-white">
+          <TableRow
+            v-for="(item, index) in items"
+            :key="index"
+            :headers="headers"
+            :item="item"
+            :index="index"
+            :show-actions="showActions"
+            :selectable="selectable"
+            :selected-items="selectedItems"
+            @select="(obj) => selectItem(obj)"
+          >
+            <template v-for="(header, i) in headers" :key="i" v-slot:[header.value]="{ row }">
+              <slot :name="header.value" :row="row" />
+            </template>
+          </TableRow>
+        </tbody>
         <tbody v-else>
           <tr>
-            <td :colspan="headers.length" class="px-5">
-              <NoData />
+            <td :colspan="selectable ? headers.length + 1 : headers.length" class="px-6 pt-5">
+              <NoData class="table-content-placeholder" />
             </td>
           </tr>
         </tbody>
@@ -143,10 +157,12 @@ const selectItem = (item: any) => {
       <Pagination
         v-if="showPagination"
         class="px-6 mt-8"
-        current-page="2"
-        total-pages="10"
-        current-range="1 - 6"
-        total="60"
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        :total="totalObjs"
+        :current-range="currentRange"
+        @next="nextPage"
+        @previous="previousPage"
       />
 
       <Transition
@@ -175,3 +191,9 @@ const selectItem = (item: any) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.table-content-placeholder {
+  height: 864px;
+}
+</style>

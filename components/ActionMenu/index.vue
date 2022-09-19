@@ -45,7 +45,7 @@ const hideActionMenu = () => {
     >
       <div
         v-show="actionMenuActive"
-        class="ring-1 ring-black ring-opacity-5 focus:outline-none absolute mt-6 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg"
+        class="ring-1 ring-black ring-opacity-5 focus:outline-none absolute z-20 mt-6 mr-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg"
         :class="[
           {
             'right-0': alignment === 'right',

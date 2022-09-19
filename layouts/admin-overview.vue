@@ -4,6 +4,8 @@ import { MenuIcon } from '@heroicons/vue/outline'
 definePageMeta({
   layout: false,
 })
+
+defineProps<{ test?: string }>()
 </script>
 
 <template>

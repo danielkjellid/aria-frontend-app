@@ -20,23 +20,27 @@ export const defaultHeaders = {
   Authorization: process.client ? `Bearer ${localStorage.getItem('accessToken')}` : null,
 }
 
-export async function getter<T>(url: string, options: any = {}): Promise<T> {
+export async function getter<T>(url: string, options: any = {}, noBase = false): Promise<T> {
   const config = useRuntimeConfig().public
   const baseURL = config.BASE_URL
 
-  if (!baseURL) {
-    throw new Error('BASE_URL not defined')
-  }
+  if (!noBase) {
+    if (!baseURL) {
+      throw new Error('BASE_URL not defined')
+    }
 
-  if (baseURL && baseURL.slice(-1) === '/') {
-    throw new Error('BASE_URL cannot end with a trailing /')
+    if (baseURL && baseURL.slice(-1) === '/') {
+      throw new Error('BASE_URL cannot end with a trailing /')
+    }
   }
 
   if (!url) {
     throw new Error('Url was not provided.')
   }
 
-  const response = await apiService(`${config.BASE_URL}${url}`, {
+  const completeUrl = noBase ? url : `${config.BASE_URL}${url}`
+
+  const response = await apiService(completeUrl, {
     ...options,
     headers: {
       ...defaultHeaders,

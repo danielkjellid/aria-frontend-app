@@ -47,6 +47,10 @@ const publicEndpoints = {
   },
 }
 
-const internalEndpoints = {}
+const internalEndpoints = {
+  products: {
+    list: () => '/v1/internal/products/',
+  },
+}
 
 export { publicEndpoints as publicUrls, internalEndpoints as internalUrls }
