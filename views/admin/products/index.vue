@@ -41,6 +41,10 @@ const prepareProductDelete = (id: number) => {
   productToBeDeleted.value = id
   productDeleteModalActive.value = true
 }
+
+const newProduct = reactive({
+  name: '',
+})
 </script>
 
 <template>
@@ -115,6 +119,18 @@ const prepareProductDelete = (id: number) => {
             <Button variant="primaryDanger">Slett</Button>
           </template>
         </ModalDialog>
+
+        <ModalSlideOver title="Legg til nytt produkt" :active="true">
+          <CollapsableSection title="Hmmm">
+            <p>Content</p>
+          </CollapsableSection>
+          <template #actions>
+            <div class="grid grid-cols-3 gap-5">
+              <Button variant="secondary">Avbryt</Button>
+              <Button variant="primary" class="col-span-2">Legg til produkt</Button>
+            </div>
+          </template>
+        </ModalSlideOver>
       </template>
     </NuxtLayout>
   </div>

@@ -54,15 +54,15 @@ const onClose = () => {
             :class="maxWidth ? maxWidth : 'md:max-w-lg lg:max-w-xl max-w-md'"
           >
             <div class="flex flex-col h-full pt-6 overflow-y-auto bg-white shadow-xl">
-              <div :class="paddingX ? paddingX : 'sm:px-6 px-4'">
-                <div class="flex items-start justify-between">
+              <div :class="paddingX ? paddingX : 'sm:px-10 px-8'">
+                <div class="flex items-center justify-between">
                   <slot name="head">
-                    <Text tag="h1" variant="title5">{{ title }}</Text>
+                    <h1 class="text-2xl text-gray-900">{{ title }}</h1>
                   </slot>
                   <div class="h-7 flex items-center ml-3">
                     <IconWrapper as="button" type="button" @click="onClose">
                       <span class="sr-only">Close panel</span>
-                      <XMarkIcon class="hover:text-gray-900 w-6 h-6 text-gray-600" />
+                      <XMarkIcon class="hover:text-gray-900 w-6 h-6 text-gray-500" />
                     </IconWrapper>
                   </div>
                 </div>
@@ -76,7 +76,7 @@ const onClose = () => {
               </div>
               <div
                 v-if="actionsSlot"
-                :class="paddingX ? paddingX : 'sm:px-6 px-4'"
+                :class="paddingX ? paddingX : 'sm:px-10 px-8'"
                 class="bg-gray-50 relative bottom-0 left-0 right-0 py-5"
               >
                 <slot name="actions" />
