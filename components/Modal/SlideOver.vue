@@ -53,16 +53,20 @@ const onClose = () => {
             class="w-screen"
             :class="maxWidth ? maxWidth : 'md:max-w-lg lg:max-w-xl max-w-md'"
           >
-            <div class="flex flex-col h-full pt-6 overflow-y-auto bg-white shadow-xl">
+            <div class="pt-9 flex flex-col h-full overflow-y-auto bg-white shadow-xl">
               <div :class="paddingX ? paddingX : 'sm:px-10 px-8'">
                 <div class="flex items-center justify-between">
                   <slot name="head">
-                    <h1 class="text-2xl text-gray-900">{{ title }}</h1>
+                    <Text variant="title3">{{ title }}</Text>
                   </slot>
                   <div class="h-7 flex items-center ml-3">
                     <IconWrapper as="button" type="button" @click="onClose">
                       <span class="sr-only">Close panel</span>
+<<<<<<< HEAD
                       <XMarkIcon class="hover:text-gray-900 w-6 h-6 text-gray-500" />
+=======
+                      <XIcon class="hover:text-gray-900 w-5 h-5 text-gray-500" />
+>>>>>>> b9acf89 (Start adding tiptap editor)
                     </IconWrapper>
                   </div>
                 </div>

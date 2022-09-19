@@ -35,6 +35,11 @@ interface InputProps {
    * Removes borders and most styling.
    */
   plain?: boolean
+  /**
+   * Designates if the field is required or not. Note, this is purely aesthetic,
+   * validation still has to be performed outside this component.
+   */
+  required?: boolean
 }
 
 const props = defineProps<InputProps>()
@@ -55,9 +60,9 @@ defineEmits(['update:modelValue'])
     <label
       :for="id"
       :class="{ 'sr-only': hiddenLabel, 'mb-1': label, 'text-red-600': error }"
-      class="block text-sm font-semibold leading-5 text-gray-700"
+      class="block text-sm font-medium leading-5 text-gray-700"
     >
-      {{ label }}
+      {{ label }} <span v-if="required" class="font-normal text-red-600">*</span>
     </label>
     <div class="relative rounded-md">
       <div

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { PagedProductInternalListOutput } from '~~/@types/'
+import { ButtonProps } from '~~/components/Button/index.vue'
+
+import { PagedProductInternalListOutput, ApiError } from '~~/@types/'
 import { internalUrls } from '~~/endpoints'
 
 definePageMeta({
@@ -42,9 +44,54 @@ const prepareProductDelete = (id: number) => {
   productDeleteModalActive.value = true
 }
 
+/*****************
+ ** State: forms **
+ *****************/
+
+const formSubmissionState = ref<ButtonProps['loadingState']>('initial')
+
 const newProduct = reactive({
-  name: '',
+  name: null,
+  supplier: null,
+  categories: null,
+  status: null,
+  slug: null,
+  searchKeywords: null,
+  description: null,
+  unit: null,
+  vatRate: null,
+  availableInSpecialSizes: false,
+  colors: null,
+  shapes: null,
+  materials: null,
+  rooms: null,
+  absorption: null,
+  displayPriceToCustomer: false,
+  canBePurchasedOnline: false,
+  canBePickedUp: false,
 })
+
+const newProductImages = ref([])
+
+const newProductFiles = ref([])
+
+const newProductOptions = ref([])
+
+/*******************
+ ** State: errors **
+ *******************/
+
+const error = ref<ApiError | null>(null)
+const errorMessage = computed(() => (error.value.message ? error.value.message : null))
+
+const clearError = () => {
+  if (error.value) {
+    error.value = null
+    formSubmissionState.value = 'initial'
+  }
+}
+
+const newProductModalActive = ref<boolean>(false)
 </script>
 
 <template>
@@ -54,7 +101,7 @@ const newProduct = reactive({
         <Text variant="title3">Produkter</Text>
       </template>
       <template #actions>
-        <Button variant="secondary">Nytt produkt</Button>
+        <Button variant="secondary" @click="newProductModalActive = true">Nytt produkt</Button>
       </template>
       <template #content>
         <Table
@@ -120,13 +167,50 @@ const newProduct = reactive({
           </template>
         </ModalDialog>
 
-        <ModalSlideOver title="Legg til nytt produkt" :active="true">
-          <CollapsableSection title="Hmmm">
-            <p>Content</p>
+        <ModalSlideOver
+          title="Legg til nytt produkt"
+          :active="newProductModalActive"
+          @close="newProductModalActive = false"
+        >
+          <CollapsableSection title="Generelt">
+            <div class="space-y-5">
+              <Input
+                id="id_product_name"
+                v-model="newProduct.name"
+                label="Navn"
+                required
+                :error="$parseApiError('name', error)"
+                @input="clearError"
+              />
+              <Select
+                id="id_supplier"
+                v-model="newProduct.supplier"
+                label="Leverandør"
+                required
+                :error="$parseApiError('supplier', error)"
+                @input="clearError"
+              >
+                <option>X</option>
+              </Select>
+              <Input
+                id="id_product_description"
+                v-model="newProduct.description"
+                label="Beskrivelse"
+                required
+                :error="$parseApiError('description', error)"
+                @input="clearError"
+              />
+              <Editor />
+            </div>
           </CollapsableSection>
+          <CollapsableSection title="Pris"> </CollapsableSection>
+          <CollapsableSection title="Bilder"> </CollapsableSection>
+          <CollapsableSection title="Filer"> </CollapsableSection>
+          <CollapsableSection title="Størrelser"> </CollapsableSection>
+          <CollapsableSection title="Varianter"> </CollapsableSection>
           <template #actions>
             <div class="grid grid-cols-3 gap-5">
-              <Button variant="secondary">Avbryt</Button>
+              <Button variant="secondary" class="col-span-1">Avbryt</Button>
               <Button variant="primary" class="col-span-2">Legg til produkt</Button>
             </div>
           </template>
