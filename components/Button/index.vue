@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/vue/solid'
+import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/vue/20/solid'
 
 /***********
  ** Props **

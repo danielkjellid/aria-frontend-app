@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import useCategoriesStore from '~~/store/categories'
-// import { ShoppingBagIcon, UserCircleIcon, SearchIcon } from '@heroicons/vue/outline'
+// import { ShoppingBagIcon, UserCircleIcon, SearchIcon } from '@heroicons/vue/24/outline'
 
 const flyoutActive = ref<boolean>(false)
 

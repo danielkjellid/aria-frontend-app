@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { XIcon } from '@heroicons/vue/outline'
+import { XMarkIcon } from '@heroicons/vue/24/outline'
 
 interface NavbarMobileMenuProps {
   active: boolean
@@ -48,7 +48,7 @@ const closeMenu = () => {
                   @click="closeMenu"
                 >
                   <span class="sr-only">Close menu</span>
-                  <XIcon class="w-6 h-6" />
+                  <XMarkIcon class="w-6 h-6" />
                 </button>
               </div>
             </div>

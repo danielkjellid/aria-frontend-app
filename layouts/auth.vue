@@ -4,7 +4,7 @@ import auth1920x1080 from '~~/assets/images/auth_1920x1080.jpeg'
 import useUsersStore from '~~/store/users'
 import useNotificationsStore from '~~/store/notifications'
 
-import { ChevronLeftIcon } from '@heroicons/vue/solid'
+import { ChevronLeftIcon } from '@heroicons/vue/20/solid'
 import { storeToRefs } from 'pinia'
 
 /************

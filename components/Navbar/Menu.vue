@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CubeTransparentIcon, MenuAlt2Icon } from '@heroicons/vue/outline'
+import { CubeTransparentIcon, Bars3BottomLeftIcon } from '@heroicons/vue/24/outline'
 
 /***********
  ** Props **
@@ -148,7 +148,7 @@ watch(
                       @click="openMobileMenu"
                     >
                       <span class="sr-only">Open menu</span>
-                      <MenuAlt2Icon
+                      <Bars3BottomLeftIcon
                         class="w-6 h-6"
                         :class="
                           isTransparent

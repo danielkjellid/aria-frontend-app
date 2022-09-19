@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /* eslint-disable vuejs-accessibility/click-events-have-key-events */
-import { XIcon } from '@heroicons/vue/outline'
+import { XMarkIcon } from '@heroicons/vue/24/outline'
 
 /*******************
  ** Generic types **
@@ -103,7 +103,7 @@ const closeModal = () => {
                 @click="closeModal"
               >
                 <span class="sr-only">Close overlay</span>
-                <XIcon class="group-hover:text-gray-300 w-6 h-6 text-white" />
+                <XMarkIcon class="group-hover:text-gray-300 w-6 h-6 text-white" />
               </IconWrapper>
             </div>
           </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EmojiSadIcon } from '@heroicons/vue/outline'
+import { FaceFrownIcon } from '@heroicons/vue/24/outline'
 
 /***********
  ** Props **
@@ -25,7 +25,7 @@ const errorMessage = computed(() =>
     class="relative flex items-center justify-center w-full p-12 text-center border-2 border-gray-300 border-dashed rounded-lg"
   >
     <div>
-      <EmojiSadIcon class="w-12 h-12 mx-auto text-gray-400" />
+      <FaceFrownIcon class="w-12 h-12 mx-auto text-gray-400" />
       <span class="block mt-2 text-sm font-medium text-gray-900">
         {{ errorMessage }}
       </span>

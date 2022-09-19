@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ProductFileOutput } from '~~/@types'
-import { PaperClipIcon } from '@heroicons/vue/outline'
+import { PaperClipIcon } from '@heroicons/vue/24/outline'
 
 /***********
  ** Props **

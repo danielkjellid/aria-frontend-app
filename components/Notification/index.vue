@@ -4,8 +4,8 @@ import {
   XCircleIcon,
   CheckCircleIcon,
   InformationCircleIcon,
-  XIcon,
-} from '@heroicons/vue/outline'
+  XMarkIcon,
+} from '@heroicons/vue/24/outline'
 
 /***********
  ** Props **
@@ -81,7 +81,7 @@ dismissAutomatically()
               class="focus:outline-none focus:text-gray-600 hover:bg-gray-200 inline-flex p-1 text-gray-500 transition duration-150 ease-in-out rounded-full"
               @click="dismissNotification"
             >
-              <XIcon class="w-5 h-5" />
+              <XMarkIcon class="w-5 h-5" />
             </button>
           </div>
         </div>

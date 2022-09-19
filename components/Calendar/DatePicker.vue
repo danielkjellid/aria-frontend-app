@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DatePicker } from 'v-calendar'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/solid'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/20/solid'
 import { DateTime } from 'luxon'
 
 interface DateObjEventType {
