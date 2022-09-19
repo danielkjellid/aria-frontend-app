@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import useCategoriesStore from '~~/store/categories'
-import { FilterIcon } from '@heroicons/vue/outline'
+import { FunnelIcon } from '@heroicons/vue/24/outline'
 import { ProductListOutput } from '~~/@types'
 import { ButtonProps } from '~~/components/Button/index.vue'
 import { publicUrls } from '~~/endpoints'
@@ -265,7 +265,7 @@ watch(
           <Button variant="secondary" fluid @click="openMobileFilterMenu">
             Filtrer
             <template #leftIcon>
-              <FilterIcon class="w-5 h-5 text-gray-500" />
+              <FunnelIcon class="w-5 h-5 text-gray-500" />
             </template>
           </Button>
           <form class="lg:hidden flex items-center mt-2 space-x-3" @submit.prevent="searchEndpoint">

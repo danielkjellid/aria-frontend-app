@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronLeftIcon } from '@heroicons/vue/solid'
+import { ChevronLeftIcon } from '@heroicons/vue/20/solid'
 
 const config = useRuntimeConfig().public
 </script>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /* eslint-disable vue/no-v-for-template-key */
-import { LocationMarkerIcon, PhoneIcon, AtSymbolIcon, ClockIcon } from '@heroicons/vue/outline'
+import { MapPinIcon, PhoneIcon, AtSymbolIcon, ClockIcon } from '@heroicons/vue/24/outline'
 import { OpeningHoursOutput, EmployeeListOutput, SupplierListOutput } from '~~/@types'
 import storeImg from '~~/assets/images/store.jpeg'
 import { publicUrls } from '~~/endpoints'
@@ -137,7 +137,7 @@ fetchSupplierList()
                 </div>
               </div>
               <div class="flex flex-row items-center gap-2">
-                <LocationMarkerIcon class="w-6 h-6 text-gray-500" />
+                <MapPinIcon class="w-6 h-6 text-gray-500" />
                 <Text variant="body2" color="text-gray-600">Åråssvingen 12, 2007 Kjeller</Text>
               </div>
               <div class="flex flex-row items-center gap-2">

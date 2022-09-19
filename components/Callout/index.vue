@@ -4,7 +4,7 @@ import {
   XCircleIcon,
   CheckCircleIcon,
   InformationCircleIcon,
-} from '@heroicons/vue/solid'
+} from '@heroicons/vue/20/solid'
 
 /***********
  ** Props **

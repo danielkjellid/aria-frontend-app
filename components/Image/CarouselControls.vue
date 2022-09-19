@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowNarrowRightIcon, ArrowNarrowLeftIcon } from '@heroicons/vue/solid'
+import { ArrowLongRightIcon, ArrowLongLeftIcon } from '@heroicons/vue/20/solid'
 
 /***********
  ** Props **
@@ -46,7 +46,7 @@ const previous = () => {
       class="hover:bg-black hover:bg-opacity-50 flex items-center justify-center w-8 h-8 text-white bg-transparent border border-white rounded-full"
       @click="previous"
     >
-      <ArrowNarrowLeftIcon class="w-5 h-5" />
+      <ArrowLongLeftIcon class="w-5 h-5" />
     </IconWrapper>
     <div class="flex items-center mx-20 space-x-3">
       <div
@@ -64,7 +64,7 @@ const previous = () => {
       class="hover:bg-black hover:bg-opacity-50 flex items-center justify-center w-8 h-8 text-white bg-transparent border border-white rounded-full"
       @click="next"
     >
-      <ArrowNarrowRightIcon class="w-5 h-5" />
+      <ArrowLongRightIcon class="w-5 h-5" />
     </IconWrapper>
   </div>
 </template>

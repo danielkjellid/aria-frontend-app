@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { XIcon } from '@heroicons/vue/outline'
+import { XMarkIcon } from '@heroicons/vue/24/outline'
 
 interface ModalSlideOverProps {
   /**
@@ -63,7 +63,7 @@ const onClose = () => {
                   <div class="h-7 flex items-center ml-3">
                     <IconWrapper as="button" type="button" @click="onClose">
                       <span class="sr-only">Close panel</span>
-                      <XIcon class="hover:text-gray-900 w-6 h-6 text-gray-600" />
+                      <XMarkIcon class="hover:text-gray-900 w-6 h-6 text-gray-600" />
                     </IconWrapper>
                   </div>
                 </div>

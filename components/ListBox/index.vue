@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /* eslint-disable vuejs-accessibility/label-has-for */
-import { SelectorIcon } from '@heroicons/vue/solid'
+import { ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import { ButtonProps } from '~~/components/Button/index.vue'
 
 /***********
@@ -45,7 +45,7 @@ const closeMenu = () => {
       <Button :disabled="disabled" :variant="buttonVariant" @click="menuOpen = true">
         {{ buttonLabel }}
         <template #rightIcon>
-          <SelectorIcon
+          <ChevronUpDownIcon
             v-if="!selected || selected.length == 0"
             class="w-5 h-5 text-gray-400"
             aria-hidden="true"

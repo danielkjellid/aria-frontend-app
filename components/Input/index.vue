@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /* eslint-disable vuejs-accessibility/label-has-for */
-import { ExclamationCircleIcon } from '@heroicons/vue/solid'
+import { ExclamationCircleIcon } from '@heroicons/vue/20/solid'
 
 interface InputProps {
   /**

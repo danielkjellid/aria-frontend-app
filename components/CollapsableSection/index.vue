@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /* eslint-disable vuejs-accessibility/click-events-have-key-events */
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/solid'
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/20/solid'
 /***********
  ** Props **
  ***********/
