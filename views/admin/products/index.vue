@@ -32,6 +32,15 @@ const previousPage = async () => {
   await fetchProducts(data.value.previous, true)
   newPageLoading.value = false
 }
+
+const productToBeDeleted = ref<number>(null)
+
+const productDeleteModalActive = ref<boolean>(false)
+
+const prepareProductDelete = (id: number) => {
+  productToBeDeleted.value = id
+  productDeleteModalActive.value = true
+}
 </script>
 
 <template>
@@ -80,7 +89,32 @@ const previousPage = async () => {
           <template #unit="{ row }">
             <span v-if="row.unit === 'm2'">m<sup>2</sup></span>
           </template>
+          <template #actions="{ item }">
+            <ActionMenuSection>
+              <ActionMenuItem as="NuxtLink" to="#">Gå til produkt</ActionMenuItem>
+              <ActionMenuItem as="NuxtLink" to="#">Rediger produkt</ActionMenuItem>
+              <ActionMenuItem as="NuxtLink" to="#">Se i front</ActionMenuItem>
+            </ActionMenuSection>
+            <ActionMenuSection>
+              <ActionMenuItem as="button" type="button" @click="prepareProductDelete(item.id)">
+                Slett produkt
+              </ActionMenuItem>
+            </ActionMenuSection>
+          </template>
         </Table>
+
+        <ModalDialog
+          title="Er du sikker på at du vil slette produktet?"
+          :active="productDeleteModalActive"
+          @close="productDeleteModalActive = false"
+        >
+          Sletting av et produkt sletter også all tilhørende data, inkludert bilder. Slettingen vil
+          ikke fjerne produktet fra tidligere bestillinger.
+          <template #actions>
+            <Button variant="secondary">Avbryt</Button>
+            <Button variant="primaryDanger">Slett</Button>
+          </template>
+        </ModalDialog>
       </template>
     </NuxtLayout>
   </div>

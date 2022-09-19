@@ -37,8 +37,7 @@ const onClose = () => {
 </script>
 
 <template>
-  <div class="relative z-50" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
-    <ModalBackDrop :active="active" @close="onClose" />
+  <ModalBase :title="title" :active="active" @close="onClose">
     <div class="absolute inset-0 overflow-hidden">
       <div class="fixed inset-y-0 right-0 z-40 flex max-w-full">
         <Transition
@@ -87,5 +86,5 @@ const onClose = () => {
         </Transition>
       </div>
     </div>
-  </div>
+  </ModalBase>
 </template>

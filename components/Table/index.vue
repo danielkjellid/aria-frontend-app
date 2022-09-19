@@ -89,7 +89,7 @@ const previousPage = () => {
       >
         <SearchIcon class="w-5 h-5 text-gray-800" />
       </Input>
-      <Button variant="primary" size="s">Søk</Button>
+      <Button variant="secondary" size="s">Søk</Button>
     </form>
 
     <div class="overflow-x-auto">
@@ -142,6 +142,9 @@ const previousPage = () => {
           >
             <template v-for="(header, i) in headers" :key="i" v-slot:[header.value]="{ row }">
               <slot :name="header.value" :row="row" />
+            </template>
+            <template #action-menu-items="{ obj }">
+              <slot name="actions" :item="obj" />
             </template>
           </TableRow>
         </tbody>

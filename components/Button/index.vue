@@ -61,7 +61,7 @@ const elem = computed(() => {
       {
         'hover:bg-brand-900 focus:ring-brand-800 text-white bg-brand-800 border-brand-900':
           variant === 'primary' && !disabled,
-        'hover:bg-red-800 focus:ring-red-800 text-white bg-red-700 border-red-800':
+        'hover:bg-red-700 focus:ring-red-700 text-white bg-red-600 border-red-700':
           variant === 'primaryDanger' && !disabled,
         'hover:bg-brand-100 focus:ring-brand-800 text-brand-800 bg-white border-brand-300':
           variant === 'secondary' && !disabled,

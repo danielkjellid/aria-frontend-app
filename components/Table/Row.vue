@@ -50,10 +50,12 @@ const sortedItemValues = computed(() =>
     .map((header) => {
       const value = getObjectValueByPath(props.item, header.value)
       const slot = header.value
+      const align = header.align ? header.align : undefined
 
       return {
         value,
         slot,
+        align,
       }
     })
 )
@@ -89,6 +91,9 @@ const selectItem = (item: any) => {
       :class="{
         'rounded-l-md': i === 0 && !selectable,
         'rounded-r-md': i === headers.length - 1 && !showActions,
+        'text-left': obj.align === undefined || obj.align === 'left',
+        'text-center': obj.align === 'center',
+        'text-right': obj.align === 'right',
       }"
     >
       <!-- add slot to be able to style/edit each column according to content presented -->
@@ -104,7 +109,7 @@ const selectItem = (item: any) => {
         <ActionMenu :transparent-bg="false" alignment="right">
           <DotsHorizontalIcon class="w-5 h-5 text-gray-800" />
           <template #items>
-            <ActionMenuItem as="NuxtLink" to="#">Test1</ActionMenuItem>
+            <slot name="action-menu-items" :obj="item" />
           </template>
         </ActionMenu>
       </div>
