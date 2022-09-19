@@ -43,7 +43,7 @@
     "humps": "^2.0.1",
     "luxon": "^3.0.3",
     "mapbox-gl": "^2.10.0",
-    "pinia": "^2.0.21",
+    "pinia": "^2.0.22",
     "v-calendar": "^3.0.0-alpha.8",
     "vue-gtag-next": "^1.14.0"
   }
