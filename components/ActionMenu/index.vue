@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/* eslint-disable vuejs-accessibility/click-events-have-key-events */
 interface ActionMenuProps {
   alignment?: 'left' | 'center' | 'right'
   width?: string
@@ -58,6 +59,7 @@ const hideActionMenu = () => {
         aria-orientation="vertical"
         aria-labelledby="user-menu-button"
         tabindex="-1"
+        @click="hideActionMenu"
       >
         <slot name="items" />
       </div>
