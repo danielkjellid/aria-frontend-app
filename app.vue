@@ -20,13 +20,16 @@ usersStore.fetchCurrentUser()
  ** State **
  ***********/
 
+const siteLoaded = ref<boolean>(false)
 const isDevEnvironment = computed(() => {
   if (process.env.NODE_ENV !== 'production') return true
 
   return false
 })
 
-const siteLoaded = ref<boolean>(false)
+/***********
+ ** Hooks **
+ ***********/
 
 onMounted(() => {
   siteLoaded.value = true

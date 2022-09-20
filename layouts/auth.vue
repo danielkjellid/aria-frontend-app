@@ -65,7 +65,6 @@ const logOut = () => {
 watch(
   () => currentUserLoggedIn.value,
   (_oldValue, _newValue) => {
-    console.log('this hit')
     if (next) {
       router.push(next as string)
     }

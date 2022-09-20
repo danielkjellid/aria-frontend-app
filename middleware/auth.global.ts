@@ -37,8 +37,6 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
 
   if (authRequired || staffRequired || (permissionsRequired && requiredPermissions.length)) {
     const user = await getUser()
-    // console.log(user)
-    // console.log(userHasRequiredPerms(user))
     // All of the above, auth, staff and permissions require a user object to run
     // checks against.
     //
@@ -53,7 +51,6 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
       //
       // For staffRequired this check is enough.
       if (!user.isStaff && !user.isSuperuser) {
-        console.log('here')
         notificationStore.create({
           title: 'Manglende tilgang',
           text: 'Du har ikke tilgang til å utføre denne handlingen.',

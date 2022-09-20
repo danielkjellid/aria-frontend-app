@@ -1,10 +1,24 @@
 <script setup lang="ts">
+/***********
+ ** Props **
+ ***********/
+
 interface LoadingSpinnerProps {
+  /**
+   * Width of the spinner. Should be equal to height if set.
+   */
   width?: string
+  /**
+   * Height of the spinner. Should be equal to width if set.
+   */
   height?: string
 }
 
 const props = defineProps<LoadingSpinnerProps>()
+
+/**************
+ ** Defaults **
+ **************/
 
 const width = computed(() => (props.width ? props.width : 'w-12'))
 const height = computed(() => (props.height ? props.height : 'h-12'))
