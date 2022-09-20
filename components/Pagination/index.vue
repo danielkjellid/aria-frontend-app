@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/vue/outline'
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/vue/24/outline'
 
 interface PaginationProps {
   /**

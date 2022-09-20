@@ -2,7 +2,7 @@
 /* eslint-disable vue/v-slot-style */
 /* eslint-disable vue/no-v-for-template-key */
 /* eslint-disable vuejs-accessibility/click-events-have-key-events */
-import { SearchIcon } from '@heroicons/vue/outline'
+import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 
 export interface TableHeaderObj {
   label: string
@@ -87,7 +87,7 @@ const previousPage = () => {
         plain
         class="w-full"
       >
-        <SearchIcon class="w-5 h-5 text-gray-800" />
+        <MagnifyingGlassIcon class="w-5 h-5 text-gray-800" />
       </Input>
       <Button variant="secondary" size="s">Søk</Button>
     </form>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DotsHorizontalIcon } from '@heroicons/vue/outline'
+import { EllipsisHorizontalIcon } from '@heroicons/vue/24/outline'
 import { TableHeaderObj } from '~~/components/Table/index.vue'
 
 interface TableRowProps {
@@ -107,7 +107,7 @@ const selectItem = (item: any) => {
     >
       <div class="flex items-center justify-center">
         <ActionMenu :transparent-bg="false" alignment="right">
-          <DotsHorizontalIcon class="w-5 h-5 text-gray-800" />
+          <EllipsisHorizontalIcon class="w-5 h-5 text-gray-800" />
           <template #items>
             <slot name="action-menu-items" :obj="item" />
           </template>

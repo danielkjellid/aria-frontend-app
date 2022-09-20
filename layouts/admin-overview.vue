@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MenuIcon } from '@heroicons/vue/outline'
+import { Bars3Icon } from '@heroicons/vue/24/outline'
 
 definePageMeta({
   layout: false,
@@ -13,7 +13,7 @@ defineProps<{ test?: string }>()
     <NuxtLayout name="admin">
       <template #title>
         <div class="flex items-center space-x-5">
-          <MenuIcon class="w-6 h-6 mt-px text-gray-800" />
+          <Bars3Icon class="w-6 h-6 mt-px text-gray-800" />
           <slot name="title">
             <Text variant="title3">Overview template</Text>
           </slot>

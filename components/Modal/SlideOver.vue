@@ -62,11 +62,7 @@ const onClose = () => {
                   <div class="h-7 flex items-center ml-3">
                     <IconWrapper as="button" type="button" @click="onClose">
                       <span class="sr-only">Close panel</span>
-<<<<<<< HEAD
                       <XMarkIcon class="hover:text-gray-900 w-6 h-6 text-gray-500" />
-=======
-                      <XIcon class="hover:text-gray-900 w-5 h-5 text-gray-500" />
->>>>>>> b9acf89 (Start adding tiptap editor)
                     </IconWrapper>
                   </div>
                 </div>
