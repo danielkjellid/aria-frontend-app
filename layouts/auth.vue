@@ -20,6 +20,8 @@ const config = useRuntimeConfig().public
 const route = useRoute()
 const router = useRouter()
 
+const { next } = route.query
+
 const metaDescription = ref(
   'FK-JKE Design er en totalleverandør av markedes mest spennende utvalg innenfor fliser, baderomsinnredning, tilbehør til bad og kjøkken fra noen av verdens mest spennende produsenter.'
 )
@@ -36,7 +38,6 @@ const usersStore = useUsersStore()
  ***********/
 
 const { currentUser } = storeToRefs(usersStore)
-
 const currentUserLoggedIn = computed(() => Object.keys(currentUser.value).length > 0)
 
 const logOut = () => {
@@ -50,6 +51,26 @@ const logOut = () => {
 
   router.push({ name: 'index' })
 }
+
+/**************
+ ** Watchers **
+ **************/
+
+// If currentUser is updated, and we have a next query parameter
+// in the url, we want to redirect the use immediately. This is
+// because users are redirected to log in if a route requires auth,
+// and since currentUser is fetched async, we don't always have the
+// updated state before the protected route renders (especially if
+// the route is accessed directly)
+watch(
+  () => currentUserLoggedIn.value,
+  (_oldValue, _newValue) => {
+    console.log('this hit')
+    if (next) {
+      router.push(next as string)
+    }
+  }
+)
 </script>
 
 <template>

@@ -17,6 +17,7 @@ definePageMeta({
  ** Routes **
  ************/
 
+const route = useRoute()
 const router = useRouter()
 
 /***********
@@ -78,7 +79,8 @@ const logIn = async () => {
         })
       }
 
-      router.push('/')
+      const { next } = route.query
+      router.push(next ? (next as string) : '/')
 
       notificationsStore.create({
         title: 'Logget inn',
@@ -132,7 +134,6 @@ const logIn = async () => {
               label="E-post"
               type="email"
               autocomplete="email"
-              :model-value="email"
               :error="$parseApiError('email', error)"
               @input="clearError"
             />
@@ -144,7 +145,6 @@ const logIn = async () => {
               label="Passord"
               type="password"
               autocomplete="current-password"
-              :model-value="password"
               :error="$parseApiError('password', error)"
               @input="clearError"
             />

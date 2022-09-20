@@ -25,15 +25,38 @@ const isDevEnvironment = computed(() => {
 
   return false
 })
+
+const siteLoaded = ref<boolean>(false)
+
+onMounted(() => {
+  siteLoaded.value = true
+})
 </script>
 
 <template>
   <div>
     <NotificationHandler />
-    <NuxtLayout>
-      <NuxtPage />
-      <CookieConsent />
-    </NuxtLayout>
+    <Transition
+      enter-active-class="transition-opacity duration-200 ease-linear"
+      enter-from-class="opacity-0"
+      enter-to-class="opacity-100"
+      leave-active-class="transition-opacity duration-200 ease-linear"
+      leave-from-class="opacity-100"
+      leave-to-class="opacity-0"
+    >
+      <div v-if="siteLoaded">
+        <NuxtLayout>
+          <NuxtPage />
+          <CookieConsent />
+        </NuxtLayout>
+      </div>
+      <div
+        v-else
+        class="absolute inset-0 flex items-center justify-center overflow-hidden bg-white"
+      >
+        <LoadingSpinner width="w-20" height="h-20" />
+      </div>
+    </Transition>
     <div
       v-if="isDevEnvironment"
       class="dev-env-warning fixed bottom-0 left-0 right-0 z-50 py-1 text-center"
