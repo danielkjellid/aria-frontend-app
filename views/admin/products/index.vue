@@ -59,7 +59,7 @@ const newProduct = reactive({
   searchKeywords: null,
   description: null,
   unit: null,
-  vatRate: null,
+  vatRate: 0.25,
   availableInSpecialSizes: false,
   colors: null,
   shapes: null,
@@ -179,6 +179,7 @@ const newProductModalActive = ref<boolean>(false)
                 v-model="newProduct.name"
                 label="Navn"
                 required
+                display-word-count
                 :error="$parseApiError('name', error)"
                 @input="clearError"
               />
@@ -198,16 +199,57 @@ const newProductModalActive = ref<boolean>(false)
                 required
                 render-as-input
                 output="string"
+                display-word-count
                 :error="$parseApiError('description', error)"
                 @input="clearError"
               />
             </div>
           </CollapsableSection>
-          <CollapsableSection title="Pris"> </CollapsableSection>
+          <CollapsableSection title="Kommersielt">
+            <div class="space-y-5">
+              <Checkbox
+                id="id_can_be_purchased_online"
+                v-model="newProduct.canBePurchasedOnline"
+                label="Kan kjøpes på nett"
+                help-text="Kunder kan legge inn bestilling på produktet, og få prouktet sendt hjem."
+              />
+              <Checkbox
+                id="id_can_be_picked_up"
+                v-model="newProduct.canBePickedUp"
+                label="Kan hentes i butikk"
+                help-text="Kunder kan legge inn klikk og hent ordre."
+              />
+              <Checkbox
+                id="id_display_price_to_customer"
+                v-model="newProduct.displayPriceToCustomer"
+                label="Vis pris til kunde"
+                help-text="Prisen på produktet er tilgjengelig i nettbutikken."
+              />
+              <Input
+                id="id_vat_rate"
+                v-model="newProduct.vatRate"
+                label="MVA sats"
+                required
+                help-text="Prosentvis sats for MVA i desimalform. E.g. 0.25 for 25%."
+                :error="$parseApiError('vatRate', error)"
+                @input="clearError"
+              />
+              <Select
+                id="id_unit"
+                v-model="newProduct.unit"
+                label="Enhet"
+                required
+                :error="$parseApiError('supplier', error)"
+                @input="clearError"
+              >
+                <option>Stk</option>
+                <option>m2</option>
+              </Select>
+            </div>
+          </CollapsableSection>
           <CollapsableSection title="Bilder"> </CollapsableSection>
           <CollapsableSection title="Filer"> </CollapsableSection>
-          <CollapsableSection title="Størrelser"> </CollapsableSection>
-          <CollapsableSection title="Varianter"> </CollapsableSection>
+          <CollapsableSection title="Alternativer"> </CollapsableSection>
           <template #actions>
             <div class="grid grid-cols-3 gap-5">
               <Button variant="secondary" class="col-span-1">Avbryt</Button>

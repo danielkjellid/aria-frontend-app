@@ -27,6 +27,10 @@ interface SelectProps {
    * validation still has to be performed outside this component.
    */
   required?: boolean
+  /**
+   * Additional help text bellow the select.
+   */
+  helpText?: string
 }
 
 const props = defineProps<SelectProps>()
@@ -52,14 +56,15 @@ defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <div>
-    <label
-      :for="id"
-      :class="{ 'sr-only': hiddenLabel, 'mb-1': label, 'text-red-600': error }"
-      class="block text-sm font-medium leading-5 text-gray-700"
-    >
-      {{ label }} <span v-if="required" class="font-normal text-red-600">*</span>
-    </label>
+  <FormElementBase
+    :id="id"
+    :label="label"
+    :hidden-label="hiddenLabel"
+    :error="error"
+    :required="required"
+    :help-text="helpText"
+    :word-count="null"
+  >
     <div class="relative rounded-md">
       <div
         v-if="existingIcon"
@@ -87,6 +92,5 @@ defineEmits(['update:modelValue'])
         <ExclamationCircleIcon class="z-10 w-5 h-5 text-red-500" />
       </div>
     </div>
-    <p v-if="error" class="mt-1 text-sm text-red-600">{{ error }}</p>
-  </div>
+  </FormElementBase>
 </template>

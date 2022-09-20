@@ -40,6 +40,14 @@ interface InputProps {
    * validation still has to be performed outside this component.
    */
   required?: boolean
+  /**
+   * Additional help text bellow the input.
+   */
+  helpText?: string
+  /**
+   * Display the work count adjacent to the label.
+   */
+  displayWordCount?: boolean
 }
 
 const props = defineProps<InputProps>()
@@ -56,14 +64,15 @@ defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <div>
-    <label
-      :for="id"
-      :class="{ 'sr-only': hiddenLabel, 'mb-1': label, 'text-red-600': error }"
-      class="block text-sm font-medium leading-5 text-gray-700"
-    >
-      {{ label }} <span v-if="required" class="font-normal text-red-600">*</span>
-    </label>
+  <FormElementBase
+    :id="id"
+    :label="label"
+    :hidden-label="hiddenLabel"
+    :error="error"
+    :required="required"
+    :help-text="helpText"
+    :word-count="displayWordCount && modelValue ? modelValue.length : null"
+  >
     <div class="relative rounded-md">
       <div
         v-if="existingIcon"
@@ -92,6 +101,5 @@ defineEmits(['update:modelValue'])
         <ExclamationCircleIcon class="w-5 h-5 text-red-500" />
       </div>
     </div>
-    <p v-if="error" class="relative mt-1 text-sm text-red-600">{{ error }}</p>
-  </div>
+  </FormElementBase>
 </template>

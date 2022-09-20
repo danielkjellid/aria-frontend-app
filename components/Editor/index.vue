@@ -38,6 +38,14 @@ interface EditorProps {
    */
   error?: string
   /**
+   * Additional help text bellow the input.
+   */
+  helpText?: string
+  /**
+   * Display the work count adjacent to the label.
+   */
+  displayWordCount?: boolean
+  /**
    * The value of the editor itself, usually set by v-model.
    */
   modelValue?: OutputData
@@ -130,26 +138,32 @@ onMounted(async () => {
 </script>
 <template>
   <ClientOnly>
-    <div>
-      <label
-        for="editor"
-        :class="{ 'sr-only': hiddenLabel, 'mb-1': label, 'text-red-600': error }"
-        class="block text-sm font-medium leading-5 text-gray-700"
-      >
-        {{ label }} <span v-if="required" class="font-normal text-red-600">*</span>
-      </label>
+    <FormElementBase
+      v-if="renderAsInput"
+      id="editor"
+      :label="label"
+      :hidden-label="hiddenLabel"
+      :error="error"
+      :required="required"
+      :help-text="helpText"
+      :word-count="null"
+    >
+      <div
+        id="editor"
+        class="w-full min-h-full overflow-y-auto text-sm focus:outline-none mt-1 focus:ring-2 h-40 border px-3 py-0.5 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent block leading-5 border-gray-200 rounded-md"
+        :class="{
+          'cursor-not-allowed': readonly,
+        }"
+      />
+    </FormElementBase>
+    <div v-else>
       <div
         id="editor"
         class="w-full min-h-full overflow-y-auto text-sm"
         :class="{
-          'border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red':
-            error,
-          'focus:outline-none mt-1 focus:ring-2 h-40 border px-3 py-0.5 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent block w-full text-sm leading-5 border-gray-200 rounded-md':
-            renderAsInput,
           'cursor-not-allowed': readonly,
         }"
       />
-      <p v-if="error" class="relative mt-1 text-sm text-red-600">{{ error }}</p>
     </div>
   </ClientOnly>
 </template>
