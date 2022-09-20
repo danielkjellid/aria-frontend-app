@@ -81,9 +81,6 @@ const loading = computed(() => {
               selv om det ikke ligger i nettbutikken.
             </Text>
           </div>
-          <NuxtLink to="/admin/products">TEST</NuxtLink>
-          <p>Should be here:</p>
-          <LoadingSpinner />
         </Container>
       </section>
       <!-- Skeleton loading while content is loading -->
