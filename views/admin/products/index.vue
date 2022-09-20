@@ -192,15 +192,15 @@ const newProductModalActive = ref<boolean>(false)
               >
                 <option>X</option>
               </Select>
-              <Input
-                id="id_product_description"
+              <Editor
                 v-model="newProduct.description"
                 label="Beskrivelse"
                 required
+                render-as-input
+                output="string"
                 :error="$parseApiError('description', error)"
                 @input="clearError"
               />
-              <Editor />
             </div>
           </CollapsableSection>
           <CollapsableSection title="Pris"> </CollapsableSection>
