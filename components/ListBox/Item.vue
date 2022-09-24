@@ -7,7 +7,7 @@ import { CheckIcon } from '@heroicons/vue/24/outline'
 
 interface ListBoxItemProps {
   checkMarkAlignment?: 'left' | 'right'
-  selected?: string[]
+  selected?: any[]
   value: string
   disabled?: boolean
 }
@@ -59,10 +59,11 @@ const onSelect = () => {
     @focusout="isHovering = false"
   >
     <div
+      class="cursor-pointer"
       :class="[
         isSelected ? 'bg-brand-100 text-brand-900' : 'text-gray-900',
         leftIcon || checkMarkAlignment === 'left' ? 'pl-12' : 'pl-3',
-        'relative cursor-default select-none py-2 pr-4',
+        'relative select-none py-2 pr-4',
       ]"
     >
       <span :class="[isSelected ? 'font-medium' : 'font-normal', 'block truncate']">

@@ -38,7 +38,7 @@ const closeMenu = () => {
 
 <template>
   <div v-click-outside="closeMenu">
-    <label v-if="label" :for="id" class="block mb-1 text-sm font-medium text-gray-700">
+    <label v-if="label" :for="id" class="block mb-2 text-sm font-medium text-gray-700">
       {{ label }}
     </label>
     <div class="max-w-72 relative mt-1">

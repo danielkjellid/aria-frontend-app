@@ -105,7 +105,7 @@ const selectItem = (item: any) => {
       v-if="showActions"
       class="whitespace-nowrap rounded-r-md group-hover:bg-gray-50 relative px-6 py-3 text-right"
     >
-      <div class="flex items-center justify-center">
+      <div class="flex items-center justify-end">
         <ActionMenu :transparent-bg="false" alignment="right">
           <EllipsisHorizontalIcon class="w-5 h-5 text-gray-800" />
           <template #items>

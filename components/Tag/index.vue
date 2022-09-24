@@ -40,7 +40,7 @@ const onTagRemove = () => {
 
 <template>
   <span
-    class="inline-flex items-center font-medium"
+    class="shrink-0 inline-flex items-center font-medium"
     :class="[
       {
         'bg-gray-100 text-gray-800': variant === 'gray',
@@ -70,7 +70,7 @@ const onTagRemove = () => {
     <button
       v-if="dismissible"
       type="button"
-      class="flex-shrink-0 ml-0.5 h-4 w-4 rounded-full inline-flex items-center justify-center text-blue-400 hover:bg-blue-200 hover:text-blue-500 focus:outline-none focus:bg-blue-500 focus:text-white"
+      class="hover:bg-blue-200 hover:text-blue-500 focus:outline-none focus:bg-blue-500 focus:text-white inline-flex items-center justify-center flex-shrink-0 w-4 h-4 ml-1 text-blue-400 rounded-full"
       @click="onTagRemove"
     >
       <span class="sr-only">Remove tag</span>
