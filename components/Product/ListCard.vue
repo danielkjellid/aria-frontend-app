@@ -168,7 +168,7 @@ const canBePurchasedOnline = ref<boolean>(false)
           </div>
           <template v-if="displayPrice || currentlyDiscounted">
             <div v-if="!currentlyDiscounted" class="shrink-0 font-normal text-right">
-              <p>Fra kr {{ fromPrice }} <ProductUnitTag :unit="unit" /></p>
+              <p>Fra kr {{ $formatPrice(fromPrice) }} <ProductUnitTag :unit="unit" /></p>
             </div>
             <div v-else class="shrink-0 font-normal text-right">
               <p class="text-red-600">
@@ -176,7 +176,7 @@ const canBePurchasedOnline = ref<boolean>(false)
                 <ProductUnitTag :unit="unit" />
               </p>
               <p class="mt-1 text-sm font-normal">
-                <s> Fra kr {{ fromPrice }} <ProductUnitTag :unit="unit" /></s>
+                <s> Fra kr {{ $formatPrice(fromPrice) }} <ProductUnitTag :unit="unit" /></s>
               </p>
             </div>
           </template>
