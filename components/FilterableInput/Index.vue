@@ -153,6 +153,8 @@ watch(
   },
   { deep: true }
 )
+
+const t = () => console.log('test')
 </script>
 
 <template>
@@ -165,62 +167,65 @@ watch(
       :required="required"
       :help-text="helpText"
     >
-      <div
-        class="relative flex items-center w-full h-10 px-3 space-x-2 text-sm leading-5 border border-gray-200 rounded-md"
-        :class="{
-          'outline-none ring-2 ring-offset-2 ring-brand-800 border-transparent':
-            containerFocused || menuOpen,
-        }"
-        @click="menuOpen = true"
-      >
-        <Tag
-          v-for="mappedSelect in mappedSelected"
-          :key="mappedSelect[valueField]"
-          dismissible
-          @remove="handleSelect(mappedSelect[valueField])"
+      <div class="relative w-full" @keydown.esc="closeMenu">
+        <div
+          class="relative flex flex-wrap items-center w-full h-full px-3 space-y-1 text-sm leading-5 border border-gray-200 rounded-md"
+          :class="{
+            'outline-none ring-2 ring-offset-2 ring-brand-800 border-transparent':
+              containerFocused || menuOpen,
+          }"
+          @click="menuOpen = true"
         >
-          {{ mappedSelect[displayField] }}
-        </Tag>
-        <input
-          v-model="filterQuery"
-          type="text"
-          class="focus:outline-none focus:border-transparent focus:ring-transparent w-full px-0 py-2 leading-5 bg-red-100 border-transparent"
-          @focusin="containerFocused = true"
-          @focusout="containerFocused = false"
-        />
-      </div>
-
-      <Transition
-        enter-active-class="transition duration-100 ease-out"
-        enter-from-class="transform scale-95 opacity-0"
-        enter-to-class="transform scale-100 opacity-100"
-        leave-active-class="transition duration-75 ease-out"
-        leave-from-class="transform scale-100 opacity-100"
-        leave-to-class="transform scale-95 opacity-0"
-      >
-        <ul
-          v-show="menuOpen && options.length"
-          class="max-h-80 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm absolute z-10 w-full py-1 mt-3 overflow-auto text-base bg-white rounded-md shadow-lg"
-          :aria-multiselectable="multiple ? 'true' : 'false'"
-          aria-labelledby="listbox-button"
-          aria-orientation="vertical"
-          role="listbox"
-          tabindex="0"
-          @click="!props.multiple ? closeMenu() : null"
-          @keypress.enter="!props.multiple ? closeMenu() : null"
-        >
-          <ListBoxItem
-            v-for="option in filteredMappedOptions"
-            :key="option.value"
-            :value="option.value"
-            :selected="selected"
-            check-mark-alignment="right"
-            @select="handleSelect(option.value)"
+          <Tag
+            v-for="mappedSelect in mappedSelected"
+            :key="mappedSelect[valueField]"
+            class="mr-2"
+            dismissible
+            @remove="handleSelect(mappedSelect[valueField])"
           >
-            {{ option.display }}
-          </ListBoxItem>
-        </ul>
-      </Transition>
+            {{ mappedSelect[displayField] }}
+          </Tag>
+          <input
+            v-model="filterQuery"
+            type="text"
+            class="focus:outline-none focus:border-transparent focus:ring-transparent grow px-0 py-2 leading-5 border-transparent"
+            @focusin="containerFocused = true"
+            @focusout="containerFocused = false"
+          />
+        </div>
+
+        <Transition
+          enter-active-class="transition duration-100 ease-out"
+          enter-from-class="transform scale-95 opacity-0"
+          enter-to-class="transform scale-100 opacity-100"
+          leave-active-class="transition duration-75 ease-out"
+          leave-from-class="transform scale-100 opacity-100"
+          leave-to-class="transform scale-95 opacity-0"
+        >
+          <ul
+            v-show="menuOpen && options.length"
+            class="max-h-80 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm absolute z-10 w-full py-1 mt-3 overflow-auto text-base bg-white rounded-md shadow-lg"
+            :aria-multiselectable="multiple ? 'true' : 'false'"
+            aria-labelledby="listbox-button"
+            aria-orientation="vertical"
+            role="listbox"
+            tabindex="0"
+            @click="!multiple ? closeMenu() : null"
+            @keypress.enter="!multiple ? closeMenu() : null"
+          >
+            <ListBoxItem
+              v-for="option in filteredMappedOptions"
+              :key="option.value"
+              :value="option.value"
+              :selected="selected"
+              check-mark-alignment="right"
+              @select="handleSelect(option.value)"
+            >
+              {{ option.display }}
+            </ListBoxItem>
+          </ul>
+        </Transition>
+      </div>
     </FormElementBase>
   </div>
 </template>

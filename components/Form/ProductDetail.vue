@@ -77,6 +77,28 @@ const fileFormActive = ref<boolean>(false)
           />
         </div>
       </CollapsableSection>
+      <CollapsableSection title="Kategorier">
+        <FilterableInput
+          id="id_categories"
+          label="Kategorier"
+          help-text="Velg alle kategoriene some egner seg til produktet."
+          display-field="text"
+          value-field="id"
+          :options="[
+            { id: 1, text: 'Item 1' },
+            { id: 2, text: 'Item 2' },
+            { id: 3, text: 'Item 3' },
+            { id: 4, text: 'Item 4' },
+            { id: 5, text: 'Item 5' },
+            { id: 6, text: 'Item 6' },
+            { id: 7, text: 'Item 7' },
+            { id: 8, text: 'Item 8' },
+            { id: 9, text: 'Item 9' },
+          ]"
+          required
+          multiple
+        />
+      </CollapsableSection>
       <CollapsableSection title="Kommersielt">
         <div class="space-y-5">
           <Checkbox

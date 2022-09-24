@@ -8,7 +8,7 @@ import { CheckIcon } from '@heroicons/vue/24/outline'
 interface ListBoxItemProps {
   checkMarkAlignment?: 'left' | 'right'
   selected?: any[]
-  value: string
+  value: any
   disabled?: boolean
 }
 
