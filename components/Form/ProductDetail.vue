@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { SupplierListInternalOutput, CategoryListInternalOutput, ApiError } from '~~/@types'
+import { internalUrls } from '~~/endpoints'
+import { ButtonProps } from '~~/components/Button/index.vue'
+import { FormProductFileData } from '~~/components/Form/ProductFile.vue'
+import { ChevronRightIcon } from '@heroicons/vue/20/solid'
+
 interface FormProductDetailProps {
   active: boolean
   existingProduct?: any // TODO: Change to actual type
@@ -28,6 +34,15 @@ const reactiveProduct = reactive({
   canBePurchasedOnline: clonedProduct.canBePurchasedOnline,
   canBePickedUp: clonedProduct.canBePickedUp,
 })
+const formSubmissionState = ref<ButtonProps['loadingState']>('initial')
+const error = ref<ApiError | null>(null)
+
+const clearError = () => {
+  if (error.value) {
+    error.value = null
+    formSubmissionState.value = 'initial'
+  }
+}
 
 interface FormProductDetailEmits {
   (e: 'close'): void
@@ -40,6 +55,30 @@ const onClose = () => {
 }
 
 const fileFormActive = ref<boolean>(false)
+const filesData = ref<FormProductFileData[]>([])
+const files = computed((): File[] => filesData.value.flatMap((fileData) => fileData.file))
+const addNewFileData = (fileData: FormProductFileData) => {
+  filesData.value.push(fileData)
+  console.log(filesData.value)
+  console.log(files.value)
+}
+
+const suppliers = ref<SupplierListInternalOutput[]>()
+const fetchSuppliers = async () => {
+  suppliers.value = await performGet<SupplierListInternalOutput[]>(internalUrls.suppliers.list())
+}
+
+fetchSuppliers()
+
+const fetchedCategories = ref<CategoryListInternalOutput[]>()
+const fetchCategories = async () => {
+  fetchedCategories.value = await performGet<CategoryListInternalOutput[]>(
+    internalUrls.categories.list()
+  )
+}
+
+fetchCategories()
+const comp = computed(() => (fetchedCategories.value ? fetchedCategories.value : []))
 </script>
 
 <template>
@@ -64,7 +103,9 @@ const fileFormActive = ref<boolean>(false)
             :error="$parseApiError('supplier', error)"
             @input="clearError"
           >
-            <option>X</option>
+            <option v-for="supplier in suppliers" :key="supplier.id" :value="supplier.id">
+              {{ supplier.name }} {{ !supplier.isActive ? '(Inaktiv)' : '' }}
+            </option>
           </Select>
           <Editor
             v-model="reactiveProduct.description"
@@ -82,19 +123,9 @@ const fileFormActive = ref<boolean>(false)
           id="id_categories"
           label="Kategorier"
           help-text="Velg alle kategoriene some egner seg til produktet."
-          display-field="text"
+          display-field="displayName"
           value-field="id"
-          :options="[
-            { id: 1, text: 'Item 1' },
-            { id: 2, text: 'Item 2' },
-            { id: 3, text: 'Item 3' },
-            { id: 4, text: 'Item 4' },
-            { id: 5, text: 'Item 5' },
-            { id: 6, text: 'Item 6' },
-            { id: 7, text: 'Item 7' },
-            { id: 8, text: 'Item 8' },
-            { id: 9, text: 'Item 9' },
-          ]"
+          :options="comp"
           required
           multiple
         />
@@ -145,17 +176,38 @@ const fileFormActive = ref<boolean>(false)
         <FileUploadInput type="image" multiple />
       </CollapsableSection>
       <CollapsableSection title="Filer">
-        <button type="button" @click="fileFormActive = true">Files</button>
+        <div class="space-y-6">
+          <FileUploadUploadedBlock>
+            <FileUploadUploadedBlockFileItem
+              v-for="fd in filesData"
+              :key="fd.name"
+              :name="fd.name"
+              :file="fd.file"
+              @delete="null"
+            />
+          </FileUploadUploadedBlock>
+          <div>
+            <Button variant="tertiary" fluid @click="fileFormActive = true">Legg til filer</Button>
+            <p class="mt-3 text-sm font-light text-gray-500">
+              Legg til filer som kan hjelpe kunden å få en bedre oversikt over produktets
+              egenskaper. For eksempel katalog, tekniske spesifikasjoner, bruksanvisninger osv.
+            </p>
+          </div>
+        </div>
       </CollapsableSection>
       <CollapsableSection title="Alternativer"> </CollapsableSection>
       <template #actions>
-        <div class="grid grid-cols-3 gap-5">
+        <div class="grid grid-cols-5 gap-5">
           <Button variant="secondary" class="col-span-1">Avbryt</Button>
-          <Button variant="primary" class="col-span-2">Legg til produkt</Button>
+          <Button variant="primary" class="col-span-4">Legg til produkt</Button>
         </div>
       </template>
     </ModalSlideOver>
 
-    <FormProductFile :active="fileFormActive" @close="fileFormActive = false" />
+    <FormProductFile
+      :active="fileFormActive"
+      @close="fileFormActive = false"
+      @submit="(fileData) => addNewFileData(fileData)"
+    />
   </div>
 </template>

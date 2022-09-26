@@ -48,8 +48,16 @@ const publicEndpoints = {
 }
 
 const internalEndpoints = {
+  categories: {
+    list: () => '/v1/internal/categories/',
+  },
+
   products: {
     list: () => '/v1/internal/products/',
+  },
+
+  suppliers: {
+    list: () => '/v1/internal/suppliers/',
   },
 }
 

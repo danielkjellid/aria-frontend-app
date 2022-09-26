@@ -153,8 +153,6 @@ watch(
   },
   { deep: true }
 )
-
-const t = () => console.log('test')
 </script>
 
 <template>
@@ -169,7 +167,7 @@ const t = () => console.log('test')
     >
       <div class="relative w-full" @keydown.esc="closeMenu">
         <div
-          class="relative flex flex-wrap items-center w-full h-full px-3 space-y-1 text-sm leading-5 border border-gray-200 rounded-md"
+          class="relative flex flex-wrap items-center w-full h-full px-3 py-2 space-y-1 text-sm leading-5 border border-gray-200 rounded-md"
           :class="{
             'outline-none ring-2 ring-offset-2 ring-brand-800 border-transparent':
               containerFocused || menuOpen,
@@ -188,7 +186,7 @@ const t = () => console.log('test')
           <input
             v-model="filterQuery"
             type="text"
-            class="focus:outline-none focus:border-transparent focus:ring-transparent grow px-0 py-2 leading-5 border-transparent"
+            class="focus:outline-none focus:border-transparent focus:ring-transparent grow w-20 h-5 px-0 py-2 border-transparent"
             @focusin="containerFocused = true"
             @focusout="containerFocused = false"
           />

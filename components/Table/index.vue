@@ -187,7 +187,7 @@ const previousPage = () => {
               </p>
               <Button variant="transparent" size="s" @click="selectedItems = []">Fjern valg</Button>
             </div>
-            <slot name="actions" />
+            <slot name="page-actions" />
           </div>
         </div>
       </Transition>

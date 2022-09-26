@@ -14,7 +14,6 @@ const apiService = $fetch.create({
 })
 
 export const defaultHeaders = {
-  'Content-Type': 'application/json',
   'Accept-Language': 'no',
   Accept: 'application/json',
   Authorization: process.client ? `Bearer ${localStorage.getItem('accessToken')}` : null,
@@ -57,7 +56,7 @@ export const setter =
     const payload = JSON.stringify(data)
 
     return getter<T>(url, {
-      body: payload,
+      body: data,
       method,
       ...options,
       headers: {

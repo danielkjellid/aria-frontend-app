@@ -69,7 +69,7 @@ const elem = computed(() => {
           variant === 'secondaryDanger' && !disabled,
         'hover:bg-black hover:bg-opacity-25 focus:ring-white focus:bg-opacity-25 text-white bg-transparent border-white':
           variant === 'outlined' && !disabled,
-        'hover:bg-gray-200 focus:ring-brand-800 text-gray-600 bg-gray-100 border-gray-200':
+        'hover:bg-gray-200 focus:ring-brand-800 text-gray-800 bg-gray-100 border-gray-200':
           variant === 'tertiary' && !disabled,
         'bg-white bg-opacity-20 hover:bg-opacity-10 border border-transparent focus:ring-transparent text-white focus:bg-opacity-10':
           variant === 'transparent' && !disabled,
