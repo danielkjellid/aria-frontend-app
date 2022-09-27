@@ -51,7 +51,7 @@ const onClose = () => {
           <div
             v-show="active"
             class="w-screen"
-            :class="maxWidth ? maxWidth : 'md:max-w-lg lg:max-w-xl max-w-md'"
+            :class="maxWidth ? maxWidth : 'md:max-w-xl lg:max-w-2xl max-w-md'"
           >
             <div class="pt-9 flex flex-col h-full overflow-y-auto bg-white shadow-xl">
               <div :class="paddingX ? paddingX : 'sm:px-10 px-8'">

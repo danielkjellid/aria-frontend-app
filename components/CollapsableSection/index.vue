@@ -33,10 +33,15 @@ const collapsed = ref<boolean>(false)
       @click="collapsed = !collapsed"
     >
       <h1>{{ title }}</h1>
-      <button v-if="!disableCollapse" type="button" class="hover:text-brand-900 text-brand-600">
+      <IconWrapper
+        v-if="!disableCollapse"
+        as="button"
+        type="button"
+        class="hover:text-brand-900 text-brand-600"
+      >
         <ChevronUpIcon v-if="!collapsed" class="w-5 h-5" />
         <ChevronDownIcon v-else class="w-5 h-5" />
-      </button>
+      </IconWrapper>
     </div>
     <div class="px-4 my-6">
       <Transition

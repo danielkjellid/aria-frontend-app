@@ -55,11 +55,8 @@ const onClose = () => {
 
 const fileFormActive = ref<boolean>(false)
 const filesData = ref<FormProductFileData[]>([])
-const files = computed((): File[] => filesData.value.flatMap((fileData) => fileData.file))
 const addNewFileData = (fileData: FormProductFileData) => {
   filesData.value.push(fileData)
-  console.log(filesData.value)
-  console.log(files.value)
 }
 
 const suppliers = ref<SupplierListInternalOutput[]>()
@@ -174,7 +171,7 @@ const optionFormActive = ref<boolean>(false)
         </div>
       </CollapsableSection>
       <CollapsableSection title="Bilder">
-        <FileUploadInput type="image" multiple />
+        <FileUploadInput type="image" multiple allow-set-primary />
       </CollapsableSection>
       <CollapsableSection title="Filer">
         <div class="space-y-6">

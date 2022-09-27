@@ -30,7 +30,7 @@ watch(
 </script>
 
 <template>
-  <div class="relative z-50" :aria-labelledby="title" role="dialog" aria-modal="true">
+  <div class="relative z-50" :aria-labelledby="title" role="dialog" aria-modal="true" tabindex="0">
     <ModalBackDrop :active="active" @close="onClose" />
     <slot />
   </div>

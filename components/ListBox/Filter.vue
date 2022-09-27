@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/* eslint-disable vuejs-accessibility/click-events-have-key-events */
 /***********
  ** Props **
  ***********/
@@ -34,10 +35,6 @@ interface ListBoxFilterProps {
    */
   helpText?: string
   /**
-   * Allow selection of multiple values.
-   */
-  multiple?: boolean
-  /**
    * A list of options presented in the filterable dropdown.
    */
   options?: Object[]
@@ -62,7 +59,7 @@ const props = defineProps<ListBoxFilterProps>()
  ** State **
  ***********/
 
-const menuOpen = ref<boolean>(true)
+const menuOpen = ref<boolean>(false)
 
 const closeMenu = () => {
   menuOpen.value = false
@@ -97,7 +94,7 @@ const mappedOptions = computed(() => {
  ** State: filtering **
  **********************/
 
-const filterQuery = ref<string>()
+const filterQuery = ref<string>('')
 
 const filteredMappedOptions = computed(() =>
   mappedOptions.value.filter((option) => {
@@ -113,7 +110,6 @@ const emits = defineEmits(['update:modelValue'])
 const selected = ref<any>()
 
 const handleSelect = (option: FilterableOption) => {
-  console.log(option)
   emits('update:modelValue', String(option.value))
   filterQuery.value = option.display
   selected.value = option.value
@@ -121,7 +117,7 @@ const handleSelect = (option: FilterableOption) => {
 </script>
 
 <template>
-  <div v-click-outside="closeMenu">
+  <div>
     <FormElementBase
       :id="id"
       :label="label"
@@ -142,7 +138,6 @@ const handleSelect = (option: FilterableOption) => {
           type="text"
           class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent block w-full text-sm leading-5 border-gray-200 rounded-md"
           @focusin="menuOpen = true"
-          @focusout="menuOpen = false"
         />
         <Transition
           enter-active-class="transition duration-100 ease-out"
@@ -153,15 +148,15 @@ const handleSelect = (option: FilterableOption) => {
           leave-to-class="transform scale-95 opacity-0"
         >
           <ul
-            v-show="menuOpen && options.length"
+            v-show="menuOpen && filteredMappedOptions.length"
             class="max-h-80 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm absolute z-10 w-full py-1 mt-3 overflow-auto text-base bg-white rounded-md shadow-lg"
-            :aria-multiselectable="multiple ? 'true' : 'false'"
+            :aria-multiselectable="false"
             aria-labelledby="listbox-button"
             aria-orientation="vertical"
             role="listbox"
             tabindex="0"
-            @click="!multiple ? closeMenu() : null"
-            @keypress.enter="!multiple ? closeMenu() : null"
+            @click="closeMenu"
+            @keypress.enter="closeMenu"
           >
             <ListBoxItem
               v-for="option in filteredMappedOptions"
@@ -169,7 +164,7 @@ const handleSelect = (option: FilterableOption) => {
               :value="option.value"
               :selected="[selected]"
               check-mark-alignment="right"
-              @select="handleSelect(option)"
+              @select="() => handleSelect(option)"
             >
               {{ option.display }}
             </ListBoxItem>

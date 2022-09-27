@@ -148,7 +148,7 @@ const handleSelect = (val: any) => {
 
 watch(
   () => mappedSelected,
-  (_oldValue, newValue) => {
+  (newValue, _oldValue) => {
     emits('select', newValue.value)
   },
   { deep: true }

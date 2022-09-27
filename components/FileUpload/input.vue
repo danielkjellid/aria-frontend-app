@@ -14,6 +14,10 @@ interface FileUploadInputProps {
    * Additional help text bellow the input.
    */
   helpText?: string
+  /**
+   * Allow to set the primary image of image type input.
+   */
+  allowSetPrimary?: boolean
 }
 
 const props = defineProps<FileUploadInputProps>()
@@ -111,7 +115,7 @@ watch(
         <FileUploadUploadedBlockImageItem
           v-if="type === 'image'"
           :file="file"
-          :selected="file === filesUploaded[0]"
+          :selected="file === filesUploaded[0] && filesUploaded.length > 1"
           @set-primary="setAsPrimary(file)"
           @delete="deleteFile(file)"
         />

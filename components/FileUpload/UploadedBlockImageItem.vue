@@ -7,6 +7,7 @@ interface FileUploadUploadedBlockImageItemProps {
   name?: string
   file: File
   selected: boolean
+  allowSetPrimary?: boolean
 }
 
 defineProps<FileUploadUploadedBlockImageItemProps>()
@@ -58,7 +59,12 @@ const deleteFile = (file: File) => {
         <EllipsisHorizontalIcon class="w-5 h-5 text-gray-800" />
         <template #items>
           <ActionMenuSection>
-            <ActionMenuItem v-if="!selected" as="button" type="button" @click="setAsPrimary(file)">
+            <ActionMenuItem
+              v-if="!selected && allowSetPrimary"
+              as="button"
+              type="button"
+              @click="setAsPrimary(file)"
+            >
               Sett som forsidebilde
             </ActionMenuItem>
             <ActionMenuItem as="button" type="button" @click="deleteFile(file)">
