@@ -3,7 +3,6 @@ import { SupplierListInternalOutput, CategoryListInternalOutput, ApiError } from
 import { internalUrls } from '~~/endpoints'
 import { ButtonProps } from '~~/components/Button/index.vue'
 import { FormProductFileData } from '~~/components/Form/ProductFile.vue'
-import { ChevronRightIcon } from '@heroicons/vue/20/solid'
 
 interface FormProductDetailProps {
   active: boolean
@@ -79,6 +78,8 @@ const fetchCategories = async () => {
 
 fetchCategories()
 const comp = computed(() => (fetchedCategories.value ? fetchedCategories.value : []))
+
+const optionFormActive = ref<boolean>(false)
 </script>
 
 <template>
@@ -119,7 +120,7 @@ const comp = computed(() => (fetchedCategories.value ? fetchedCategories.value :
         </div>
       </CollapsableSection>
       <CollapsableSection title="Kategorier">
-        <FilterableInput
+        <MultiSelect
           id="id_categories"
           label="Kategorier"
           help-text="Velg alle kategoriene some egner seg til produktet."
@@ -150,15 +151,6 @@ const comp = computed(() => (fetchedCategories.value ? fetchedCategories.value :
             label="Vis pris til kunde"
             help-text="Prisen på produktet er tilgjengelig i nettbutikken."
           />
-          <Input
-            id="id_vat_rate"
-            v-model="reactiveProduct.vatRate"
-            label="MVA sats"
-            required
-            help-text="Prosentvis sats for MVA i desimalform. E.g. 0.25 for 25%."
-            :error="$parseApiError('vatRate', error)"
-            @input="clearError"
-          />
           <Select
             id="id_unit"
             v-model="reactiveProduct.unit"
@@ -170,6 +162,15 @@ const comp = computed(() => (fetchedCategories.value ? fetchedCategories.value :
             <option>Stk</option>
             <option>m2</option>
           </Select>
+          <Input
+            id="id_vat_rate"
+            v-model="reactiveProduct.vatRate"
+            label="MVA sats"
+            required
+            help-text="Prosentvis sats for MVA i desimalform. E.g. 0.25 for 25%."
+            :error="$parseApiError('vatRate', error)"
+            @input="clearError"
+          />
         </div>
       </CollapsableSection>
       <CollapsableSection title="Bilder">
@@ -177,7 +178,7 @@ const comp = computed(() => (fetchedCategories.value ? fetchedCategories.value :
       </CollapsableSection>
       <CollapsableSection title="Filer">
         <div class="space-y-6">
-          <FileUploadUploadedBlock>
+          <FileUploadUploadedBlock v-if="filesData.length">
             <FileUploadUploadedBlockFileItem
               v-for="fd in filesData"
               :key="fd.name"
@@ -195,7 +196,17 @@ const comp = computed(() => (fetchedCategories.value ? fetchedCategories.value :
           </div>
         </div>
       </CollapsableSection>
-      <CollapsableSection title="Alternativer"> </CollapsableSection>
+      <CollapsableSection title="Alternativer">
+        <div>
+          <Button variant="tertiary" fluid @click="optionFormActive = true">
+            Legg til alternativer
+          </Button>
+          <p class="mt-3 text-sm font-light text-gray-500">
+            Legg til filer som kan hjelpe kunden å få en bedre oversikt over produktets egenskaper.
+            For eksempel katalog, tekniske spesifikasjoner, bruksanvisninger osv.
+          </p>
+        </div>
+      </CollapsableSection>
       <template #actions>
         <div class="grid grid-cols-5 gap-5">
           <Button variant="secondary" class="col-span-1">Avbryt</Button>
@@ -209,5 +220,7 @@ const comp = computed(() => (fetchedCategories.value ? fetchedCategories.value :
       @close="fileFormActive = false"
       @submit="(fileData) => addNewFileData(fileData)"
     />
+
+    <FormProductOption :active="optionFormActive" />
   </div>
 </template>

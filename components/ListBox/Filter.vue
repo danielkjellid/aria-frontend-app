@@ -1,11 +1,9 @@
 <script setup lang="ts">
-/* eslint-disable vuejs-accessibility/click-events-have-key-events */
-
 /***********
  ** Props **
  ***********/
 
-interface FilterableInputProps {
+interface ListBoxFilterProps {
   /**
    * The id for the element itself.
    */
@@ -52,26 +50,19 @@ interface FilterableInputProps {
    * text.
    */
   displayField?: string
+  /**
+   * Optional placeholder. Used as guidance for the user.
+   */
+  placeholder?: string
 }
 
-const props = defineProps<FilterableInputProps>()
-
-/***********
- ** Emits **
- ***********/
-
-interface FilterableInputEmits {
-  (e: 'select', val: any[]): void
-}
-
-const emits = defineEmits<FilterableInputEmits>()
+const props = defineProps<ListBoxFilterProps>()
 
 /***********
  ** State **
  ***********/
 
 const menuOpen = ref<boolean>(true)
-const containerFocused = ref<boolean>(false)
 
 const closeMenu = () => {
   menuOpen.value = false
@@ -116,43 +107,17 @@ const filteredMappedOptions = computed(() =>
     return option
   })
 )
-/**********************
- ** State: selection **
- **********************/
 
-const selected = ref([])
+const emits = defineEmits(['update:modelValue'])
 
-// Map back selected value to the original options array sent through props.
-const mappedSelected = computed(() =>
-  props.options.filter((option) => selected.value.includes(option[props.valueField]))
-)
+const selected = ref<any>()
 
-const handleSelect = (val: any) => {
-  if (selected.value.includes(val)) {
-    // If the selected array already contains clicked item, remove it.
-    const index = selected.value.findIndex((item) => item === val)
-    selected.value.splice(index, 1)
-  } else if (props.multiple) {
-    // If selected item does not contain clicked item and accepts multiple
-    // values, add the clicked item to the list.
-    selected.value.push(val)
-  } else {
-    // If we only accept single values, replace entire array.
-    selected.value = [val]
-  }
+const handleSelect = (option: FilterableOption) => {
+  console.log(option)
+  emits('update:modelValue', String(option.value))
+  filterQuery.value = option.display
+  selected.value = option.value
 }
-
-/**************
- ** Watchers **
- **************/
-
-watch(
-  () => mappedSelected,
-  (_oldValue, newValue) => {
-    emits('select', newValue.value)
-  },
-  { deep: true }
-)
 </script>
 
 <template>
@@ -165,33 +130,20 @@ watch(
       :required="required"
       :help-text="helpText"
     >
-      <div class="relative w-full" @keydown.esc="closeMenu">
-        <div
-          class="relative flex flex-wrap items-center w-full h-full px-3 py-2 space-y-1 text-sm leading-5 border border-gray-200 rounded-md"
+      <div class="relative w-full">
+        <input
+          :id="id"
+          v-model="filterQuery"
           :class="{
-            'outline-none ring-2 ring-offset-2 ring-brand-800 border-transparent':
-              containerFocused || menuOpen,
+            'pr-10 border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red':
+              error,
           }"
-          @click="menuOpen = true"
-        >
-          <Tag
-            v-for="mappedSelect in mappedSelected"
-            :key="mappedSelect[valueField]"
-            class="mr-2"
-            dismissible
-            @remove="handleSelect(mappedSelect[valueField])"
-          >
-            {{ mappedSelect[displayField] }}
-          </Tag>
-          <input
-            v-model="filterQuery"
-            type="text"
-            class="focus:outline-none focus:border-transparent focus:ring-transparent grow w-20 h-5 px-0 py-2 border-transparent"
-            @focusin="containerFocused = true"
-            @focusout="containerFocused = false"
-          />
-        </div>
-
+          :placeholder="placeholder"
+          type="text"
+          class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent block w-full text-sm leading-5 border-gray-200 rounded-md"
+          @focusin="menuOpen = true"
+          @focusout="menuOpen = false"
+        />
         <Transition
           enter-active-class="transition duration-100 ease-out"
           enter-from-class="transform scale-95 opacity-0"
@@ -215,9 +167,9 @@ watch(
               v-for="option in filteredMappedOptions"
               :key="option.value"
               :value="option.value"
-              :selected="selected"
+              :selected="[selected]"
               check-mark-alignment="right"
-              @select="handleSelect(option.value)"
+              @select="handleSelect(option)"
             >
               {{ option.display }}
             </ListBoxItem>
