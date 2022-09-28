@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import useProductsStore from '~~/store/products'
+
+const store = useProductsStore()
+
 interface FormProductOptionProps {
   active: boolean
 }
 
 defineProps<FormProductOptionProps>()
 
+const variants = await store.getVariants()
 const selectedVariant = ref()
 
 const variantFormActive = ref<boolean>(false)
@@ -52,16 +57,9 @@ const variantFormActive = ref<boolean>(false)
               label="Variant"
               value-field="id"
               display-field="name"
-              :options="[
-                { id: 1, name: 'Some variant 1' },
-                { id: 2, name: 'Some variant 2' },
-                { id: 6, name: 'Some variant 6' },
-                { id: 3, name: 'Some variant 3' },
-                { id: 4, name: 'Some variant 4' },
-                { id: 5, name: 'Some variant 5' },
-              ]"
+              :options="variants"
             />
-            <Button variant="tertiary" fluid @click="variantFormActive = true">
+            <Button variant="secondary" fluid @click="variantFormActive = true">
               Legg til ny variant
             </Button>
             <p class="mt-3 text-sm font-light text-gray-500">
@@ -84,6 +82,6 @@ const variantFormActive = ref<boolean>(false)
       </ModalSlideOver>
     </form>
 
-    <FormProductOptionVariant :active="variantFormActive" />
+    <FormProductOptionVariant :active="variantFormActive" @close="variantFormActive = false" />
   </div>
 </template>

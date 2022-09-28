@@ -21,7 +21,7 @@ definePageMeta({
             </div>
           </div>
           <div class="mt-10">
-            <slot name="content" />
+            <slot />
           </div>
         </div>
       </div>

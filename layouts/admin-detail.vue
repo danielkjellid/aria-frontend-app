@@ -17,7 +17,7 @@ definePageMeta({
           <Button variant="secondary">Example action</Button>
         </slot>
       </template>
-      <template #content>
+      <template #default>
         <div class="mx-4">
           <slot name="tabs">
             <Tabs>
@@ -29,7 +29,7 @@ definePageMeta({
           </slot>
         </div>
         <div class="mt-4">
-          <slot name="content">
+          <slot>
             <div class="h-screen border-4 border-gray-200 border-dashed rounded-lg" />
           </slot>
         </div>

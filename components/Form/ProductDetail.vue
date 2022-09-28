@@ -185,7 +185,7 @@ const optionFormActive = ref<boolean>(false)
             />
           </FileUploadUploadedBlock>
           <div>
-            <Button variant="tertiary" fluid @click="fileFormActive = true">Legg til filer</Button>
+            <Button variant="secondary" fluid @click="fileFormActive = true">Legg til filer</Button>
             <p class="mt-3 text-sm font-light text-gray-500">
               Legg til filer som kan hjelpe kunden å få en bedre oversikt over produktets
               egenskaper. For eksempel katalog, tekniske spesifikasjoner, bruksanvisninger osv.
@@ -195,7 +195,7 @@ const optionFormActive = ref<boolean>(false)
       </CollapsableSection>
       <CollapsableSection title="Alternativer">
         <div>
-          <Button variant="tertiary" fluid @click="optionFormActive = true">
+          <Button variant="secondary" fluid @click="optionFormActive = true">
             Legg til alternativer
           </Button>
           <p class="mt-3 text-sm font-light text-gray-500">

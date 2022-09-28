@@ -48,6 +48,7 @@ interface InputProps {
    * Display the work count adjacent to the label.
    */
   displayWordCount?: boolean
+  disabled?: boolean
 }
 
 const props = defineProps<InputProps>()
@@ -83,15 +84,22 @@ defineEmits(['update:modelValue'])
       <input
         :id="id"
         :value="modelValue"
-        :class="{
-          'pl-10': existingIcon,
-          'pr-10 border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red':
-            error,
-          'border-0 focus:ring-transparent': plain,
-        }"
+        :class="[
+          disabled
+            ? 'focus:outline-none focus:ring-0 border-gray-200 bg-gray-50 cursor-not-allowed'
+            : 'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent border-gray-200',
+          {
+            'pl-10': existingIcon,
+            'pr-10 border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red':
+              error,
+            'border-0 focus:ring-transparent': plain,
+          },
+        ]"
+        :aria-disabled="disabled"
+        :disabled="disabled"
         :placeholder="placeholder"
         :type="type"
-        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent block w-full text-sm leading-5 border-gray-200 rounded-md"
+        class="block w-full text-sm leading-5 border rounded-md"
         @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
       />
       <div

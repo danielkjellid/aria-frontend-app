@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { ButtonProps } from '~~/components/Button/index.vue'
-
 import { PagedProductInternalListOutput, ApiError } from '~~/@types/'
 import { internalUrls } from '~~/endpoints'
+
+import useProductsStore from '~~/store/products'
+
+const store = useProductsStore()
+store.fetchVariants()
 
 definePageMeta({
   authRequired: true,
@@ -103,7 +107,7 @@ const newProductModalActive = ref<boolean>(false)
       <template #actions>
         <Button variant="secondary" @click="newProductModalActive = true">Nytt produkt</Button>
       </template>
-      <template #content>
+      <template #default>
         <Table
           :items-loading="dataLoaded && newPageLoading"
           :headers="[

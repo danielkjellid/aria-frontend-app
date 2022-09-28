@@ -19,8 +19,8 @@ const onClose = () => {
 
 watch(
   () => props.active,
-  (_oldValue, newValue) => {
-    if (newValue === false) {
+  (newValue, _oldValue) => {
+    if (newValue === true) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
@@ -30,7 +30,7 @@ watch(
 </script>
 
 <template>
-  <div class="relative z-50" :aria-labelledby="title" role="dialog" aria-modal="true" tabindex="0">
+  <div class="relative z-40" :aria-labelledby="title" role="dialog" aria-modal="true" tabindex="0">
     <ModalBackDrop :active="active" @close="onClose" />
     <slot />
   </div>

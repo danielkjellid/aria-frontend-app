@@ -18,6 +18,11 @@ interface FileUploadInputProps {
    * Allow to set the primary image of image type input.
    */
   allowSetPrimary?: boolean
+  /**
+   * Field error as string.
+   */
+  error?: string
+  files: File[]
 }
 
 const props = defineProps<FileUploadInputProps>()
@@ -25,7 +30,7 @@ const props = defineProps<FileUploadInputProps>()
 const type = computed(() => (props.type ? props.type : 'file'))
 const dragging = ref<boolean>(false)
 
-const filesUploaded = ref([])
+const filesUploaded = ref(props.files)
 
 const uploadFiles = (files: FileList) => {
   if (props.multiple) {
@@ -85,15 +90,32 @@ watch(
   >
     <label
       class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent h-36 hover:border-brand-800 hover:border-solid flex justify-center w-full bg-white border-2 rounded-lg appearance-none cursor-pointer"
-      :class="dragging ? 'border-brand-800 border-solid' : 'border-gray-200 border-dashed'"
+      :class="
+        dragging
+          ? 'border-brand-800 border-solid'
+          : error
+          ? 'border-red-300 border-dashed'
+          : 'border-gray-200 border-dashed'
+      "
       @drop.prevent="(e) => onDropUpload(e)"
     >
       <div
         class="flex flex-col items-center justify-center w-full px-4 space-y-4 pointer-events-none"
       >
-        <PhotoIcon v-if="type === 'image'" class="w-5 h-5 text-gray-800" />
-        <DocumentPlusIcon v-if="type === 'file'" class="w-5 h-5 text-gray-800" />
-        <span class="text-sm font-normal text-gray-900">
+        <PhotoIcon
+          v-if="type === 'image'"
+          class="w-5 h-5"
+          :class="error && !dragging ? 'text-red-400' : 'text-gray-800'"
+        />
+        <DocumentPlusIcon
+          v-if="type === 'file'"
+          class="w-5 h-5"
+          :class="error && !dragging ? 'text-red-400' : 'text-gray-800'"
+        />
+        <span
+          class="text-sm font-normal"
+          :class="error && !dragging ? 'text-red-500' : 'text-gray-800'"
+        >
           Slipp {{ type === 'file' ? 'filer' : 'bilder' }} her, eller klikk for å bla gjennom lokale
           filer
         </span>
@@ -107,15 +129,13 @@ watch(
       />
     </label>
     <p v-if="helpText" class="mt-2 text-sm font-light text-gray-500">{{ helpText }}</p>
-    <Text v-if="filesUploaded && filesUploaded.length" variant="body2" class="my-5 font-medium">
-      Opplastinger:
-    </Text>
-    <FileUploadUploadedBlock>
-      <div v-for="(file, index) in filesUploaded" :key="index">
+    <p v-if="error" class="relative mt-1 text-sm text-red-600">{{ error }}</p>
+    <FileUploadUploadedBlock class="mt-5">
+      <div v-for="(file, index) in files" :key="index">
         <FileUploadUploadedBlockImageItem
           v-if="type === 'image'"
           :file="file"
-          :selected="file === filesUploaded[0] && filesUploaded.length > 1"
+          :selected="file === files[0] && files.length > 1"
           @set-primary="setAsPrimary(file)"
           @delete="deleteFile(file)"
         />

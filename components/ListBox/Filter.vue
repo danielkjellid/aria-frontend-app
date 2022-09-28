@@ -107,7 +107,7 @@ const filteredMappedOptions = computed(() =>
 
 const emits = defineEmits(['update:modelValue'])
 
-const selected = ref<any>()
+const selected = ref<any>(null)
 
 const handleSelect = (option: FilterableOption) => {
   emits('update:modelValue', String(option.value))
@@ -117,7 +117,7 @@ const handleSelect = (option: FilterableOption) => {
 </script>
 
 <template>
-  <div>
+  <div v-click-outside="closeMenu">
     <FormElementBase
       :id="id"
       :label="label"
@@ -162,7 +162,7 @@ const handleSelect = (option: FilterableOption) => {
               v-for="option in filteredMappedOptions"
               :key="option.value"
               :value="option.value"
-              :selected="[selected]"
+              :selected="selected ? [selected] : []"
               check-mark-alignment="right"
               @select="() => handleSelect(option)"
             >

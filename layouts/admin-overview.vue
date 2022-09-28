@@ -24,8 +24,8 @@ defineProps<{ test?: string }>()
           <Button variant="secondary">Example action</Button>
         </slot>
       </template>
-      <template #content>
-        <slot name="content">
+      <template #default>
+        <slot>
           <div class="h-screen border-4 border-gray-200 border-dashed rounded-lg" />
         </slot>
       </template>
