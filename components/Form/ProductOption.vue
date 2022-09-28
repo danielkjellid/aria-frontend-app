@@ -10,24 +10,51 @@ interface FormProductOptionProps {
 defineProps<FormProductOptionProps>()
 
 const variants = await store.getVariants()
-const selectedVariant = ref()
-
 const variantFormActive = ref<boolean>(false)
 
+const statuses = useProductStatus()
+
+const reactiveOption = reactive({
+  status: '3',
+  price: 0,
+  size: {
+    height: null,
+    width: null,
+    depth: null,
+    circumference: null,
+  },
+  variantId: null,
+})
+
 // TODO: add store for product status and fetch from there
+const disableCircumference = computed(
+  () => reactiveOption.size.height || reactiveOption.size.width || reactiveOption.size.depth
+)
+const disableHeightWidthDepth = computed(() => !!reactiveOption.size.circumference)
 </script>
 
 <template>
   <div>
     <form @submit.prevent>
       <ModalSlideOver title="Legg til nytt alternativ" :active="active">
+        {{ reactiveOption }}
+        <hr />
+        {{ disableHeightWidthDepth }}
         <CollapsableSection title="Generelt">
           <div class="space-y-5">
-            <Select id="id_status" label="Status">
-              <option>Somethign</option>
+            <Select id="id_status" v-model="reactiveOption.status" label="Status">
+              <option
+                v-for="(value, key) in statuses"
+                :key="key"
+                :value="value"
+                :selected="value.toString() === reactiveOption.status"
+              >
+                {{ key }}
+              </option>
             </Select>
             <Input
               id="id_gross_price"
+              v-model.number="reactiveOption.price"
               label="Pris"
               type="number"
               help-text="Prisen for dette alternativet."
@@ -37,15 +64,35 @@ const variantFormActive = ref<boolean>(false)
         <CollapsableSection title="Størrelse">
           <div class="space-y-5">
             <div class="grid grid-cols-3 gap-5">
-              <Input id="id_size_width" label="Bredde" type="number" />
-              <Input id="id_size_height" label="Høyde" type="number" />
-              <Input id="id_size_height" label="Dybde" type="number" />
+              <Input
+                id="id_size_width"
+                v-model="reactiveOption.size.width"
+                label="Bredde i cm"
+                type="number"
+                :disabled="disableHeightWidthDepth"
+              />
+              <Input
+                id="id_size_height"
+                v-model="reactiveOption.size.height"
+                label="Høyde i cm"
+                type="number"
+                :disabled="disableHeightWidthDepth"
+              />
+              <Input
+                id="id_size_height"
+                v-model="reactiveOption.size.depth"
+                label="Dybde i cm"
+                type="number"
+                :disabled="disableHeightWidthDepth"
+              />
             </div>
             <Input
               id="id_size_height"
-              label="Omkrets"
+              v-model="reactiveOption.size.circumference"
+              label="Omkrets i cm"
               type="number"
               help-text="Omkrets kan brukes dersom alternativet har en sfærisk form fremfor en kvadratisk en. Omkrets kan ikke benyttes når de andre feltene er fylt ut."
+              :disabled="disableCircumference"
             />
           </div>
         </CollapsableSection>
@@ -53,19 +100,21 @@ const variantFormActive = ref<boolean>(false)
           <div class="space-y-5">
             <ListBoxFilter
               id="id_variant"
-              v-model="selectedVariant"
+              v-model="reactiveOption.variantId"
               label="Variant"
               value-field="id"
               display-field="name"
               :options="variants"
             />
-            <Button variant="secondary" fluid @click="variantFormActive = true">
-              Legg til ny variant
-            </Button>
-            <p class="mt-3 text-sm font-light text-gray-500">
-              Dersom varianten du ønsker å legge til ikke allerede eksisterer kan du opprette en ny
-              en.
-            </p>
+            <div v-if="!reactiveOption.variantId">
+              <Button variant="secondary" fluid @click="variantFormActive = true">
+                Legg til ny variant
+              </Button>
+              <p class="mt-3 text-sm font-light text-gray-500">
+                Dersom varianten du ønsker å legge til ikke allerede eksisterer kan du opprette en
+                ny en.
+              </p>
+            </div>
           </div>
         </CollapsableSection>
         <template #actions>

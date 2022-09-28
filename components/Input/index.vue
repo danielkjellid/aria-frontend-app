@@ -22,7 +22,7 @@ interface InputProps {
   /**
    * The value of the input itself, usually set by v-model.
    */
-  modelValue?: string
+  modelValue?: string | number
   /**
    * Type of input: https://www.w3schools.com/html/html_form_input_types.asp.
    */
@@ -72,7 +72,9 @@ defineEmits(['update:modelValue'])
     :error="error"
     :required="required"
     :help-text="helpText"
-    :word-count="displayWordCount && modelValue ? modelValue.length : null"
+    :word-count="
+      displayWordCount && modelValue && typeof modelValue === 'string' ? modelValue.length : null
+    "
   >
     <div class="relative rounded-md">
       <div
@@ -83,6 +85,7 @@ defineEmits(['update:modelValue'])
       </div>
       <input
         :id="id"
+        v-bind="$attrs"
         :value="modelValue"
         :class="[
           disabled
