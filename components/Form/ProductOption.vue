@@ -91,7 +91,7 @@ const disableHeightWidthDepth = computed(() => !!reactiveOption.size.circumferen
               v-model="reactiveOption.size.circumference"
               label="Omkrets i cm"
               type="number"
-              help-text="Omkrets kan brukes dersom alternativet har en sfærisk form fremfor en kvadratisk en. Omkrets kan ikke benyttes når de andre feltene er fylt ut."
+              help-text="Omkrets kan brukes dersom alternativet har en sfærisk form fremfor en kvadratisk en. Omkrets kan ikke benyttes når de andre størrelsesfeltene er fylt ut."
               :disabled="disableCircumference"
             />
           </div>
@@ -100,7 +100,7 @@ const disableHeightWidthDepth = computed(() => !!reactiveOption.size.circumferen
           <div class="space-y-5">
             <ListBoxFilter
               id="id_variant"
-              v-model="reactiveOption.variantId"
+              v-model.number="reactiveOption.variantId"
               label="Variant"
               value-field="id"
               display-field="name"
@@ -118,12 +118,24 @@ const disableHeightWidthDepth = computed(() => !!reactiveOption.size.circumferen
           </div>
         </CollapsableSection>
         <template #actions>
-          <div class="grid grid-cols-5 gap-5">
-            <Button variant="secondary" class="col-span-1">Avbryt</Button>
-            <Button variant="primary" class="col-span-2" type="submit" @click="null">
+          <div class="md:grid-cols-5 grid grid-cols-2 gap-5">
+            <Button variant="secondary" class="md:col-span-1 md:order-1 order-2 col-span-2">
+              Avbryt
+            </Button>
+            <Button
+              variant="primary"
+              class="md:col-span-2 md:order-2 col-span-1"
+              type="submit"
+              @click="null"
+            >
               Lagre og gå tilbake
             </Button>
-            <Button variant="primary" class="col-span-2" type="submit" @click="null">
+            <Button
+              variant="primary"
+              class="md:col-span-2 md:order-2 col-span-1"
+              type="submit"
+              @click="null"
+            >
               Lagre og legg til ny
             </Button>
           </div>

@@ -213,22 +213,22 @@ const handleSubmitAndAddNew = async () => {
         />
       </CollapsableSection>
       <template #actions>
-        <div class="grid grid-cols-5 gap-5">
-          <Button variant="secondary" class="col-span-1">Avbryt</Button>
+        <div class="md:grid-cols-5 grid grid-cols-2 gap-5">
+          <Button variant="secondary" class="md:col-span-1 md:order-1 order-2 col-span-2">
+            Avbryt
+          </Button>
           <Button
             variant="primary"
-            class="col-span-2"
+            class="md:col-span-2 md:order-2 col-span-1"
             type="submit"
-            :loading-state="submitAndCloseFormSubmissionState"
             @click="handleSubmitAndClose"
           >
             Lagre og gå tilbake
           </Button>
           <Button
             variant="primary"
-            class="col-span-2"
+            class="md:col-span-2 md:order-2 col-span-1"
             type="submit"
-            :loading-state="submitAndAddNewFormSubmissionState"
             @click="handleSubmitAndAddNew"
           >
             Lagre og legg til ny

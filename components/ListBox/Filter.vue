@@ -20,7 +20,7 @@ interface ListBoxFilterProps {
   /**
    * The value of the input itself, usually set by v-model.
    */
-  modelValue?: string
+  modelValue?: string | number
   /**
    * Field error as string.
    */
@@ -94,7 +94,11 @@ const mappedOptions = computed(() => {
  ** State: filtering **
  **********************/
 
-const filterQuery = ref<string>('')
+const filterQuery = ref<string>(
+  props.modelValue
+    ? mappedOptions.value.find((option) => option.value === props.modelValue).display
+    : null
+)
 
 const filteredMappedOptions = computed(() =>
   mappedOptions.value.filter((option) => {
@@ -107,7 +111,7 @@ const filteredMappedOptions = computed(() =>
 
 const emits = defineEmits(['update:modelValue'])
 
-const selected = ref<any>(null)
+const selected = ref<any>(props.modelValue ? props.modelValue : null)
 
 const handleSelect = (option: FilterableOption) => {
   emits('update:modelValue', String(option.value))
@@ -126,7 +130,7 @@ const handleSelect = (option: FilterableOption) => {
       :required="required"
       :help-text="helpText"
     >
-      <div class="relative w-full">
+      <div class="relative w-full" @keydown.esc="closeMenu">
         <input
           :id="id"
           v-model="filterQuery"
