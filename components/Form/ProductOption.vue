@@ -26,20 +26,50 @@ const reactiveOption = reactive({
   variantId: null,
 })
 
-// TODO: add store for product status and fetch from there
 const disableCircumference = computed(
-  () => reactiveOption.size.height || reactiveOption.size.width || reactiveOption.size.depth
+  () => !!reactiveOption.size.height || !!reactiveOption.size.width || !!reactiveOption.size.depth
 )
 const disableHeightWidthDepth = computed(() => !!reactiveOption.size.circumference)
+
+interface FormProductOptionEmits {
+  (e: 'close'): void
+  (e: 'submit', val: any): void
+}
+
+const onClose = () => {
+  emits('close')
+}
+
+const resetForm = () => {
+  reactiveOption.status = '3'
+  reactiveOption.price = 0
+  reactiveOption.variantId = null
+
+  reactiveOption.size.height = null
+  reactiveOption.size.width = null
+  reactiveOption.size.depth = null
+  reactiveOption.size.circumference = null
+}
+
+const emits = defineEmits<FormProductOptionEmits>()
+
+const handleSubmitAndClose = () => {
+  emits('submit', { ...reactiveOption, size: { ...reactiveOption.size } })
+  emits('close')
+  resetForm()
+}
+
+const handleSubmitAndAddNew = () => {
+  emits('submit', { ...reactiveOption, size: { ...reactiveOption.size } })
+  resetForm()
+}
 </script>
 
 <template>
   <div>
     <form @submit.prevent>
-      <ModalSlideOver title="Legg til nytt alternativ" :active="active">
+      <ModalSlideOver title="Legg til nytt alternativ" :active="active" @close="onClose">
         {{ reactiveOption }}
-        <hr />
-        {{ disableHeightWidthDepth }}
         <CollapsableSection title="Generelt">
           <div class="space-y-5">
             <Select id="id_status" v-model="reactiveOption.status" label="Status">
@@ -91,7 +121,7 @@ const disableHeightWidthDepth = computed(() => !!reactiveOption.size.circumferen
               v-model="reactiveOption.size.circumference"
               label="Omkrets i cm"
               type="number"
-              help-text="Omkrets kan brukes dersom alternativet har en sfærisk form fremfor en kvadratisk en. Omkrets kan ikke benyttes når de andre størrelsesfeltene er fylt ut."
+              help-text="Omkrets kan brukes dersom alternativet har en sfærisk form fremfor en kvadratisk en. Feltet kan ikke benyttes når de andre størrelsesfeltene er fylt ut."
               :disabled="disableCircumference"
             />
           </div>
@@ -126,7 +156,7 @@ const disableHeightWidthDepth = computed(() => !!reactiveOption.size.circumferen
               variant="primary"
               class="md:col-span-2 md:order-2 col-span-1"
               type="submit"
-              @click="null"
+              @click="handleSubmitAndClose"
             >
               Lagre og gå tilbake
             </Button>
@@ -134,7 +164,7 @@ const disableHeightWidthDepth = computed(() => !!reactiveOption.size.circumferen
               variant="primary"
               class="md:col-span-2 md:order-2 col-span-1"
               type="submit"
-              @click="null"
+              @click="handleSubmitAndAddNew"
             >
               Lagre og legg til ny
             </Button>

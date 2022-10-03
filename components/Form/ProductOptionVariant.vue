@@ -181,11 +181,15 @@ const handleSubmitAndAddNew = async () => {
     submitAndAddNewFormSubmissionState.value = 'error'
   }
 }
+
+const onClose = () => {
+  emits('close')
+}
 </script>
 
 <template>
   <form enctype="multipart/form-data" @submit.prevent>
-    <ModalSlideOver title="Legg til ny variant" :active="active">
+    <ModalSlideOver title="Legg til ny variant" :active="active" @close="onClose">
       <CollapsableSection title="Generelt">
         <div class="space-y-5">
           <Input
@@ -214,7 +218,11 @@ const handleSubmitAndAddNew = async () => {
       </CollapsableSection>
       <template #actions>
         <div class="md:grid-cols-5 grid grid-cols-2 gap-5">
-          <Button variant="secondary" class="md:col-span-1 md:order-1 order-2 col-span-2">
+          <Button
+            variant="secondary"
+            class="md:col-span-1 md:order-1 order-2 col-span-2"
+            @click="onClose"
+          >
             Avbryt
           </Button>
           <Button

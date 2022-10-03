@@ -77,6 +77,12 @@ fetchCategories()
 const comp = computed(() => (fetchedCategories.value ? fetchedCategories.value : []))
 
 const optionFormActive = ref<boolean>(false)
+const options = ref([])
+const addNewOption = (val: any) => {
+  options.value.push(val)
+}
+
+// TODO: Fetch categories and suppliers through store
 </script>
 
 <template>
@@ -194,6 +200,7 @@ const optionFormActive = ref<boolean>(false)
         </div>
       </CollapsableSection>
       <CollapsableSection title="Alternativer">
+        {{ options }}
         <div>
           <Button variant="secondary" fluid @click="optionFormActive = true">
             Legg til alternativer
@@ -218,6 +225,10 @@ const optionFormActive = ref<boolean>(false)
       @submit="(fileData) => addNewFileData(fileData)"
     />
 
-    <FormProductOption :active="optionFormActive" />
+    <FormProductOption
+      :active="optionFormActive"
+      @close="optionFormActive = false"
+      @submit="(option) => addNewOption(option)"
+    />
   </div>
 </template>

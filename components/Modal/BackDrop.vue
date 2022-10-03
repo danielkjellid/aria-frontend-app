@@ -15,7 +15,7 @@ const emit = defineEmits<{ (e: 'close'): void }>()
  ** State handling **
  ********************/
 
-const close = () => {
+const onClose = () => {
   console.log('fired')
   emit('close')
 }
@@ -34,7 +34,7 @@ const close = () => {
       v-show="active"
       class="bg-opacity-30 fixed inset-0 z-30 bg-black"
       aria-hidden="true"
-      @click="close"
+      @click="onClose"
     />
   </transition>
 </template>
