@@ -25,7 +25,7 @@ const publicEndpoints = {
 
   kitchens: {
     list: () => '/v1/kitchens/',
-    detail: (slug: string) => `/kitchens/${slug}/`,
+    detail: (slug: string) => `/v1/kitchens/${slug}/`,
   },
 
   products: {
