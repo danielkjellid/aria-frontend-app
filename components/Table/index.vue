@@ -2,13 +2,7 @@
 /* eslint-disable vue/v-slot-style */
 /* eslint-disable vue/no-v-for-template-key */
 /* eslint-disable vuejs-accessibility/click-events-have-key-events */
-import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
-
-export interface TableHeaderObj {
-  label: string
-  align?: 'left' | 'center' | 'right'
-  value: string
-}
+import { TableHeaderObj } from './Header.vue'
 
 interface TableProps {
   itemsLoading?: boolean
@@ -35,8 +29,6 @@ const selectable = computed(() => (props.selectable ? props.selectable : false))
 const showActions = computed(
   () => props.headers && props.headers.filter((header) => header.value === 'actions').length > 0
 )
-
-const query = ref<string>('')
 
 const emitQuery = () => {}
 
@@ -73,51 +65,11 @@ const previousPage = () => {
 
 <template>
   <div>
-    <form
-      v-if="showSearch"
-      class="flex items-center w-full pl-2 pr-4 mb-4 space-x-5"
-      @submit.prevent="emitQuery"
-    >
-      <Input
-        id="table-search"
-        v-model="query"
-        label="search"
-        hidden-label
-        :placeholder="searchPlaceholder"
-        plain
-        class="w-full"
-      >
-        <MagnifyingGlassIcon class="w-5 h-5 text-gray-800" />
-      </Input>
-      <Button variant="secondary" size="s">Søk</Button>
-    </form>
+    <TableSearch v-if="showSearch" :placeholder="searchPlaceholder" @on-search="emitQuery" />
 
     <div class="overflow-x-auto">
       <table class="min-w-full">
-        <thead>
-          <tr class="rounded-md">
-            <th
-              v-if="selectable"
-              class="rounded-l-md px-6 py-3 text-sm font-normal text-gray-600 bg-gray-100"
-            >
-              <div class="w-4 h-4 bg-transparent border border-gray-400 rounded"></div>
-            </th>
-            <th
-              v-for="(header, index) in headers"
-              :key="index"
-              :class="{
-                'rounded-l-md': index === 0 && !selectable,
-                'rounded-r-md': index === headers.length - 1,
-                'text-left': header.align === undefined || 'left',
-                'text-center': header.align === 'center',
-                'text-right': header.align === 'right',
-              }"
-              class="px-6 py-3 text-sm font-normal text-gray-600 bg-gray-100"
-            >
-              {{ header.label }}
-            </th>
-          </tr>
-        </thead>
+        <TableHeader :headers="headers" :selectable="selectable" />
         <tbody v-if="itemsLoading">
           <tr>
             <td
