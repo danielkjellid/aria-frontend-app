@@ -12,6 +12,11 @@ import { internalUrls } from '~~/endpoints'
 interface FormProductOptionVariantProps {
   active: boolean
   existingVariant?: VariantCreateInternalOutput
+  /**
+   * Render the black overlay transparent. Useful if you have multiple overlapping
+   * slide overs.
+   */
+  isNested?: boolean
 }
 
 defineProps<FormProductOptionVariantProps>()
@@ -189,7 +194,12 @@ const onClose = () => {
 
 <template>
   <form enctype="multipart/form-data" @submit.prevent>
-    <ModalSlideOver title="Legg til ny variant" :active="active" @close="onClose">
+    <ModalSlideOver
+      title="Legg til ny variant"
+      :active="active"
+      :is-nested="isNested"
+      @close="onClose"
+    >
       <CollapsableSection title="Generelt">
         <div class="space-y-5">
           <Input

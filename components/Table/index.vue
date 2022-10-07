@@ -30,7 +30,7 @@ const showActions = computed(
   () => props.headers && props.headers.filter((header) => header.value === 'actions').length > 0
 )
 
-const emitQuery = () => {}
+const emitQuery = (val: string) => {}
 
 const selectedItems = ref([])
 const selectItem = (item: any) => {
@@ -65,7 +65,11 @@ const previousPage = () => {
 
 <template>
   <div>
-    <TableSearch v-if="showSearch" :placeholder="searchPlaceholder" @on-search="emitQuery" />
+    <TableSearch
+      v-if="showSearch"
+      :placeholder="searchPlaceholder"
+      @on-search="(e) => emitQuery(e)"
+    />
 
     <div class="overflow-x-auto">
       <table class="min-w-full">

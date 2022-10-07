@@ -1,13 +1,22 @@
 <script setup lang="ts">
 import useProductsStore from '~~/store/products'
+import useNotificationsStore from '~~/store/notifications'
+import { ProductOption } from './types'
 
 const store = useProductsStore()
+const notificationsStore = useNotificationsStore()
 
 interface FormProductOptionProps {
   active: boolean
+  existingOption?: ProductOption
+  /**
+   * Render the black overlay transparent. Useful if you have multiple overlapping
+   * slide overs.
+   */
+  isNested?: boolean
 }
 
-defineProps<FormProductOptionProps>()
+const props = defineProps<FormProductOptionProps>()
 
 const variants = await store.getVariants()
 const variantFormActive = ref<boolean>(false)
@@ -53,23 +62,55 @@ const resetForm = () => {
 
 const emits = defineEmits<FormProductOptionEmits>()
 
-const handleSubmitAndClose = () => {
+const handleSubmit = () => {
   emits('submit', { ...reactiveOption, size: { ...reactiveOption.size } })
+  notificationsStore.create({
+    type: 'success',
+    title: 'Alternativ lagt til!',
+    text: 'Alternativet ble lagt til, og blir lagret samtidig som produktet.',
+  })
+}
+
+const handleSubmitAndClose = () => {
+  handleSubmit()
   emits('close')
-  resetForm()
 }
 
 const handleSubmitAndAddNew = () => {
-  emits('submit', { ...reactiveOption, size: { ...reactiveOption.size } })
+  handleSubmit()
   resetForm()
 }
+
+watch(
+  () => props.active,
+  (newValue, _oldValue) => {
+    if (newValue === true) {
+      if (props.existingOption) {
+        reactiveOption.status = props.existingOption.status
+        reactiveOption.price = props.existingOption.price
+        reactiveOption.variantId = props.existingOption.variantId
+
+        reactiveOption.size.height = props.existingOption.size.height
+        reactiveOption.size.width = props.existingOption.size.width
+        reactiveOption.size.depth = props.existingOption.size.depth
+        reactiveOption.size.circumference = props.existingOption.size.circumference
+      } else {
+        resetForm()
+      }
+    }
+  }
+)
 </script>
 
 <template>
   <div>
     <form @submit.prevent>
-      <ModalSlideOver title="Legg til nytt alternativ" :active="active" @close="onClose">
-        {{ reactiveOption }}
+      <ModalSlideOver
+        title="Legg til nytt alternativ"
+        :active="active"
+        :is-nested="isNested"
+        @close="onClose"
+      >
         <CollapsableSection title="Generelt">
           <div class="space-y-5">
             <Select id="id_status" v-model="reactiveOption.status" label="Status">
@@ -149,7 +190,11 @@ const handleSubmitAndAddNew = () => {
         </CollapsableSection>
         <template #actions>
           <div class="md:grid-cols-5 grid grid-cols-2 gap-5">
-            <Button variant="secondary" class="md:col-span-1 md:order-1 order-2 col-span-2">
+            <Button
+              variant="secondary"
+              class="md:col-span-1 md:order-1 order-2 col-span-2"
+              @click="onClose"
+            >
               Avbryt
             </Button>
             <Button
@@ -173,6 +218,6 @@ const handleSubmitAndAddNew = () => {
       </ModalSlideOver>
     </form>
 
-    <FormProductOptionVariant :active="variantFormActive" @close="variantFormActive = false" />
+    <FormVariant :active="variantFormActive" is-nested @close="variantFormActive = false" />
   </div>
 </template>

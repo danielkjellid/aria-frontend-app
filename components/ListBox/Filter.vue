@@ -118,6 +118,20 @@ const handleSelect = (option: FilterableOption) => {
   filterQuery.value = option.display
   selected.value = option.value
 }
+
+/**************
+ ** Watchers **
+ **************/
+
+watch(
+  () => props.modelValue,
+  (newValue, _oldValue) => {
+    if (newValue === null) {
+      filterQuery.value = ''
+      selected.val = null
+    }
+  }
+)
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { EllipsisHorizontalIcon } from '@heroicons/vue/24/outline'
-import { TableHeaderObj } from '~~/components/Table/index.vue'
+import { TableHeaderObj } from '~~/components/Table/Header.vue'
 
 interface TableRowProps {
   headers: TableHeaderObj[]

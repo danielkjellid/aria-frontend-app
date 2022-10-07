@@ -2,7 +2,6 @@
 import { SupplierListInternalOutput, CategoryListInternalOutput, ApiError } from '~~/@types'
 import { internalUrls } from '~~/endpoints'
 import { ButtonProps } from '~~/components/Button/index.vue'
-import { FormProductFileData } from '~~/components/Form/ProductFile.vue'
 
 interface FormProductDetailProps {
   active: boolean
@@ -53,12 +52,6 @@ const onClose = () => {
   emits('close')
 }
 
-const fileFormActive = ref<boolean>(false)
-const filesData = ref<FormProductFileData[]>([])
-const addNewFileData = (fileData: FormProductFileData) => {
-  filesData.value.push(fileData)
-}
-
 const suppliers = ref<SupplierListInternalOutput[]>()
 const fetchSuppliers = async () => {
   suppliers.value = await performGet<SupplierListInternalOutput[]>(internalUrls.suppliers.list())
@@ -76,10 +69,12 @@ const fetchCategories = async () => {
 fetchCategories()
 const comp = computed(() => (fetchedCategories.value ? fetchedCategories.value : []))
 
-const optionFormActive = ref<boolean>(false)
-const options = ref([])
-const addNewOption = (val: any) => {
-  options.value.push(val)
+const createdFiles = ref([])
+const createdOptions = ref([])
+const createdImages = ref([])
+
+const handleImageUpload = (files: File[]) => {
+  createdImages.value = [...files]
 }
 
 // TODO: Fetch categories and suppliers through store
@@ -177,39 +172,19 @@ const addNewOption = (val: any) => {
         </div>
       </CollapsableSection>
       <CollapsableSection title="Bilder">
-        <FileUploadInput type="image" multiple allow-set-primary />
+        <FileUploadInput
+          type="image"
+          multiple
+          allow-set-primary
+          :files="createdImages"
+          @upload="(images) => handleImageUpload(images)"
+        />
       </CollapsableSection>
       <CollapsableSection title="Filer">
-        <div class="space-y-6">
-          <FileUploadUploadedBlock v-if="filesData.length">
-            <FileUploadUploadedBlockFileItem
-              v-for="fd in filesData"
-              :key="fd.name"
-              :name="fd.name"
-              :file="fd.file"
-              @delete="null"
-            />
-          </FileUploadUploadedBlock>
-          <div>
-            <Button variant="secondary" fluid @click="fileFormActive = true">Legg til filer</Button>
-            <p class="mt-3 text-sm font-light text-gray-500">
-              Legg til filer som kan hjelpe kunden å få en bedre oversikt over produktets
-              egenskaper. For eksempel katalog, tekniske spesifikasjoner, bruksanvisninger osv.
-            </p>
-          </div>
-        </div>
+        <FormProductFileBlock @update="(files) => (createdFiles = files)" />
       </CollapsableSection>
       <CollapsableSection title="Alternativer">
-        {{ options }}
-        <div>
-          <Button variant="secondary" fluid @click="optionFormActive = true">
-            Legg til alternativer
-          </Button>
-          <p class="mt-3 text-sm font-light text-gray-500">
-            Legg til filer som kan hjelpe kunden å få en bedre oversikt over produktets egenskaper.
-            For eksempel katalog, tekniske spesifikasjoner, bruksanvisninger osv.
-          </p>
-        </div>
+        <FormProductOptionBlock @update="(options) => (createdOptions = options)" />
       </CollapsableSection>
       <template #actions>
         <div class="grid grid-cols-5 gap-5">
@@ -218,17 +193,5 @@ const addNewOption = (val: any) => {
         </div>
       </template>
     </ModalSlideOver>
-
-    <FormProductFile
-      :active="fileFormActive"
-      @close="fileFormActive = false"
-      @submit="(fileData) => addNewFileData(fileData)"
-    />
-
-    <FormProductOption
-      :active="optionFormActive"
-      @close="optionFormActive = false"
-      @submit="(option) => addNewOption(option)"
-    />
   </div>
 </template>

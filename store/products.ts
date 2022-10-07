@@ -33,7 +33,12 @@ const useProductsStore = defineStore('products', {
       return this.variants
     },
   },
-  getters: {},
+  getters: {
+    getVariant:
+      (state) =>
+      (id: number): VariantListInternalOutput =>
+        state.variants.find((variant) => variant.id === id),
+  },
 })
 
 export default useProductsStore

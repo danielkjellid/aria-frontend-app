@@ -1,28 +1,32 @@
 <script setup lang="ts">
-import { ProductFileCreateInternalOutput } from '~~/@types'
-
-export interface FormProductFileData {
-  name: string
-  file: File
-}
+import { ProductFile } from './types'
+import useNotificationsStore from '~~/store/notifications'
 
 interface FormProductFileProps {
   active: boolean
-  existingProductFile?: ProductFileCreateInternalOutput
+  /**
+   * Render the black overlay transparent. Useful if you have multiple overlapping
+   * slide overs.
+   */
+  isNested?: boolean
 }
 
-const props = defineProps<FormProductFileProps>()
+defineProps<FormProductFileProps>()
 
-const clonedFile = { ...props.existingProductFile }
+const notificationsStore = useNotificationsStore()
 
 const reactiveProductFile = reactive({
-  name: clonedFile.name,
-  file: clonedFile.file,
+  name: null,
+  file: null,
 })
+
+const productFileFiles = computed(() =>
+  reactiveProductFile.file ? [reactiveProductFile.file] : []
+)
 
 interface FormProductFileEmits {
   (e: 'close'): void
-  (e: 'submit', val: FormProductFileData): void
+  (e: 'submit', val: ProductFile): void
 }
 
 const emits = defineEmits<FormProductFileEmits>()
@@ -33,38 +37,43 @@ const onClose = () => {
 
 const handleFileUpload = (files: File[]) => {
   const [file] = files
-  // @ts-ignore
   reactiveProductFile.file = file
 }
 
 const handleSubmitAndClose = () => {
-  // @ts-ignore
   emits('submit', reactiveProductFile)
+  notificationsStore.create({
+    type: 'success',
+    title: 'Filen ble lagt til!',
+    text: 'Filen ble lagt til, og blir lagret samtidig som produktet.',
+  })
   onClose()
 }
 
 const handleSubmitAndAddNew = () => {
-  // @ts-ignore
   emits('submit', reactiveProductFile)
+  notificationsStore.create({
+    type: 'success',
+    title: 'Filen ble lagt til!',
+    text: 'Filen ble lagt til, og blir lagret samtidig som produktet.',
+  })
   reactiveProductFile.name = null
   reactiveProductFile.file = null
 }
-
-// TODO: actually update if there is an existing file sent in
-// TODO: clean data and add new
-// TODO: Fix @ts-ignores
-// TODO: Add notifications
-// TODO: Fix sync between file input and parent component
 </script>
 
 <template>
   <form enctype="multipart/form-data" @submit.prevent>
-    <ModalSlideOver title="Legg til ny fil" :active="active" @close="onClose">
+    <ModalSlideOver title="Legg til ny fil" :active="active" :is-nested="isNested" @close="onClose">
       <CollapsableSection title="Generelt">
         <Input id="id_name" v-model="reactiveProductFile.name" label="Navn" required />
       </CollapsableSection>
       <CollapsableSection title="Fil">
-        <FileUploadInput type="file" @upload="(files) => handleFileUpload(files)" />
+        <FileUploadInput
+          type="file"
+          :files="productFileFiles"
+          @upload="(files) => handleFileUpload(files)"
+        />
       </CollapsableSection>
       <template #actions>
         <div class="grid grid-cols-5 gap-5">

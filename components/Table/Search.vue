@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
-import { placeholder } from '@babel/types'
 
 interface TableSearchProps {
   placeholder?: string
@@ -15,6 +14,7 @@ interface TableSearchEmits {
 const emits = defineEmits<TableSearchEmits>()
 
 const query = ref<string>('')
+
 const search = () => {
   emits('onSearch', query.value)
 }

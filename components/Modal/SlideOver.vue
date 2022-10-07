@@ -18,6 +18,11 @@ interface ModalSlideOverProps {
    * Apply custom max width if needed, in the form of css class(es).
    */
   maxWidth?: string
+  /**
+   * Render the black overlay transparent. Useful if you have multiple overlapping
+   * slide overs.
+   */
+  isNested?: boolean
 }
 
 defineProps<ModalSlideOverProps>()
@@ -37,7 +42,7 @@ const onClose = () => {
 </script>
 
 <template>
-  <ModalBase :title="title" :active="active" @close="onClose">
+  <ModalBase :title="title" :active="active" :is-nested="isNested" @close="onClose">
     <div class="absolute inset-0 overflow-hidden">
       <div class="fixed inset-y-0 right-0 z-40 flex max-w-full">
         <Transition

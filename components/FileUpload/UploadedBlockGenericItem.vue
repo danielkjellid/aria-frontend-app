@@ -1,23 +1,12 @@
 <script setup lang="ts">
 import { EllipsisHorizontalIcon } from '@heroicons/vue/24/outline'
-import formatBytes from './utils'
 
-interface FileUploadUploadedBlockImageItemProps {
+interface FileUploadUploadedBlockGenericItemProps {
   name?: string
-  file: File
+  highlight?: any
 }
 
-defineProps<FileUploadUploadedBlockImageItemProps>()
-
-interface FileUploadUploadedBlockEmits {
-  (e: 'delete', val: File): void
-}
-
-const emits = defineEmits<FileUploadUploadedBlockEmits>()
-
-const deleteFile = (file: File) => {
-  emits('delete', file)
-}
+defineProps<FileUploadUploadedBlockGenericItemProps>()
 </script>
 
 <template>
@@ -34,21 +23,17 @@ const deleteFile = (file: File) => {
         <div
           class="h-14 flex items-center justify-center w-20 text-base font-medium text-gray-600 bg-gray-100 rounded-md"
         >
-          {{ file.name.split('.').pop() }}
+          {{ highlight }}
         </div>
         <div class="flex flex-col space-y-2">
-          <Text variant="body2" class="font-medium">{{ name ? name : file.name }}</Text>
-          <Text variant="body2" muted class="font-light">{{ formatBytes(file.size) }}</Text>
+          <Text variant="body2" class="font-medium">{{ name }}</Text>
+          <Text variant="body2" muted class="font-light"><slot /></Text>
         </div>
       </div>
       <ActionMenu alignment="right">
         <EllipsisHorizontalIcon class="w-5 h-5 text-gray-800" />
         <template #items>
-          <ActionMenuSection>
-            <ActionMenuItem as="button" type="button" @click="deleteFile(file)">
-              Slett
-            </ActionMenuItem>
-          </ActionMenuSection>
+          <slot name="actions" />
         </template>
       </ActionMenu>
     </div>

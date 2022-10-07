@@ -2,6 +2,11 @@
 interface ModalDialogProps {
   title: string
   active: boolean
+  /**
+   * Render the black overlay transparent. Useful if you have multiple overlapping
+   * modals.
+   */
+  isNested?: boolean
 }
 
 const props = defineProps<ModalDialogProps>()
@@ -13,7 +18,9 @@ interface ModalDialogEmits {
 const emits = defineEmits<ModalDialogEmits>()
 
 const onClose = () => {
-  document.body.style.overflow = ''
+  if (!props.isNested) {
+    document.body.style.overflow = ''
+  }
   emits('close')
 }
 
@@ -22,7 +29,7 @@ watch(
   (newValue, _oldValue) => {
     if (newValue === true) {
       document.body.style.overflow = 'hidden'
-    } else {
+    } else if (!props.isNested) {
       document.body.style.overflow = ''
     }
   }
@@ -31,7 +38,7 @@ watch(
 
 <template>
   <div class="relative z-40" :aria-labelledby="title" role="dialog" aria-modal="true" tabindex="0">
-    <ModalBackDrop :active="active" @close="onClose" />
+    <ModalBackDrop :active="active" :is-nested="isNested" @close="onClose" />
     <slot />
   </div>
 </template>

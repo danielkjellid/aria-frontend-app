@@ -30,7 +30,7 @@ const props = defineProps<FileUploadInputProps>()
 const type = computed(() => (props.type ? props.type : 'file'))
 const dragging = ref<boolean>(false)
 
-const filesUploaded = ref(props.files)
+const filesUploaded = ref(props.files ? [...props.files] : [])
 
 const uploadFiles = (files: FileList) => {
   if (props.multiple) {
@@ -60,8 +60,10 @@ const setAsPrimary = (file: any) => {
   if (index !== -1) {
     filesUploaded.value.splice(index, 1)
     filesUploaded.value.unshift(file)
+    emits('upload', filesUploaded.value)
   } else {
     filesUploaded.value.unshift(file)
+    emits('upload', filesUploaded.value)
   }
 }
 
@@ -73,8 +75,8 @@ const emits = defineEmits<FileUploadInputBaseEmits>()
 
 watch(
   () => filesUploaded.value,
-  (_oldValue, _newValue) => {
-    emits('upload', filesUploaded.value)
+  (newValue, _oldValue) => {
+    emits('upload', newValue)
   }
 )
 </script>
@@ -136,6 +138,7 @@ watch(
           v-if="type === 'image'"
           :file="file"
           :selected="file === files[0] && files.length > 1"
+          :allow-set-primary="allowSetPrimary"
           @set-primary="setAsPrimary(file)"
           @delete="deleteFile(file)"
         />
