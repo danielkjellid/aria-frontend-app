@@ -15,7 +15,7 @@ interface CheckboxProps {
   /**
    * Controls if the checkbox is checked or not.
    */
-  modelValue?: boolean
+  modelValue?: any
   /**
    * Sets label as screen reader only.
    */

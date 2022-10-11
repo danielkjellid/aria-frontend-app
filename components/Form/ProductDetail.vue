@@ -77,6 +77,8 @@ const handleImageUpload = (files: File[]) => {
   createdImages.value = [...files]
 }
 
+const test = ref([])
+
 // TODO: Fetch categories and suppliers through store
 </script>
 
@@ -169,8 +171,17 @@ const handleImageUpload = (files: File[]) => {
             :error="$parseApiError('vatRate', error)"
             @input="clearError"
           />
+          <Input
+            id="id_search_keywords"
+            v-model="reactiveProduct.searchKeywords"
+            label="Søkeord"
+            help-text="Separer ord med mellomrom. Navn, leverandør og materiale er allerede inkludert."
+            :error="$parseApiError('searchKeywords', error)"
+            @input="clearError"
+          />
         </div>
       </CollapsableSection>
+      <CollapsableSection title="Atributter"> </CollapsableSection>
       <CollapsableSection title="Bilder">
         <FileUploadInput
           type="image"
