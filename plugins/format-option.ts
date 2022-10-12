@@ -1,14 +1,14 @@
 /* eslint-disable arrow-body-style */
 import { ProductOption } from '~~/components/Form/ProductOption/types'
-import useProductsStore from '~~/store/products'
+import useProductAttributesStore from '~~/store/product-attributes'
 
 export default defineNuxtPlugin(() => {
-  const store = useProductsStore()
+  const attributesStore = useProductAttributesStore()
 
   return {
     provide: {
       formatOptionName: (option: ProductOption) => {
-        const variant = store.getVariant(option.variantId)
+        const variant = attributesStore.getVariant(option.variantId)
 
         let compressedSize
         const sizeCircumference = option.size.circumference

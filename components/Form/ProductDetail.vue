@@ -2,11 +2,15 @@
 import { SupplierListInternalOutput, CategoryListInternalOutput, ApiError } from '~~/@types'
 import { internalUrls } from '~~/endpoints'
 import { ButtonProps } from '~~/components/Button/index.vue'
+import useProductAttributesStore from '~~/store/product-attributes'
+import slugify from '~~/utils/slugify'
 
 interface FormProductDetailProps {
   active: boolean
   existingProduct?: any // TODO: Change to actual type
 }
+
+const attributesStore = useProductAttributesStore()
 
 const props = defineProps<FormProductDetailProps>()
 
@@ -16,7 +20,7 @@ const reactiveProduct = reactive({
   name: clonedProduct.name,
   supplier: clonedProduct.supplier,
   categories: clonedProduct.categories,
-  status: clonedProduct.status,
+  status: clonedProduct.status ? clonedProduct.status : '3',
   slug: clonedProduct.slug,
   searchKeywords: clonedProduct.searchKeywords,
   description: clonedProduct.description,
@@ -77,9 +81,40 @@ const handleImageUpload = (files: File[]) => {
   createdImages.value = [...files]
 }
 
-const test = ref([])
+const colors = await attributesStore.getColors()
+const shapes = await attributesStore.getShapes()
+
+const materials = [
+  { name: 'Kompisitt', value: 'kompositt' },
+  { name: 'DADOkvarts', value: 'dado kvarts' },
+  { name: 'Rustfritt stål', value: 'rustfritt stål' },
+  { name: 'Pusset stål', value: 'pusset stål' },
+  { name: 'Metall', value: 'metall' },
+  { name: 'Tre', value: 'tre' },
+  { name: 'Laminat', value: 'laminat' },
+  { name: 'Glass', value: 'glass' },
+  { name: 'Marmor', value: 'marmor' },
+]
+const rooms = [
+  { name: 'Bad', value: 'badrom' },
+  { name: 'Kjøkken', value: 'kjøkken' },
+  { name: 'Stue, gang og oppholdsrom', value: 'stue gang oppholdsrom' },
+  { name: 'Uterom', value: 'uterom' },
+]
+
+const statuses = useProductStatus()
 
 // TODO: Fetch categories and suppliers through store
+
+const slugifySupplierName = (supplierName: string, productName: string) => {
+  const slug = slugify(`${supplierName} ${productName}`)
+  reactiveProduct.slug = slug
+}
+const humanReadableSupplier = computed(() =>
+  reactiveProduct.supplier && suppliers.value
+    ? suppliers.value.find((obj) => obj.id === parseInt(reactiveProduct.supplier, 10)).name
+    : null
+)
 </script>
 
 <template>
@@ -104,6 +139,7 @@ const test = ref([])
             :error="$parseApiError('supplier', error)"
             @input="clearError"
           >
+            <option selected disabled value="">Velg leverandør...</option>
             <option v-for="supplier in suppliers" :key="supplier.id" :value="supplier.id">
               {{ supplier.name }} {{ !supplier.isActive ? '(Inaktiv)' : '' }}
             </option>
@@ -117,6 +153,37 @@ const test = ref([])
             display-word-count
             :error="$parseApiError('description', error)"
           />
+          <Select id="id_status" v-model="reactiveProduct.status" label="Status">
+            <option
+              v-for="(value, key) in statuses"
+              :key="key"
+              :value="value"
+              :selected="value.toString() === reactiveProduct.status"
+            >
+              {{ key }}
+            </option>
+          </Select>
+          <div class="flex space-x-3">
+            <div class="w-full">
+              <Input
+                id="id_slug"
+                v-model="reactiveProduct.slug"
+                label="Slug"
+                required
+                :disabled="!reactiveProduct.name || !reactiveProduct.supplier"
+                :error="$parseApiError('slug', error)"
+                @input="clearError"
+              />
+            </div>
+            <Button
+              variant="secondary"
+              align-self="bottom"
+              :disabled="!reactiveProduct.name || !reactiveProduct.supplier"
+              @click="slugifySupplierName(humanReadableSupplier, reactiveProduct.name)"
+            >
+              Generer
+            </Button>
+          </div>
         </div>
       </CollapsableSection>
       <CollapsableSection title="Kategorier">
@@ -181,7 +248,66 @@ const test = ref([])
           />
         </div>
       </CollapsableSection>
-      <CollapsableSection title="Atributter"> </CollapsableSection>
+      <CollapsableSection title="Farger">
+        <div class="space-y-5">
+          <Checkbox
+            id="id_available_in_special_sizes"
+            v-model="reactiveProduct.availableInSpecialSizes"
+            label="Tilgjengelig i spesialstørrelser"
+            help-text="Prouktets størrelse kan tilpasses etter kundens behov."
+          />
+          <MultiSelect
+            id="id_colors"
+            label="Farger"
+            help-text="Velg alle fargene some egner seg til produktet."
+            display-field="name"
+            value-field="id"
+            :options="colors"
+            required
+            multiple
+          />
+        </div>
+      </CollapsableSection>
+      <CollapsableSection title="Atributter">
+        <div class="space-y-5">
+          <MultiSelect
+            id="id_shapes"
+            label="Fasonger"
+            help-text="Velg alle fasongene some egner seg til produktet."
+            display-field="name"
+            value-field="id"
+            :options="shapes"
+            required
+            multiple
+          />
+          <MultiSelect
+            id="id_materials"
+            label="Materialer"
+            help-text="Velg alle materialene some egner seg til produktet."
+            display-field="name"
+            value-field="value"
+            :options="materials"
+            multiple
+          />
+          <MultiSelect
+            id="id_rooms"
+            label="Rom"
+            help-text="Velg alle rommene some egner seg til produktet."
+            display-field="name"
+            value-field="value"
+            :options="rooms"
+            multiple
+          />
+          <Input
+            id="id_absorption"
+            v-model="reactiveProduct.absorption"
+            label="Absorberingsevne"
+            help-text="Gjelder kun fliser. Flisens absorberingsvene. Verdi i hele prosent - e.g. 0.5 for 0.5%"
+            :error="$parseApiError('absorption', error)"
+            @input="clearError"
+          />
+        </div>
+      </CollapsableSection>
       <CollapsableSection title="Bilder">
         <FileUploadInput
           type="image"

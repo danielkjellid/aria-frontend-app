@@ -19,7 +19,7 @@ export interface ButtonProps {
   as?: string
   loadingState?: 'initial' | 'loading' | 'error' | 'success'
   fluid?: boolean
-  alignSelf?: 'auto' | 'left' | 'right' | 'center' | 'stretch' | 'baseline'
+  alignSelf?: 'auto' | 'top' | 'bottom' | 'center' | 'stretch' | 'baseline'
   disabled?: boolean
 }
 
@@ -77,8 +77,8 @@ const elem = computed(() => {
         'px-4 py-2': size === 'm',
         'px-5 py-3': size === 'l',
         'self-auto': !alignSelf || alignSelf === 'auto',
-        'self-start': alignSelf === 'left',
-        'self-end': alignSelf === 'right',
+        'self-start': alignSelf === 'top',
+        'self-end': alignSelf === 'bottom',
         'self-center': alignSelf === 'center',
         'self-stretch': alignSelf === 'stretch',
         'self-baseline': alignSelf === 'baseline',

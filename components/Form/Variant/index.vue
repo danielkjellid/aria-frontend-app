@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { VariantCreateInternalOutput, ApiError } from '~~/@types'
 import { ButtonProps } from '~~/components/Button/index.vue'
-import useProductsStore from '~~/store/products'
+import useProductAttributesStore from '~~/store/product-attributes'
 import useNotificationsStore from '~~/store/notifications'
 import { internalUrls } from '~~/endpoints'
 
@@ -35,7 +35,7 @@ const emits = defineEmits<FormProductOptionVariantEmits>()
  ** Store **
  ***********/
 
-const productsStore = useProductsStore()
+const attributesStore = useProductAttributesStore()
 const notificationsStore = useNotificationsStore()
 
 /************
@@ -126,7 +126,7 @@ const handleSubmitAndClose = async () => {
       payload
     )
 
-    productsStore.addVariantToState(createdVariant)
+    attributesStore.addVariantToState(createdVariant)
 
     notificationsStore.create({
       type: 'success',
@@ -165,7 +165,7 @@ const handleSubmitAndAddNew = async () => {
 
     submitAndAddNewFormSubmissionState.value = 'success'
 
-    productsStore.addVariantToState(createdVariant)
+    attributesStore.addVariantToState(createdVariant)
 
     notificationsStore.create({
       type: 'success',

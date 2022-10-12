@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import useProductsStore from '~~/store/products'
+import useProductAttributesStore from '~~/store/product-attributes'
 import useNotificationsStore from '~~/store/notifications'
 import { ProductOption } from './types'
 
-const store = useProductsStore()
+const attributesStore = useProductAttributesStore()
 const notificationsStore = useNotificationsStore()
 
 interface FormProductOptionProps {
@@ -18,7 +18,7 @@ interface FormProductOptionProps {
 
 const props = defineProps<FormProductOptionProps>()
 
-const variants = await store.getVariants()
+const variants = await attributesStore.getVariants()
 const variantFormActive = ref<boolean>(false)
 
 const statuses = useProductStatus()

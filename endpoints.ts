@@ -55,6 +55,12 @@ const internalEndpoints = {
   products: {
     list: () => '/v1/internal/products/',
 
+    colors: {
+      list: () => '/v1/internal/products/colors/',
+    },
+    shapes: {
+      list: () => '/v1/internal/products/shapes/',
+    },
     variants: {
       list: () => '/v1/internal/products/variants/',
       create: () => '/v1/internal/products/variants/create/',

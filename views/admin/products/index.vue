@@ -3,10 +3,12 @@ import { ButtonProps } from '~~/components/Button/index.vue'
 import { PagedProductInternalListOutput, ApiError } from '~~/@types/'
 import { internalUrls } from '~~/endpoints'
 
-import useProductsStore from '~~/store/products'
+import useProductAttributesStore from '~~/store/product-attributes'
 
-const store = useProductsStore()
-store.fetchVariants()
+const attributesStore = useProductAttributesStore()
+attributesStore.fetchVariants()
+attributesStore.fetchColors()
+attributesStore.fetchShapes()
 
 definePageMeta({
   authRequired: true,
