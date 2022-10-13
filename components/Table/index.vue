@@ -35,7 +35,6 @@ const emitQuery = (val: string) => {}
 const selectedItems = ref([])
 const selectItem = (item: any) => {
   if (selectedItems.value.includes(item)) {
-    console.log('here')
     const index = selectedItems.value.indexOf(item)
 
     if (index !== -1) {
@@ -44,6 +43,19 @@ const selectItem = (item: any) => {
     }
   } else {
     selectedItems.value.push(item)
+  }
+}
+
+const selectAllItems = () => {
+  const copiedItems = [...props.items]
+
+  if (
+    selectedItems.value.length &&
+    selectedItems.value.every((selectedItem) => copiedItems.includes(selectedItem))
+  ) {
+    selectedItems.value = []
+  } else {
+    selectedItems.value = [...copiedItems]
   }
 }
 
@@ -64,7 +76,7 @@ const previousPage = () => {
 </script>
 
 <template>
-  <div>
+  <div class="relative">
     <TableSearch
       v-if="showSearch"
       :placeholder="searchPlaceholder"
@@ -73,7 +85,13 @@ const previousPage = () => {
 
     <div class="overflow-x-auto">
       <table class="min-w-full">
-        <TableHeader :headers="headers" :selectable="selectable" />
+        <TableHeader
+          :headers="headers"
+          :selectable="selectable"
+          :selected-items="selectedItems"
+          :items="items"
+          @select-all="selectAllItems"
+        />
         <tbody v-if="itemsLoading">
           <tr>
             <td
@@ -123,31 +141,28 @@ const previousPage = () => {
         @next="nextPage"
         @previous="previousPage"
       />
-
-      <Transition
-        enter-active-class="sm:duration-300 transition duration-500 ease-in-out transform"
-        enter-from-class="translate-y-full"
-        enter-to-class="translate-y-0"
-        leave-active-class="sm:duration-300 transition duration-500 ease-in-out transform"
-        leave-from-class="translate-y-0"
-        leave-to-class="translate-y-full"
-      >
-        <div
-          v-if="selectedItems.length"
-          class="bg-brand-800 fixed bottom-0 left-0 right-0 px-10 py-4"
-        >
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-              <p class="text-sm font-normal text-gray-300">
-                <span class="font-extrabold text-white">{{ selectedItems.length }}</span> valgt
-              </p>
-              <Button variant="transparent" size="s" @click="selectedItems = []">Fjern valg</Button>
-            </div>
-            <slot name="page-actions" />
-          </div>
-        </div>
-      </Transition>
     </div>
+
+    <Transition
+      enter-active-class="sm:duration-300 transition duration-500 ease-in-out transform"
+      enter-from-class="translate-y-full"
+      enter-to-class="translate-y-0"
+      leave-active-class="sm:duration-300 transition duration-500 ease-in-out transform"
+      leave-from-class="translate-y-0"
+      leave-to-class="translate-y-full"
+    >
+      <div v-if="selectedItems.length" class="sticky bottom-0 left-0 right-0 py-12">
+        <div class="px-7 flex items-center justify-between py-3 bg-white rounded-lg shadow-xl">
+          <div class="flex items-center space-x-4">
+            <p class="text-sm font-normal text-gray-900">
+              <span class="font-extrabold text-gray-600">{{ selectedItems.length }}</span> valgt
+            </p>
+            <Button variant="tertiary" size="s" @click="selectedItems = []">Fjern valg</Button>
+          </div>
+          <slot name="page-actions" />
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
