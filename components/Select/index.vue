@@ -31,6 +31,7 @@ interface SelectProps {
    * Additional help text bellow the select.
    */
   helpText?: string
+  initialOption?: string
 }
 
 const props = defineProps<SelectProps>()
@@ -82,6 +83,7 @@ defineEmits(['update:modelValue'])
         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 focus:border-transparent block w-full text-sm leading-5 border-gray-200 rounded-md"
         @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
       >
+        <option v-if="initialOption" selected disabled value="">{{ initialOption }}</option>
         <slot />
       </select>
       <div

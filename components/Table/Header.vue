@@ -18,7 +18,7 @@ defineProps<TableHeaderProps>()
     <tr class="rounded-md">
       <th
         v-if="selectable"
-        class="rounded-l-md px-6 py-3 text-sm font-normal text-gray-600 bg-gray-100"
+        class="rounded-l-md bg-brand-50 px-6 py-3 text-sm font-normal text-gray-600"
       >
         <div class="w-4 h-4 bg-transparent border border-gray-400 rounded"></div>
       </th>
@@ -32,7 +32,7 @@ defineProps<TableHeaderProps>()
           'text-center': header.align === 'center',
           'text-right': header.align === 'right',
         }"
-        class="px-6 py-3 text-sm font-normal text-gray-600 bg-gray-100"
+        class="bg-brand-50 px-6 py-3 text-sm font-normal text-gray-600"
       >
         {{ header.label }}
       </th>

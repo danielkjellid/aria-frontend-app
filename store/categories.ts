@@ -1,17 +1,19 @@
 import {
   CategoryChildrenListOutput,
   CategoryDetailOutput,
+  CategoryListInternalOutput,
   CategoryListOutput,
   CategoryParentListOutput,
 } from '~~/@types'
+import { internalUrls, publicUrls } from '~~/endpoints'
 
 import { defineStore } from 'pinia'
 import performGet from '~~/composables/performGet'
-import { publicUrls } from '~~/endpoints'
 
 const useCategoriesStore = defineStore('categories', {
   state: () => ({
     categories: [], // Categories, but unknown level (could either be parent or child)
+    categoriesInternal: [] as CategoryListInternalOutput[], // Categories for internal use.
     parentCategories: [], // Only top level categories
     navbarCategories: [], // Categories used for navigation
     childCategories: [], // Only sub categories
@@ -77,6 +79,23 @@ const useCategoriesStore = defineStore('categories', {
       } catch (error) {
         console.log(error)
       }
+    },
+    async fetchCategoriesInternal() {
+      try {
+        this.categoriesInternal = await performGet<CategoryListInternalOutput[]>(
+          internalUrls.categories.list()
+        )
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getCategoriesInternal() {
+      if (!this.categoriesInternal || !this.categoriesInternal.length) {
+        await this.fetchCategoriesInternal()
+        return this.categoriesInternal
+      }
+
+      return this.categoriesInternal
     },
   },
   getters: {

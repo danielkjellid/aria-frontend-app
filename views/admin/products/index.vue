@@ -1,14 +1,21 @@
 <script setup lang="ts">
-import { ButtonProps } from '~~/components/Button/index.vue'
-import { PagedProductInternalListOutput, ApiError } from '~~/@types/'
+import { PagedProductInternalListOutput } from '~~/@types/'
 import { internalUrls } from '~~/endpoints'
 
 import useProductAttributesStore from '~~/store/product-attributes'
+import useSuppliersStore from '~~/store/suppliers'
+import useCategoriesStore from '~~/store/categories'
 
 const attributesStore = useProductAttributesStore()
-attributesStore.fetchVariants()
-attributesStore.fetchColors()
-attributesStore.fetchShapes()
+attributesStore.fetchVariantsInternal()
+attributesStore.fetchColorsInternal()
+attributesStore.fetchShapesInternal()
+
+const suppliersStore = useSuppliersStore()
+suppliersStore.fetchSuppliersInternal()
+
+const categoriesStore = useCategoriesStore()
+categoriesStore.fetchCategoriesInternal()
 
 definePageMeta({
   authRequired: true,
@@ -53,49 +60,6 @@ const prepareProductDelete = (id: number) => {
 /*****************
  ** State: forms **
  *****************/
-
-const formSubmissionState = ref<ButtonProps['loadingState']>('initial')
-
-const newProduct = reactive({
-  name: 'Test?',
-  supplier: null,
-  categories: null,
-  status: null,
-  slug: null,
-  searchKeywords: null,
-  description: null,
-  unit: null,
-  vatRate: '0.25',
-  availableInSpecialSizes: false,
-  colors: null,
-  shapes: null,
-  materials: null,
-  rooms: null,
-  absorption: null,
-  displayPriceToCustomer: false,
-  canBePurchasedOnline: false,
-  canBePickedUp: false,
-})
-
-const newProductImages = ref([])
-
-const newProductFiles = ref([])
-
-const newProductOptions = ref([])
-
-/*******************
- ** State: errors **
- *******************/
-
-const error = ref<ApiError | null>(null)
-const errorMessage = computed(() => (error.value.message ? error.value.message : null))
-
-const clearError = () => {
-  if (error.value) {
-    error.value = null
-    formSubmissionState.value = 'initial'
-  }
-}
 
 const newProductModalActive = ref<boolean>(false)
 </script>

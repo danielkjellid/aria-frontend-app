@@ -20,7 +20,7 @@ const useProductAttributesStore = defineStore('productAttributes', {
      ** Colors **
      ************/
 
-    async fetchColors() {
+    async fetchColorsInternal() {
       try {
         this.colors = await performGet<ColorListInternalOutput[]>(
           internalUrls.products.colors.list()
@@ -29,7 +29,7 @@ const useProductAttributesStore = defineStore('productAttributes', {
         console.log(error)
       }
     },
-    async getColors() {
+    async getColorsInternal() {
       if (!this.colors || !this.colors.length) {
         await this.fetchColors()
         return this.colors
@@ -42,7 +42,7 @@ const useProductAttributesStore = defineStore('productAttributes', {
      ** Shapes **
      ************/
 
-    async fetchShapes() {
+    async fetchShapesInternal() {
       try {
         this.shapes = await performGet<ShapeListInternalOutput[]>(
           internalUrls.products.shapes.list()
@@ -51,7 +51,7 @@ const useProductAttributesStore = defineStore('productAttributes', {
         console.log(error)
       }
     },
-    async getShapes() {
+    async getShapesInternal() {
       if (!this.shapes || !this.shapes.length) {
         await this.fetchShapes()
         return this.shapes
@@ -64,7 +64,7 @@ const useProductAttributesStore = defineStore('productAttributes', {
      ** Variants **
      **************/
 
-    async fetchVariants() {
+    async fetchVariantsInternal() {
       try {
         this.variants = await performGet<VariantListInternalOutput[]>(
           internalUrls.products.variants.list()
@@ -73,11 +73,11 @@ const useProductAttributesStore = defineStore('productAttributes', {
         console.log(error)
       }
     },
-    addVariantToState(variant: VariantListInternalOutput) {
+    addVariantToInternalState(variant: VariantListInternalOutput) {
       this.variants.unshift(variant)
       return this.variants
     },
-    async getVariants() {
+    async getVariantsInternal() {
       if (!this.variants || !this.variants.length) {
         await this.fetchVariants()
         return this.variants
@@ -87,7 +87,7 @@ const useProductAttributesStore = defineStore('productAttributes', {
     },
   },
   getters: {
-    getVariant:
+    getVariantInternal:
       (state) =>
       (id: number): VariantListInternalOutput =>
         state.variants.find((variant) => variant.id === id),

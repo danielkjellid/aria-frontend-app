@@ -126,7 +126,7 @@ const handleSubmitAndClose = async () => {
       payload
     )
 
-    attributesStore.addVariantToState(createdVariant)
+    attributesStore.addVariantToInternalState(createdVariant)
 
     notificationsStore.create({
       type: 'success',
@@ -165,7 +165,7 @@ const handleSubmitAndAddNew = async () => {
 
     submitAndAddNewFormSubmissionState.value = 'success'
 
-    attributesStore.addVariantToState(createdVariant)
+    attributesStore.addVariantToInternalState(createdVariant)
 
     notificationsStore.create({
       type: 'success',

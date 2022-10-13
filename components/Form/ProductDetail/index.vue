@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { SupplierListInternalOutput, CategoryListInternalOutput, ApiError } from '~~/@types'
-import { internalUrls } from '~~/endpoints'
+import { ApiError } from '~~/@types'
 import { ButtonProps } from '~~/components/Button/index.vue'
 import useProductAttributesStore from '~~/store/product-attributes'
+import useSuppliersStore from '~~/store/suppliers'
+import useCategoriesStore from '~~/store/categories'
 import slugify from '~~/utils/slugify'
 
 interface FormProductDetailProps {
@@ -11,6 +12,8 @@ interface FormProductDetailProps {
 }
 
 const attributesStore = useProductAttributesStore()
+const suppliersStore = useSuppliersStore()
+const categoriesStore = useCategoriesStore()
 
 const props = defineProps<FormProductDetailProps>()
 
@@ -56,22 +59,8 @@ const onClose = () => {
   emits('close')
 }
 
-const suppliers = ref<SupplierListInternalOutput[]>()
-const fetchSuppliers = async () => {
-  suppliers.value = await performGet<SupplierListInternalOutput[]>(internalUrls.suppliers.list())
-}
-
-fetchSuppliers()
-
-const fetchedCategories = ref<CategoryListInternalOutput[]>()
-const fetchCategories = async () => {
-  fetchedCategories.value = await performGet<CategoryListInternalOutput[]>(
-    internalUrls.categories.list()
-  )
-}
-
-fetchCategories()
-const comp = computed(() => (fetchedCategories.value ? fetchedCategories.value : []))
+const suppliers = await suppliersStore.getSuppliersInternal()
+const categories = await categoriesStore.getCategoriesInternal()
 
 const createdFiles = ref([])
 const createdOptions = ref([])
@@ -81,8 +70,10 @@ const handleImageUpload = (files: File[]) => {
   createdImages.value = [...files]
 }
 
-const colors = await attributesStore.getColors()
-const shapes = await attributesStore.getShapes()
+const colors = await attributesStore.getColorsInternal()
+const shapes = await attributesStore.getShapesInternal()
+
+const statuses = useProductStatus()
 
 const materials = [
   { name: 'Kompisitt', value: 'kompositt' },
@@ -101,8 +92,6 @@ const rooms = [
   { name: 'Stue, gang og oppholdsrom', value: 'stue gang oppholdsrom' },
   { name: 'Uterom', value: 'uterom' },
 ]
-
-const statuses = useProductStatus()
 
 // TODO: Fetch categories and suppliers through store
 
@@ -136,12 +125,22 @@ const humanReadableSupplier = computed(() =>
             v-model="reactiveProduct.supplier"
             label="Leverandør"
             required
+            initial-option="Velg leverandør..."
             :error="$parseApiError('supplier', error)"
             @input="clearError"
           >
-            <option selected disabled value="">Velg leverandør...</option>
             <option v-for="supplier in suppliers" :key="supplier.id" :value="supplier.id">
               {{ supplier.name }} {{ !supplier.isActive ? '(Inaktiv)' : '' }}
+            </option>
+          </Select>
+          <Select id="id_status" v-model="reactiveProduct.status" label="Status">
+            <option
+              v-for="(value, key) in statuses"
+              :key="key"
+              :value="value"
+              :selected="value.toString() === reactiveProduct.status"
+            >
+              {{ key }}
             </option>
           </Select>
           <Editor
@@ -153,16 +152,6 @@ const humanReadableSupplier = computed(() =>
             display-word-count
             :error="$parseApiError('description', error)"
           />
-          <Select id="id_status" v-model="reactiveProduct.status" label="Status">
-            <option
-              v-for="(value, key) in statuses"
-              :key="key"
-              :value="value"
-              :selected="value.toString() === reactiveProduct.status"
-            >
-              {{ key }}
-            </option>
-          </Select>
           <div class="flex space-x-3">
             <div class="w-full">
               <Input
@@ -170,7 +159,6 @@ const humanReadableSupplier = computed(() =>
                 v-model="reactiveProduct.slug"
                 label="Slug"
                 required
-                :disabled="!reactiveProduct.name || !reactiveProduct.supplier"
                 :error="$parseApiError('slug', error)"
                 @input="clearError"
               />
@@ -193,7 +181,7 @@ const humanReadableSupplier = computed(() =>
           help-text="Velg alle kategoriene some egner seg til produktet."
           display-field="displayName"
           value-field="id"
-          :options="comp"
+          :options="categories"
           required
           multiple
         />
@@ -248,14 +236,8 @@ const humanReadableSupplier = computed(() =>
           />
         </div>
       </CollapsableSection>
-      <CollapsableSection title="Farger">
+      <CollapsableSection title="Atributter">
         <div class="space-y-5">
-          <Checkbox
-            id="id_available_in_special_sizes"
-            v-model="reactiveProduct.availableInSpecialSizes"
-            label="Tilgjengelig i spesialstørrelser"
-            help-text="Prouktets størrelse kan tilpasses etter kundens behov."
-          />
           <MultiSelect
             id="id_colors"
             label="Farger"
@@ -266,10 +248,6 @@ const humanReadableSupplier = computed(() =>
             required
             multiple
           />
-        </div>
-      </CollapsableSection>
-      <CollapsableSection title="Atributter">
-        <div class="space-y-5">
           <MultiSelect
             id="id_shapes"
             label="Fasonger"
@@ -305,6 +283,12 @@ const humanReadableSupplier = computed(() =>
             help-text="Gjelder kun fliser. Flisens absorberingsvene. Verdi i hele prosent - e.g. 0.5 for 0.5%"
             :error="$parseApiError('absorption', error)"
             @input="clearError"
+          />
+          <Checkbox
+            id="id_available_in_special_sizes"
+            v-model="reactiveProduct.availableInSpecialSizes"
+            label="Tilgjengelig i spesialstørrelser"
+            help-text="Prouktets størrelse kan tilpasses etter kundens behov."
           />
         </div>
       </CollapsableSection>

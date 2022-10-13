@@ -8,7 +8,7 @@ export default defineNuxtPlugin(() => {
   return {
     provide: {
       formatOptionName: (option: ProductOption) => {
-        const variant = attributesStore.getVariant(option.variantId)
+        const variant = attributesStore.getVariantInternal(option.variantId)
 
         let compressedSize
         const sizeCircumference = option.size.circumference

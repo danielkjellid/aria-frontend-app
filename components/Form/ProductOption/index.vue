@@ -18,7 +18,7 @@ interface FormProductOptionProps {
 
 const props = defineProps<FormProductOptionProps>()
 
-const variants = await attributesStore.getVariants()
+const variants = await attributesStore.getVariantsInternal()
 const variantFormActive = ref<boolean>(false)
 
 const statuses = useProductStatus()
