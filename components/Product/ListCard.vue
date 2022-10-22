@@ -188,11 +188,11 @@ const canBePurchasedOnline = ref<boolean>(false)
             <div
               v-if="index <= indexToShowBasedOnBreakpoint"
               class="w-8 h-8 overflow-hidden border-2 border-gray-300 rounded-full"
-              @mouseover="setImageThumbnail(variant.thumbnail)"
-              @focus="setImageThumbnail(variant.thumbnail)"
+              @mouseover="setImageThumbnail(variant.thumbnailUrl)"
+              @focus="setImageThumbnail(variant.thumbnailUrl)"
             >
               <img
-                :src="variant.image ? variant.image : defaultPreviewImage"
+                :src="variant.imageUrl ? variant.imageUrl : defaultPreviewImage"
                 :alt="`Image of ${name} variant: ${variant.name}`"
                 class="object-cover"
               />
