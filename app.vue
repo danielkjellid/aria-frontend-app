@@ -60,12 +60,12 @@ onMounted(() => {
         <LoadingSpinner width="w-20" height="h-20" />
       </div>
     </Transition>
-    <!-- <div
+    <div
       v-if="isDevEnvironment"
       class="dev-env-warning fixed bottom-0 left-0 right-0 z-10 py-1 text-center"
     >
       <span class="text-sm font-semibold text-yellow-900">Development environment</span>
-    </div> -->
+    </div>
   </div>
 </template>
 
