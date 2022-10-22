@@ -9,8 +9,8 @@ import { XMarkIcon } from '@heroicons/vue/24/outline'
 interface VariantType {
   id?: number
   name: string
-  image?: string
-  thumbnail?: string
+  imageUrl?: string
+  thumbnailUrl?: string
   colorHex?: string
 }
 
@@ -85,14 +85,14 @@ const closeModal = () => {
                 :style="`background-color: ${selectedVariant.colorHex}; height: 505px; width: 380px;`"
               />
               <img
-                v-else-if="selectedVariant && selectedVariant.thumbnail"
-                :src="selectedVariant.thumbnail"
+                v-else-if="selectedVariant && selectedVariant.thumbnailUrl"
+                :src="selectedVariant.thumbnailUrl"
                 alt=""
               />
               <!-- Temporary fallback -->
               <img
-                v-else-if="selectedVariant && selectedVariant.image"
-                :src="selectedVariant.image"
+                v-else-if="selectedVariant && selectedVariant.imageUrl"
+                :src="selectedVariant.imageUrl"
                 alt=""
               />
               <IconWrapper
@@ -122,10 +122,10 @@ const closeModal = () => {
                   class="w-20 h-20 mx-auto border-2 border-gray-200 rounded-full"
                 />
               </button>
-              <button v-else-if="variant.image" type="button" @click="activateModal(variant)">
+              <button v-else-if="variant.imageUrl" type="button" @click="activateModal(variant)">
                 <img
                   class="object-cover w-20 h-20 mx-auto border-2 border-gray-300 rounded-full"
-                  :src="variant.image"
+                  :src="variant.imageUrl"
                   alt=""
                 />
               </button>
