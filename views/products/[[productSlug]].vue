@@ -163,8 +163,8 @@ const variants = computed(
       {
         id: null,
         name: null,
-        image: image80x80,
-        thumbnail: image380x575,
+        imageUrl: image80x80,
+        thumbnailUrl: image380x575,
         colorHex: null,
       },
       mergedVariants.value
