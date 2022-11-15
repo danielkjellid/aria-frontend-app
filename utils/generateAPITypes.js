@@ -4,7 +4,7 @@ const humps = require('humps')
 const yargs = require('yargs')
 const fs = require('fs')
 const path = require('path')
-// const { exit, stderr } = require('process')
+const { exit, stderr } = require('process')
 
 const outputArgument = yargs.option('output', {
   alias: 'out',
@@ -25,16 +25,15 @@ const convertSchema = (schemas) => {
         Object.entries(properties).map(([propertyName, value]) => {
           const camelizedProperty = humps.camelize(propertyName)
 
-          // There is currently a problem with the naming of image files, once this is fixed, the
-          // code bellow can be uncommented.
-          // if (humps.decamelize(camelizedProperty) !== propertyName) {
-          //   stderr.write(
-          //     `property !== decamelize(camelize(property)). Aborting because this risks converting keys wrongly in runtime. ${propertyName} !== ${humps.decamelize(
-          //       camelizedProperty
-          //     )}\n`
-          //   )
-          //   exit(1)
-          // }
+          if (humps.decamelize(camelizedProperty) !== propertyName) {
+            stderr.write(
+              `property !== decamelize(camelize(property)). Aborting because this risks converting keys wrongly in runtime. ${propertyName} !== ${humps.decamelize(
+                camelizedProperty
+              )}\n`
+            )
+            exit(1)
+          }
+
           return [camelizedProperty, value]
         })
       )
