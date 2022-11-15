@@ -10,7 +10,8 @@ interface VariantType {
   id?: number
   name: string
   imageUrl?: string
-  thumbnailUrl?: string
+  image80x80Url?: string
+  image380x575Url?: string
   colorHex?: string
 }
 
@@ -85,8 +86,8 @@ const closeModal = () => {
                 :style="`background-color: ${selectedVariant.colorHex}; height: 505px; width: 380px;`"
               />
               <img
-                v-else-if="selectedVariant && selectedVariant.thumbnailUrl"
-                :src="selectedVariant.thumbnailUrl"
+                v-else-if="selectedVariant && selectedVariant.image380x575Url"
+                :src="selectedVariant.image380x575Url"
                 alt=""
               />
               <!-- Temporary fallback -->

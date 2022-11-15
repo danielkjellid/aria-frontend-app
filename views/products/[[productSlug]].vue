@@ -298,7 +298,7 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
       <Meta name="og:type" content="product" />
       <Meta
         name="og:image"
-        :content="product && product.images ? product.images[0].image1536x860 : ''"
+        :content="product && product.images ? product.images[0].image1440x810Url : ''"
       />
       <Meta
         name="og:description"

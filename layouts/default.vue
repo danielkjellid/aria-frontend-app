@@ -22,7 +22,7 @@ const metaDescription = ref(
       <Meta name="twitter:description" :content="metaDescription" />
       <Meta
         name="twitter:image"
-        content="https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/eternity.jpeg"
+        content="https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/eternity.jpeg"
       />
       <Meta name="og:site_name" content="FK-JKE Design" />
       <Meta name="og:locale" content="no_NO" />

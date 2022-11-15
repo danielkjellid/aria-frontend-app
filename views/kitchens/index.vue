@@ -40,23 +40,6 @@ const kitchens = computed(() =>
 )
 
 const loading = computed(() => kitchens.value.length <= 0)
-
-// Header for this route is static, so this is the object used to populate images.
-const kitchenImages = {
-  applyFilter: false,
-  image512x512:
-    'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/44c441195fec67c72481d59e8fb17b68.jpg',
-  image640x275:
-    'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/3bd3b415689c965a5aae95326eb2a22a.jpg',
-  image1024x1024:
-    'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/c6d75419f77d3fe4be3abe618a582e3c.jpg',
-  image1024x575:
-    'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/ce52d86d04f4892ac44e17e84bbc3de8.jpg',
-  image1536x860:
-    'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/33f60cee61b7d55b9696b2fd766408ee.jpg',
-  image2048x1150:
-    'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/05bdb43cc6feca8bebfd06f0a147062e.jpg',
-}
 </script>
 
 <template>
@@ -70,7 +53,26 @@ const kitchenImages = {
       <Meta name="og:type" content="website" />
     </Head>
     <main>
-      <Image title="Kjøkken" :images="kitchenImages" />
+      <Image
+        title="Kjøkken"
+        :loading="false"
+        :images="{
+          isMainImage: true,
+          applyFilter: false,
+          image640x360Url:
+            'https://bilder.flis.no/xRQBS5wvYS_uw2n8Prr8paaGQhI=/640x360/smart/media/front/kitchens.jpg',
+          image768x432Url:
+            'https://bilder.flis.no/HZ-Nywe1ekBVARnrHa83msEB640=/768x432/smart/media/front/kitchens.jpg',
+          image960x540Url:
+            'https://bilder.flis.no/DbJIc60AdJjVWXjlriP6RtObqcE=/960x540/smart/media/front/kitchens.jpg',
+          image1024x576Url:
+            'https://bilder.flis.no/pzaYRyk0_Bo6M7-ZvMqBPvdx04I=/1024x576/smart/media/front/kitchens.jpg',
+          image1280x720Url:
+            'https://bilder.flis.no/iX0LJwQXkvW8OIs2iNwzogzA1t4=/1280x720/smart/media/front/kitchens.jpg',
+          image1440x810Url:
+            'https://bilder.flis.no/cCO0ZAcE1ORhEVzuBh1pY42bGVA=/1440x810/smart/media/front/kitchens.jpg',
+        }"
+      />
       <Container>
         <Breadcrumbs>
           <BreadcrumbsItem to="/">FK JKE Design</BreadcrumbsItem>
@@ -83,12 +85,12 @@ const kitchenImages = {
             <video
               controls
               height="2000"
-              src="https://flishuset.s3.eu-north-1.amazonaws.com/media/kitchens/videos/JKE-Design-production.mp4"
+              src="https://fk-jke.s3.eu-north-1.amazonaws.com/media/kitchens/videos/JKE-Design-production.mp4"
               class="z-25 object-cover w-full h-full"
             >
               Sorry, your browser doesn't support embedded videos, but don't worry, you can
               <a
-                href="https://flishuset.s3.eu-north-1.amazonaws.com/media/kitchens/videos/JKE-Design-production.mp4"
+                href="https://fk-jke.s3.eu-north-1.amazonaws.com/media/kitchens/videos/JKE-Design-production.mp4"
                 >download it</a
               >
               and watch it with your favorite video player!

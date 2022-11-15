@@ -42,19 +42,20 @@ const loading = computed(() => {
           subtitle="En verden av ro, ærlige materialer, naturlige farger og bærekraftige design"
           :loading="false"
           :images="{
+            isMainImage: true,
             applyFilter: false,
-            image512x512:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/56907ef7444c4d9247701daa8ad6d7bd.jpg',
-            image640x275:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/cd1b1f21acec4310f7aff8f58051883c.jpg',
-            image1024x1024:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/21ca50d417c21f02c7ac2a249f2e9677.jpg',
-            image1024x575:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/81d7cb9e64359daa2651afaceb2825d4.jpg',
-            image1536x860:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/0045e186de084d7433692793c5043d96.jpg',
-            image2048x1150:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/616b755311cbdcf2b4910b1c0e685d3a.jpg',
+            image640x360Url:
+              'https://bilder.flis.no/WI_uXX7NzcZFonXloRYd0-PyR_s=/640x360/smart/media/front/header.jpg',
+            image768x432Url:
+              'https://bilder.flis.no/NoPlURb7DRSgGxeYdj5jzOL9QSI=/768x432/smart/media/front/header.jpg',
+            image960x540Url:
+              'https://bilder.flis.no/tMvF8a-M4FgPZV_VSXv6pUJvRl8=/960x540/smart/media/front/header.jpg',
+            image1024x576Url:
+              'https://bilder.flis.no/idJrxG2x-anN6rLxTqtEuklR0O4=/1024x576/smart/media/front/header.jpg',
+            image1280x720Url:
+              'https://bilder.flis.no/Zxz160XmvqOTPDKm9qE7vb58Kkg=/1280x720/smart/media/front/header.jpg',
+            image1440x810Url:
+              'https://bilder.flis.no/C2bRgBcretT2WidW9VlMMW_i1Tw=/1440x810/smart/media/front/header.jpg',
           }"
         />
       </section>
@@ -101,19 +102,20 @@ const loading = computed(() => {
           title="Kjøkken"
           :loading="loading"
           :images="{
+            isMainImage: true,
             applyFilter: false,
-            image512x512:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/44c441195fec67c72481d59e8fb17b68.jpg',
-            image640x275:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/3bd3b415689c965a5aae95326eb2a22a.jpg',
-            image1024x1024:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/c6d75419f77d3fe4be3abe618a582e3c.jpg',
-            image1024x575:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/ce52d86d04f4892ac44e17e84bbc3de8.jpg',
-            image1536x860:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/33f60cee61b7d55b9696b2fd766408ee.jpg',
-            image2048x1150:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/05bdb43cc6feca8bebfd06f0a147062e.jpg',
+            image640x360Url:
+              'https://bilder.flis.no/xRQBS5wvYS_uw2n8Prr8paaGQhI=/640x360/smart/media/front/kitchens.jpg',
+            image768x432Url:
+              'https://bilder.flis.no/HZ-Nywe1ekBVARnrHa83msEB640=/768x432/smart/media/front/kitchens.jpg',
+            image960x540Url:
+              'https://bilder.flis.no/DbJIc60AdJjVWXjlriP6RtObqcE=/960x540/smart/media/front/kitchens.jpg',
+            image1024x576Url:
+              'https://bilder.flis.no/pzaYRyk0_Bo6M7-ZvMqBPvdx04I=/1024x576/smart/media/front/kitchens.jpg',
+            image1280x720Url:
+              'https://bilder.flis.no/iX0LJwQXkvW8OIs2iNwzogzA1t4=/1280x720/smart/media/front/kitchens.jpg',
+            image1440x810Url:
+              'https://bilder.flis.no/cCO0ZAcE1ORhEVzuBh1pY42bGVA=/1440x810/smart/media/front/kitchens.jpg',
           }"
         >
           <Button variant="outlined" to="/kitchens/"> Kjøkken </Button>
