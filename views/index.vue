@@ -56,6 +56,8 @@ const loading = computed(() => {
               'https://bilder.flis.no/Zxz160XmvqOTPDKm9qE7vb58Kkg=/1280x720/smart/media/front/header.jpg',
             image1440x810Url:
               'https://bilder.flis.no/C2bRgBcretT2WidW9VlMMW_i1Tw=/1440x810/smart/media/front/header.jpg',
+            image1920x1080Url:
+              'https://bilder.flis.no/3MZRr9qDntAU3QgbB6V3TVx9vFw=/1920x1080/smart/media/front/header.jpg',
           }"
         />
       </section>
@@ -116,6 +118,8 @@ const loading = computed(() => {
               'https://bilder.flis.no/iX0LJwQXkvW8OIs2iNwzogzA1t4=/1280x720/smart/media/front/kitchens.jpg',
             image1440x810Url:
               'https://bilder.flis.no/cCO0ZAcE1ORhEVzuBh1pY42bGVA=/1440x810/smart/media/front/kitchens.jpg',
+            image1920x1080Url:
+              'https://bilder.flis.no/TcLuC8iWP4vpg6851l_1jjSNYmw=/1920x1080/smart/media/front/kitchens.jpg',
           }"
         >
           <Button variant="outlined" to="/kitchens/"> Kjøkken </Button>

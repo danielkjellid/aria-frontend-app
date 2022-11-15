@@ -6,8 +6,8 @@ import {
   ProductVariantOutput,
   ProductCategoryOutput,
 } from '~~/@types'
-import image80x80 from '~~/assets/images/default_80x80.jpeg'
-import image380x575 from '~~/assets/images/default_380x575.jpeg'
+import image80x80Url from '~~/assets/images/default_80x80.jpeg'
+import image380x575Url from '~~/assets/images/default_380x575.jpeg'
 import { publicUrls } from '~~/endpoints'
 
 /***************
@@ -163,8 +163,8 @@ const variants = computed(
       {
         id: null,
         name: null,
-        imageUrl: image80x80,
-        thumbnailUrl: image380x575,
+        image80x80Url,
+        image380x575Url,
         colorHex: null,
       },
       mergedVariants.value
@@ -423,7 +423,7 @@ const metaTitle = computed(() => (productLoaded.value ? product.value.name : und
                       </span>
                       <img
                         aria-hidden="true"
-                        :src="variant.imageUrl"
+                        :src="variant.image80x80Url"
                         alt=""
                         class="sm:w-12 sm:h-12 lg:w-10 lg:h-10 xl:w-12 xl:h-12 object-cover w-10 h-10 border-2 border-gray-300 rounded-full"
                       />

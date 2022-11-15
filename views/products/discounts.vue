@@ -55,6 +55,8 @@ fetchDiscounts()
               'https://bilder.flis.no/Yy5lyE9fv3DtQDvfTXDXK8HdFPI=/1280x720/smart/media/front/discounts.jpg',
             image1440x810Url:
               'https://bilder.flis.no/hcUPCRjKRGM-O1Xsx0NmKc5MzV8=/1440x810/smart/media/front/discounts.jpg',
+            image1920x1080Url:
+              'https://bilder.flis.no/3SL3VeD1qfm13z_PCkpN4vr-D3w=/1920x1080/smart/media/front/discounts.jpg',
           }"
         />
       </section>

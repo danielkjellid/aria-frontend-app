@@ -6,6 +6,7 @@ import image960x540Url from '~~/assets/images/default_960x540.jpeg'
 import image1024x576Url from '~~/assets/images/default_1024x576.jpeg'
 import image1280x720Url from '~~/assets/images/default_1280x720.jpeg'
 import image1440x810Url from '~~/assets/images/default_1440x810.jpeg'
+import image1920x1080Url from '~~/assets/images/default_1920x1080.jpeg'
 
 /***********
  ** Props **
@@ -49,6 +50,7 @@ const imageObj = computed(
         image1024x576Url,
         image1280x720Url,
         image1440x810Url,
+        image1920x1080Url,
       },
       props.images
     ) as BaseHeaderImageRecord
@@ -69,7 +71,8 @@ const imageObj = computed(
                   ${imageObj.image960x540Url} 960w,
                   ${imageObj.image1024x576Url} 1024w,
                   ${imageObj.image1280x720Url} 1280w,
-                  ${imageObj.image1440x810Url} 1440w`"
+                  ${imageObj.image1440x810Url} 1440w,
+                  ${imageObj.image1920x1080Url} 1920w`"
         />
       </div>
       <!-- Filter overlay -->
@@ -140,13 +143,6 @@ const imageObj = computed(
 @media (min-width: 1280px) {
   .image-full-container {
     height: 720px;
-    width: 100%;
-  }
-}
-
-@media (min-width: 1440px) {
-  .image-full-container {
-    height: 810px;
     width: 100%;
   }
 }

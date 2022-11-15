@@ -71,6 +71,8 @@ const loading = computed(() => kitchens.value.length <= 0)
             'https://bilder.flis.no/iX0LJwQXkvW8OIs2iNwzogzA1t4=/1280x720/smart/media/front/kitchens.jpg',
           image1440x810Url:
             'https://bilder.flis.no/cCO0ZAcE1ORhEVzuBh1pY42bGVA=/1440x810/smart/media/front/kitchens.jpg',
+          image1920x1080Url:
+            'https://bilder.flis.no/TcLuC8iWP4vpg6851l_1jjSNYmw=/1920x1080/smart/media/front/kitchens.jpg',
         }"
       />
       <Container>
