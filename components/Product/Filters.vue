@@ -204,14 +204,14 @@ watch(
               class="rounded-md"
               @select="(e) => handleFilterSelect(e, filter.selectedData)"
             >
-              <template #default="{ selected }">
+              <template #default="{ isSelected }">
                 <div class="flex justify-between">
                   <span v-if="filter.key === 'supplier'">
                     {{ data.originCountryFlag }} {{ data.name }}
                   </span>
                   <span v-else>{{ data.name }}</span>
                   <span
-                    :class="selected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
+                    :class="isSelected ? 'bg-brand-800 text-white' : 'bg-brand-300 text-brand-800'"
                     class="shrink-0 flex items-center justify-center w-5 h-5 mr-6 text-xs rounded-full"
                   >
                     {{ data.count }}

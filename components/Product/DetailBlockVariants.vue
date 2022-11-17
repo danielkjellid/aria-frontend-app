@@ -1,6 +1,8 @@
 <script setup lang="ts">
 /* eslint-disable vuejs-accessibility/click-events-have-key-events */
 import { XMarkIcon } from '@heroicons/vue/24/outline'
+import image80x80Url from '~~/assets/images/default_80x80.jpeg'
+import image380x575Url from '~~/assets/images/default_380x575.jpeg'
 
 /*******************
  ** Generic types **
@@ -9,8 +11,8 @@ import { XMarkIcon } from '@heroicons/vue/24/outline'
 interface VariantType {
   id?: number
   name: string
-  imageUrl?: string
-  thumbnailUrl?: string
+  image80x80Url?: string
+  image380x575Url?: string
   colorHex?: string
 }
 
@@ -46,6 +48,23 @@ const closeModal = () => {
   modalActive.value = false
   document.body.classList.remove('overflow-hidden')
 }
+
+const renderImg = (variant: VariantType) => {
+  const imgObj = {
+    image80x80Url,
+    image380x575Url,
+  }
+
+  if (variant.image80x80Url) {
+    imgObj.image80x80Url = variant.image80x80Url
+  }
+
+  if (variant.image380x575Url) {
+    imgObj.image380x575Url = variant.image380x575Url
+  }
+
+  return imgObj
+}
 </script>
 
 <template>
@@ -80,21 +99,13 @@ const closeModal = () => {
             <div
               class="sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6 inline-flex items-start align-bottom transition-all transform"
             >
-              <div
-                v-if="selectedVariant && selectedVariant.colorHex"
-                :style="`background-color: ${selectedVariant.colorHex}; height: 505px; width: 380px;`"
-              />
-              <img
-                v-else-if="selectedVariant && selectedVariant.thumbnailUrl"
-                :src="selectedVariant.thumbnailUrl"
-                alt=""
-              />
-              <!-- Temporary fallback -->
-              <img
-                v-else-if="selectedVariant && selectedVariant.imageUrl"
-                :src="selectedVariant.imageUrl"
-                alt=""
-              />
+              <div v-if="selectedVariant">
+                <div
+                  v-if="selectedVariant.colorHex"
+                  :style="`background-color: ${selectedVariant.colorHex}; height: 505px; width: 380px;`"
+                />
+                <img v-else :src="renderImg(selectedVariant).image380x575Url" alt="" />
+              </div>
               <IconWrapper
                 as="button"
                 type="button"
@@ -122,10 +133,10 @@ const closeModal = () => {
                   class="w-20 h-20 mx-auto border-2 border-gray-200 rounded-full"
                 />
               </button>
-              <button v-else-if="variant.imageUrl" type="button" @click="activateModal(variant)">
+              <button v-else type="button" @click="activateModal(variant)">
                 <img
                   class="object-cover w-20 h-20 mx-auto border-2 border-gray-300 rounded-full"
-                  :src="variant.imageUrl"
+                  :src="renderImg(variant).image80x80Url"
                   alt=""
                 />
               </button>

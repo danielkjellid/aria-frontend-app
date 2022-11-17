@@ -53,7 +53,7 @@ const metaTitle = computed(() => (kitchenLoaded.value ? kitchen.value.name : und
       <Meta name="og:type" content="product" />
       <Meta
         name="og:image"
-        :content="kitchen && kitchen.images ? kitchen.images.image1536x860 : ''"
+        :content="kitchen && kitchen.images ? kitchen.images.image1280x720Url : ''"
       />
       <Meta
         name="og:description"
@@ -146,7 +146,7 @@ const metaTitle = computed(() => (kitchenLoaded.value ? kitchen.value.name : und
                         <div>
                           <img
                             class="rounded-tr-md rounded-tl-md sm:rounded-tr-none sm:rounded-l-md h-64"
-                            src="https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/kitchens/example/example_550x300.jpg"
+                            src="https://bilder.flis.no/fgox3TOCjIU-UEgunt6pvWxjAhU=/550x300/smart/media/front/kitchen-example.jpg"
                             alt="Image of example set up"
                           />
                         </div>

@@ -84,14 +84,7 @@ const dispatchResetPassword = async () => {
       <template #content>
         <form class="max-w-sm m-auto" @submit.prevent="dispatchResetPassword">
           <div class="mb-4">
-            <Input
-              id="id_email"
-              v-model="email"
-              label="E-post"
-              type="email"
-              autocomplete="email"
-              :model-value="email"
-            />
+            <Input id="id_email" v-model="email" label="E-post" type="email" autocomplete="email" />
           </div>
           <Button type="submit" fluid :loading-state="formSubmissionState">
             Nullstill passordet mitt

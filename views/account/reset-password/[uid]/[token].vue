@@ -112,7 +112,6 @@ const setNewPassword = async () => {
               label="Nytt passord"
               type="password"
               autocomplete="new-password"
-              :model-value="newPassword1"
               :error="$parseApiError('newPassword', error)"
               @input="clearError"
             />
@@ -124,7 +123,6 @@ const setNewPassword = async () => {
               label="Bekreft nytt passord"
               type="password"
               autocomplete="new-password"
-              :model-value="newPassword2"
               :error="$parseApiError('newPassword2', error)"
               @input="clearError"
             />

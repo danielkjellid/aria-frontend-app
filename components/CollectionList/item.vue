@@ -1,17 +1,7 @@
 <script setup lang="ts">
-import image500x305 from '~~/assets/images/default_500x305.jpeg'
-import image660x400 from '~~/assets/images/default_660x400.jpeg'
-import image850x520 from '~~/assets/images/default_850x520.jpeg'
-
-/*******************
- ** Generic types **
- *******************/
-
-interface ImageType {
-  image500x305: string
-  image660x400: string
-  image850x520: string
-}
+import { BaseCollectionListImageRecord } from '~~/@types'
+import image960x540Url from '~~/assets/images/default_960x540.jpeg'
+import image576x324Url from '~~/assets/images/default_576x324.jpeg'
 
 /***********
  ** Props **
@@ -38,7 +28,7 @@ interface CollectionListItemProps {
    * Images to display. Uses srcset to toggle between the sizes 850x520,
    * 660x400 and 500x305.
    */
-  images?: ImageType
+  images?: BaseCollectionListImageRecord
   /**
    * Path to link to.
    */
@@ -55,13 +45,17 @@ const props = defineProps<CollectionListItemProps>()
  ** State **
  ***********/
 
-const defaultImageObj: ImageType = {
-  image500x305,
-  image660x400,
-  image850x520,
-}
-
-const imageObj: ImageType = props.images ? props.images : defaultImageObj
+const imageObj = computed(
+  () =>
+    replaceWithDefaults(
+      {
+        imageUrl: null,
+        image576x324Url,
+        image960x540Url,
+      },
+      props.images
+    ) as BaseCollectionListImageRecord
+)
 </script>
 
 <template>
@@ -75,12 +69,11 @@ const imageObj: ImageType = props.images ? props.images : defaultImageObj
       <NuxtLink :to="to">
         <img
           v-if="!loading"
-          :src="imageObj.image850x520"
+          :src="imageObj.image960x540Url"
           alt=""
           class="lg:self-end absolute inset-0 object-cover w-full h-full"
-          :srcset="`${imageObj.image500x305} 500w,
-                    ${imageObj.image660x400} 660w,
-                    ${imageObj.image850x520} 850w`"
+          :srcset="`${imageObj.image576x324Url} 576w,
+                    ${imageObj.image960x540Url} 960w`"
         />
       </NuxtLink>
       <SkeletonLoader :loading="loading" class="image-container" />

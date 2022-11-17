@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { BaseHeaderImageRecord } from '~~/@types'
-import image512x512 from '~~/assets/images/default_512x512.jpeg'
-import image640x275 from '~~/assets/images/default_640x275.jpeg'
-import image1024x1024 from '~~/assets/images/default_1024x1024.jpeg'
-import image1024x575 from '~~/assets/images/default_1024x575.jpeg'
-import image1536x860 from '~~/assets/images/default_1536x860.jpeg'
-import image2048x1150 from '~~/assets/images/default_2048x1150.jpeg'
+import image640x360Url from '~~/assets/images/default_640x360.jpeg'
+import image768x432Url from '~~/assets/images/default_768x432.jpeg'
+import image960x540Url from '~~/assets/images/default_960x540.jpeg'
+import image1024x576Url from '~~/assets/images/default_1024x576.jpeg'
+import image1280x720Url from '~~/assets/images/default_1280x720.jpeg'
+import image1440x810Url from '~~/assets/images/default_1440x810.jpeg'
+import image1920x1080Url from '~~/assets/images/default_1920x1080.jpeg'
 
 /***********
  ** Props **
@@ -25,8 +26,7 @@ interface ImageProps {
    */
   loading?: boolean
   /**
-   * Images to display. Uses srcset to toggle between the sizes 2048x1150,
-   * 1536x860, 1024x575, 1024x1024, 640x275 and 512x512.
+   * Images to display. Uses srcset to toggle between the sizes of the BaseHeaderImageRecord.
    */
   images?: BaseHeaderImageRecord
 }
@@ -42,13 +42,15 @@ const imageObj = computed(
   () =>
     replaceWithDefaults(
       {
+        isMainImage: true,
         applyFilter: false,
-        image512x512,
-        image640x275,
-        image1024x1024,
-        image1024x575,
-        image1536x860,
-        image2048x1150,
+        image640x360Url,
+        image768x432Url,
+        image960x540Url,
+        image1024x576Url,
+        image1280x720Url,
+        image1440x810Url,
+        image1920x1080Url,
       },
       props.images
     ) as BaseHeaderImageRecord
@@ -62,14 +64,15 @@ const imageObj = computed(
       <div class="table-cell align-middle">
         <img
           class="absolute inset-0 object-cover w-full h-full"
-          :src="imageObj.image2048x1150"
+          :src="imageObj.image1440x810Url"
           alt=""
-          :srcset="`${imageObj.image512x512} 512w,
-                  ${imageObj.image640x275} 640w,
-                  ${imageObj.image1024x1024} 1024w,
-                  ${imageObj.image1024x575} 1024w,
-                  ${imageObj.image1536x860} 1536w,
-                  ${imageObj.image2048x1150} 2048w`"
+          :srcset="`${imageObj.image640x360Url} 640w,
+                  ${imageObj.image768x432Url} 768w,
+                  ${imageObj.image960x540Url} 960w,
+                  ${imageObj.image1024x576Url} 1024w,
+                  ${imageObj.image1280x720Url} 1280w,
+                  ${imageObj.image1440x810Url} 1440w,
+                  ${imageObj.image1920x1080Url} 1920w`"
         />
       </div>
       <!-- Filter overlay -->
@@ -112,41 +115,34 @@ const imageObj = computed(
 
 <style scoped>
 .image-full-container {
-  height: 375px;
+  height: 360px;
   width: 100%;
-}
-
-@media (min-width: 640px) {
-  .image-full-container {
-    height: 330px;
-    width: 100%;
-  }
 }
 
 @media (min-width: 768px) {
   .image-full-container {
-    height: 370px;
+    height: 432px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 960px) {
+  .image-full-container {
+    height: 540px;
     width: 100%;
   }
 }
 
 @media (min-width: 1024px) {
   .image-full-container {
-    height: 575px;
+    height: 576px;
     width: 100%;
   }
 }
 
-@media (min-width: 1536px) {
+@media (min-width: 1280px) {
   .image-full-container {
-    height: 860px;
-    width: 100%;
-  }
-}
-
-@media (min-width: 2048px) {
-  .image-full-container {
-    height: 1150px;
+    height: 720px;
     width: 100%;
   }
 }

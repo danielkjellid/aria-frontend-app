@@ -41,19 +41,22 @@ fetchDiscounts()
           title="Tilbudsvarer"
           :loading="false"
           :images="{
+            isMainImage: true,
             applyFilter: false,
-            image640x275:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/discounts/a6d08a7c16a8804a6f2734b0f9afee60.jpeg',
-            image1024x1024:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/discounts/57b6f1bfed9453523152940863a15f01.jpg',
-            image512x512:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/discounts/baabc9e4bcab2b304bf0d81b9748a5d7.jpg',
-            image1024x575:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/discounts/396c1e588ce59552518e9a6cc6e4f921.jpeg',
-            image1536x860:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/discounts/0ab26a267b53ec54b107c69e4177b53c.jpeg',
-            image2048x1150:
-              'https://flishuset.s3.eu-north-1.amazonaws.com/media/front/flishuset/discounts/49820ff0e9922d95a6a200bed28c84de.jpg',
+            image640x360Url:
+              'https://bilder.flis.no/cz-E-YmeGhnLgzFQJtdHTTLbMXY=/640x360/smart/media/front/discounts.jpg',
+            image768x432Url:
+              'https://bilder.flis.no/I5uFkLLp-iFq40_0iEOXS1ynLqY=/768x432/smart/media/front/discounts.jpg',
+            image960x540Url:
+              'https://bilder.flis.no/PY-HjeywUBhIRQkyUxdPTb1rAmo=/960x540/smart/media/front/discounts.jpg',
+            image1024x576Url:
+              'https://bilder.flis.no/ldeCjovZoGaBwwNz5iP_J-84a24=/1024x576/smart/media/front/discounts.jpg',
+            image1280x720Url:
+              'https://bilder.flis.no/Yy5lyE9fv3DtQDvfTXDXK8HdFPI=/1280x720/smart/media/front/discounts.jpg',
+            image1440x810Url:
+              'https://bilder.flis.no/hcUPCRjKRGM-O1Xsx0NmKc5MzV8=/1440x810/smart/media/front/discounts.jpg',
+            image1920x1080Url:
+              'https://bilder.flis.no/3SL3VeD1qfm13z_PCkpN4vr-D3w=/1920x1080/smart/media/front/discounts.jpg',
           }"
         />
       </section>

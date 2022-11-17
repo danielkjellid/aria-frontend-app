@@ -169,7 +169,6 @@ const createAccount = async () => {
                 label="Fornavn"
                 autocomplete="given-name"
                 :error="$parseApiError('firstName', error)"
-                :model-value="user.firstName"
                 @input="clearError"
               />
             </div>
@@ -179,7 +178,6 @@ const createAccount = async () => {
                 v-model="user.lastName"
                 label="Etternavn"
                 autocomplete="family-name"
-                :model-value="user.lastName"
                 :error="$parseApiError('lastName', error)"
                 @input="clearError"
               />
@@ -195,7 +193,6 @@ const createAccount = async () => {
                 v-model="birthDateDay"
                 label="Fødselsdag"
                 autocomplete="bday-day"
-                :model-value="birthDateDay"
                 :error="$parseApiError('birthDay', error)"
                 @input="clearError"
               >
@@ -251,7 +248,6 @@ const createAccount = async () => {
               type="tel"
               label="Mobilnummer"
               autocomplete="tel"
-              :model-value="user.phoneNumber"
               :error="$parseApiError('phoneNumber', error)"
               @input="clearError"
             />
@@ -264,7 +260,6 @@ const createAccount = async () => {
               type="email"
               autocomplete="email"
               label="E-post"
-              :model-value="user.email"
               :error="$parseApiError('email', error)"
               @input="clearError"
             />
@@ -277,7 +272,6 @@ const createAccount = async () => {
               type="password"
               label="Passord"
               autocomplete="new-password"
-              :model-value="user.password"
               :error="$parseApiError('password', error)"
               @input="clearError"
             />
@@ -290,7 +284,6 @@ const createAccount = async () => {
               type="password"
               label="Gjenta passord"
               autocomplete="new-password"
-              :model-value="user.password2"
               :error="$parseApiError('password2', error)"
               @input="clearError"
             />
@@ -302,7 +295,6 @@ const createAccount = async () => {
               v-model="user.streetAddress"
               label="Gateadresse"
               autocomplete="street-address"
-              :model-value="user.streetAddress"
               :error="$parseApiError('streetAddress', error)"
               @input="clearError"
             />
@@ -317,7 +309,6 @@ const createAccount = async () => {
                 v-model="user.zipCode"
                 label="Postkode"
                 autocomplete="postal-code"
-                :model-value="user.zipCode"
                 :error="$parseApiError('zipCode', error)"
                 @input="clearError"
               />
@@ -327,7 +318,6 @@ const createAccount = async () => {
                 id="id_zip_place"
                 v-model="user.zipPlace"
                 label="Poststed"
-                :model-value="user.zipPlace"
                 :error="$parseApiError('zipPlace', error)"
                 @input="clearError"
               />
