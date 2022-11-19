@@ -30,7 +30,7 @@ defineProps<ProductListProps>()
       :key="p.id"
       :name="p.name"
       :slug="p.slug"
-      :thumbnail="p.thumbnail"
+      :thumbnail="p.image380x575Url"
       :discount="p.discount"
       :display-price="p.displayPrice"
       :from-price="p.fromPrice"
