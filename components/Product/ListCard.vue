@@ -192,7 +192,7 @@ const canBePurchasedOnline = ref<boolean>(false)
               @focus="setImageThumbnail(variant.image380x575Url)"
             >
               <img
-                :src="variant.imageUrl ? variant.imageUrl : defaultPreviewImage"
+                :src="variant.image80x80Url ? variant.image80x80Url : defaultPreviewImage"
                 :alt="`Image of ${name} variant: ${variant.name}`"
                 class="object-cover"
               />
