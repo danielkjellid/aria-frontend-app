@@ -93,7 +93,7 @@ const imageObj = computed(
       </div>
       <div>
         <Text v-if="!loading" variant="body2" class="mt-2 mb-4" color="text-gray-700">
-          {{ description }}.
+          {{ description }}
         </Text>
         <div v-else class="mt-2 mb-4">
           <SkeletonLoader :loading="loading" />
