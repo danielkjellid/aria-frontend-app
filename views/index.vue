@@ -45,19 +45,19 @@ const loading = computed(() => {
             isMainImage: true,
             applyFilter: false,
             image640x360Url:
-              'https://bilder.flis.no/WI_uXX7NzcZFonXloRYd0-PyR_s=/640x360/smart/media/front/header.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/header/header_640x360.webp',
             image768x432Url:
-              'https://bilder.flis.no/NoPlURb7DRSgGxeYdj5jzOL9QSI=/768x432/smart/media/front/header.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/header/header_768x432.webp',
             image960x540Url:
-              'https://bilder.flis.no/tMvF8a-M4FgPZV_VSXv6pUJvRl8=/960x540/smart/media/front/header.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/header/header_960x540.webp',
             image1024x576Url:
-              'https://bilder.flis.no/idJrxG2x-anN6rLxTqtEuklR0O4=/1024x576/smart/media/front/header.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/header/header_1024x576.webp',
             image1280x720Url:
-              'https://bilder.flis.no/Zxz160XmvqOTPDKm9qE7vb58Kkg=/1280x720/smart/media/front/header.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/header/header_1280x720.webp',
             image1440x810Url:
-              'https://bilder.flis.no/C2bRgBcretT2WidW9VlMMW_i1Tw=/1440x810/smart/media/front/header.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/header/header_1440x810.webp',
             image1920x1080Url:
-              'https://bilder.flis.no/3MZRr9qDntAU3QgbB6V3TVx9vFw=/1920x1080/smart/media/front/header.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/header/header_1920x1080.webp',
           }"
         />
       </section>
@@ -107,19 +107,19 @@ const loading = computed(() => {
             isMainImage: true,
             applyFilter: false,
             image640x360Url:
-              'https://bilder.flis.no/xRQBS5wvYS_uw2n8Prr8paaGQhI=/640x360/smart/media/front/kitchens.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/kitchens/kitchens_640x360.webp',
             image768x432Url:
-              'https://bilder.flis.no/HZ-Nywe1ekBVARnrHa83msEB640=/768x432/smart/media/front/kitchens.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/kitchens/kitchens_768x432.webp',
             image960x540Url:
-              'https://bilder.flis.no/DbJIc60AdJjVWXjlriP6RtObqcE=/960x540/smart/media/front/kitchens.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/kitchens/kitchens_960x540.webp',
             image1024x576Url:
-              'https://bilder.flis.no/pzaYRyk0_Bo6M7-ZvMqBPvdx04I=/1024x576/smart/media/front/kitchens.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/kitchens/kitchens_1024x576.webp',
             image1280x720Url:
-              'https://bilder.flis.no/iX0LJwQXkvW8OIs2iNwzogzA1t4=/1280x720/smart/media/front/kitchens.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/kitchens/kitchens_1280x720.webp',
             image1440x810Url:
-              'https://bilder.flis.no/cCO0ZAcE1ORhEVzuBh1pY42bGVA=/1440x810/smart/media/front/kitchens.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/kitchens/kitchens_1440x810.webp',
             image1920x1080Url:
-              'https://bilder.flis.no/TcLuC8iWP4vpg6851l_1jjSNYmw=/1920x1080/smart/media/front/kitchens.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/kitchens/kitchens_1920x1080.webp',
           }"
         >
           <Button variant="outlined" to="/kitchens/"> Kjøkken </Button>

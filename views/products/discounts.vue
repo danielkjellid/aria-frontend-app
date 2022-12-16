@@ -44,19 +44,19 @@ fetchDiscounts()
             isMainImage: true,
             applyFilter: false,
             image640x360Url:
-              'https://bilder.flis.no/cz-E-YmeGhnLgzFQJtdHTTLbMXY=/640x360/smart/media/front/discounts.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/discounts/discounts_640x360.webp',
             image768x432Url:
-              'https://bilder.flis.no/I5uFkLLp-iFq40_0iEOXS1ynLqY=/768x432/smart/media/front/discounts.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/discounts/discounts_768x432.webp',
             image960x540Url:
-              'https://bilder.flis.no/PY-HjeywUBhIRQkyUxdPTb1rAmo=/960x540/smart/media/front/discounts.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/discounts/discounts_940x540.webp',
             image1024x576Url:
-              'https://bilder.flis.no/ldeCjovZoGaBwwNz5iP_J-84a24=/1024x576/smart/media/front/discounts.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/discounts/discounts_1024x576.webp',
             image1280x720Url:
-              'https://bilder.flis.no/Yy5lyE9fv3DtQDvfTXDXK8HdFPI=/1280x720/smart/media/front/discounts.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/discounts/discounts_1280x720.webpg',
             image1440x810Url:
-              'https://bilder.flis.no/hcUPCRjKRGM-O1Xsx0NmKc5MzV8=/1440x810/smart/media/front/discounts.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/discounts/discounts_1440x810.webp',
             image1920x1080Url:
-              'https://bilder.flis.no/3SL3VeD1qfm13z_PCkpN4vr-D3w=/1920x1080/smart/media/front/discounts.jpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/discounts/discounts_1920x1080.webp',
           }"
         />
       </section>

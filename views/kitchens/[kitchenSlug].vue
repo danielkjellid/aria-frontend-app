@@ -146,7 +146,7 @@ const metaTitle = computed(() => (kitchenLoaded.value ? kitchen.value.name : und
                         <div>
                           <img
                             class="rounded-tr-md rounded-tl-md sm:rounded-tr-none sm:rounded-l-md h-64"
-                            src="https://bilder.flis.no/fgox3TOCjIU-UEgunt6pvWxjAhU=/550x300/smart/media/front/kitchen-example.jpg"
+                            src="https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/kitchens/example/example_550x300.jpg"
                             alt="Image of example set up"
                           />
                         </div>
