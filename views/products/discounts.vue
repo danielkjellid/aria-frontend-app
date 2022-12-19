@@ -52,7 +52,7 @@ fetchDiscounts()
             image1024x576Url:
               'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/discounts/discounts_1024x576.webp',
             image1280x720Url:
-              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/discounts/discounts_1280x720.webpg',
+              'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/discounts/discounts_1280x720.webp',
             image1440x810Url:
               'https://fk-jke.s3.eu-north-1.amazonaws.com/media/front/discounts/discounts_1440x810.webp',
             image1920x1080Url:
