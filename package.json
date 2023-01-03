@@ -39,7 +39,7 @@
     "@pinia/nuxt": "^0.4.1",
     "@sentry/tracing": "^7.11.1",
     "@sentry/vue": "^7.11.1",
-    "@vuepic/vue-datepicker": "^3.4.6",
+    "@vuepic/vue-datepicker": "^3.6.4",
     "humps": "^2.0.1",
     "luxon": "^3.0.3",
     "mapbox-gl": "^2.10.0",
