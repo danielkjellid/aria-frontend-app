@@ -5,6 +5,7 @@ import useProductAttributesStore from '~~/store/product-attributes'
 import useSuppliersStore from '~~/store/suppliers'
 import useCategoriesStore from '~~/store/categories'
 import slugify from '~~/utils/slugify'
+import { BuilderBlock } from '../Builder.vue'
 
 interface FormProductDetailProps {
   active: boolean
@@ -17,28 +18,8 @@ const categoriesStore = useCategoriesStore()
 
 const props = defineProps<FormProductDetailProps>()
 
-const clonedProduct = { ...props.existingProduct }
+const product = ref()
 
-const reactiveProduct = reactive({
-  name: clonedProduct.name,
-  supplier: clonedProduct.supplier,
-  categories: clonedProduct.categories,
-  status: clonedProduct.status ? clonedProduct.status : '3',
-  slug: clonedProduct.slug,
-  searchKeywords: clonedProduct.searchKeywords,
-  description: clonedProduct.description,
-  unit: clonedProduct.unit,
-  vatRate: clonedProduct.unit ? clonedProduct.unit : '0.25',
-  availableInSpecialSizes: clonedProduct.availableInSpecialSizes,
-  colors: clonedProduct.colors,
-  shapes: clonedProduct.shapes,
-  materials: clonedProduct.materials,
-  rooms: clonedProduct.rooms,
-  absorption: clonedProduct.absorption,
-  displayPriceToCustomer: clonedProduct.displayPriceToCustomers,
-  canBePurchasedOnline: clonedProduct.canBePurchasedOnline,
-  canBePickedUp: clonedProduct.canBePickedUp,
-})
 const formSubmissionState = ref<ButtonProps['loadingState']>('initial')
 const error = ref<ApiError | null>(null)
 
@@ -64,11 +45,6 @@ const categories = await categoriesStore.getCategoriesInternal()
 
 const createdFiles = ref([])
 const createdOptions = ref([])
-const createdImages = ref([])
-
-const handleImageUpload = (files: File[]) => {
-  createdImages.value = [...files]
-}
 
 const colors = await attributesStore.getColorsInternal()
 const shapes = await attributesStore.getShapesInternal()
@@ -93,214 +69,278 @@ const rooms = [
   { name: 'Uterom', value: 'uterom' },
 ]
 
-// TODO: Fetch categories and suppliers through store
+const humanReadableSupplier = (supplierId: string) =>
+  suppliers.find((supplier) => supplier.id === parseInt(supplierId, 10)).name
 
-const slugifySupplierName = (supplierName: string, productName: string) => {
-  const slug = slugify(`${supplierName} ${productName}`)
-  reactiveProduct.slug = slug
+const handleSubmit = async () => {
+  await console.log(product)
 }
-const humanReadableSupplier = computed(() =>
-  reactiveProduct.supplier && suppliers.value
-    ? suppliers.value.find((obj) => obj.id === parseInt(reactiveProduct.supplier, 10)).name
-    : null
-)
+
+const productForm: BuilderBlock[] = [
+  {
+    name: 'Generelt',
+    blocks: [
+      {
+        type: 'text',
+        label: 'Navn',
+        initialValue: 'TEst',
+        remoteProperty: 'name',
+        required: true,
+        meta: { displayWordCount: true },
+      },
+      {
+        type: 'select',
+        label: 'Leverandør',
+        remoteProperty: 'supplier',
+        required: true,
+        options: suppliers,
+        meta: {
+          optionNameProperty: 'name',
+          optionValueProperty: 'id',
+          optionInitialValue: 'Velg leverandør...',
+        },
+      },
+      {
+        type: 'select',
+        label: 'Status',
+        initialValue: '3',
+        remoteProperty: 'status',
+        options: statuses,
+        meta: { optionNameProperty: 'name', optionValueProperty: 'value' },
+      },
+      {
+        type: 'editor',
+        label: 'Beskrivelse',
+        remoteProperty: 'description',
+        required: true,
+      },
+      {
+        type: 'action',
+        label: 'Slug',
+        remoteProperty: 'slug',
+        required: true,
+      },
+    ],
+  },
+  {
+    name: 'Kategorier',
+    blocks: [
+      {
+        type: 'multiselect',
+        label: 'Kategorier',
+        remoteProperty: 'categories',
+        required: true,
+        // initialValue: [20, 22],
+        options: categories,
+        meta: {
+          optionNameProperty: 'displayName',
+          optionValueProperty: 'id',
+          allowMultiple: true,
+          helpText: 'Velg alle kategoriene some egner seg til produktet.',
+        },
+      },
+    ],
+  },
+  {
+    name: 'Kommersielt',
+    blocks: [
+      {
+        type: 'checkbox',
+        label: 'Kan kjøpes på nett',
+        remoteProperty: 'canBePurchasedOnline',
+        meta: {
+          helpText: 'Kunder kan legge inn bestilling på produktet, og få prouktet sendt hjem.',
+        },
+      },
+      {
+        type: 'checkbox',
+        label: 'Kan hentes i butikk',
+        remoteProperty: 'canBePickedUp',
+        meta: {
+          helpText: 'Kunder kan legge inn klikk og hent ordre.',
+        },
+      },
+      {
+        type: 'checkbox',
+        label: 'Vis pris til kunde',
+        remoteProperty: 'displayPriceToCustomer',
+        meta: {
+          helpText: 'Prisen på produktet er tilgjengelig i nettbutikken.',
+        },
+      },
+      {
+        type: 'select',
+        label: 'Enhet',
+        remoteProperty: 'unit',
+        required: true,
+        initialValue: 'stk',
+        options: [
+          { name: 'Stk', value: 'stk' },
+          { name: 'm2', value: 'm2' },
+        ],
+        meta: {
+          optionNameProperty: 'name',
+          optionValueProperty: 'value',
+        },
+      },
+      {
+        type: 'text',
+        label: 'MVA Sats',
+        remoteProperty: 'vatRate',
+        required: true,
+        initialValue: '0.25',
+        meta: {
+          helpText: 'Prosentvis sats for MVA i desimalform. E.g. 0.25 for 25%.',
+        },
+      },
+      {
+        type: 'text',
+        label: 'Søkeord',
+        remoteProperty: 'searchKeywords',
+        meta: {
+          helpText:
+            'Separer ord med mellomrom. Navn, leverandør og materiale er allerede inkludert.',
+        },
+      },
+    ],
+  },
+  {
+    name: 'Atributter',
+    blocks: [
+      {
+        type: 'multiselect',
+        label: 'Farger',
+        remoteProperty: 'colors',
+        required: true,
+        options: colors,
+        meta: {
+          optionNameProperty: 'name',
+          optionValueProperty: 'id',
+          allowMultiple: true,
+          helpText: 'Velg alle fargene some egner seg til produktet.',
+        },
+      },
+      {
+        type: 'multiselect',
+        label: 'Fasonger',
+        remoteProperty: 'shapes',
+        required: true,
+        options: shapes,
+        meta: {
+          optionNameProperty: 'name',
+          optionValueProperty: 'id',
+          allowMultiple: true,
+          helpText: 'Velg alle fasongene some egner seg til produktet.',
+        },
+      },
+      {
+        type: 'multiselect',
+        label: 'Materialer',
+        remoteProperty: 'materials',
+        options: materials,
+        meta: {
+          optionNameProperty: 'name',
+          optionValueProperty: 'value',
+          allowMultiple: true,
+          helpText: 'Velg alle materialene some egner seg til produktet.',
+        },
+      },
+      {
+        type: 'multiselect',
+        label: 'Rom',
+        remoteProperty: 'rooms',
+        options: rooms,
+        meta: {
+          optionNameProperty: 'name',
+          optionValueProperty: 'value',
+          allowMultiple: true,
+          helpText: 'Velg alle rommene some egner seg til produktet.',
+        },
+      },
+      {
+        type: 'text',
+        label: 'Absorberingsevne',
+        remoteProperty: 'absorption',
+        meta: {
+          helpText:
+            'Gjelder kun fliser. Flisens absorberingsvene. Verdi i hele prosent - e.g. 0.5 for 0.5%.',
+        },
+      },
+      {
+        type: 'checkbox',
+        label: 'Tilgjengelig i spesialstørrelser',
+        remoteProperty: 'availableInSpecialSizes',
+        meta: { helpText: 'Prouktets størrelse kan tilpasses etter kundens behov.' },
+      },
+    ],
+  },
+]
+
+const productImageForm: BuilderBlock[] = [
+  {
+    name: 'Bilder',
+    blocks: [
+      {
+        type: 'image',
+        label: 'Bilder',
+        remoteProperty: 'images',
+        meta: { hiddenLabel: true, allowMultiple: true, allowSetPrimaryImage: true },
+      },
+    ],
+  },
+]
+
+const t = {
+  name: 'Testing 123',
+  supplier: '64',
+  status: '3',
+  description: '<p>A populated with modifications desc</p><br/><p>Yoo</p>',
+  slug: 'wooohooo',
+  categories: [21, 24],
+  canBePurchasedOnline: true,
+  canBePickedUp: false,
+  displayPriceToCustomer: true,
+  unit: 'm2',
+  vatRate: '0.25',
+  searchKeywords: null,
+  colors: [1],
+  shapes: [8],
+  materials: ['marmor'],
+  rooms: ['uterom'],
+  absorption: null,
+  availableInSpecialSizes: false,
+}
 </script>
 
 <template>
   <div>
     <ModalSlideOver title="Legg til nytt produkt" :active="active" @close="onClose">
-      <CollapsableSection title="Generelt">
-        <div class="space-y-5">
-          <Input
-            id="id_product_name"
-            v-model="reactiveProduct.name"
-            label="Navn"
-            required
-            display-word-count
-            :error="$parseApiError('name', error)"
-            @input="clearError"
-          />
-          <Select
-            id="id_supplier"
-            v-model="reactiveProduct.supplier"
-            label="Leverandør"
-            required
-            initial-option="Velg leverandør..."
-            :error="$parseApiError('supplier', error)"
-            @input="clearError"
-          >
-            <option v-for="supplier in suppliers" :key="supplier.id" :value="supplier.id">
-              {{ supplier.name }} {{ !supplier.isActive ? '(Inaktiv)' : '' }}
-            </option>
-          </Select>
-          <Select id="id_status" v-model="reactiveProduct.status" label="Status">
-            <option
-              v-for="(value, key) in statuses"
-              :key="key"
-              :value="value"
-              :selected="value.toString() === reactiveProduct.status"
-            >
-              {{ key }}
-            </option>
-          </Select>
-          <Editor
-            v-model="reactiveProduct.description"
-            label="Beskrivelse"
-            required
-            render-as-input
-            output="string"
-            display-word-count
-            :error="$parseApiError('description', error)"
-          />
-          <div class="flex space-x-3">
-            <div class="w-full">
-              <Input
-                id="id_slug"
-                v-model="reactiveProduct.slug"
-                label="Slug"
-                required
-                :error="$parseApiError('slug', error)"
-                @input="clearError"
-              />
-            </div>
+      {{ product }}
+      <form>
+        <FormBuilder
+          as="div"
+          :form="productForm"
+          :initial-values-from-obj="t"
+          @edit="(formData) => (product = formData)"
+        >
+          <template #slug="{ formObject }">
             <Button
+              type="button"
               variant="secondary"
               align-self="bottom"
-              :disabled="!reactiveProduct.name || !reactiveProduct.supplier"
-              @click="slugifySupplierName(humanReadableSupplier, reactiveProduct.name)"
+              :disabled="!formObject['name'] || !formObject['supplier']"
+              @click="
+                formObject['slug'] = slugify(`
+                  ${humanReadableSupplier(formObject['supplier'])}
+                  ${formObject['name']}`)
+              "
             >
               Generer
             </Button>
-          </div>
-        </div>
-      </CollapsableSection>
-      <CollapsableSection title="Kategorier">
-        <MultiSelect
-          id="id_categories"
-          label="Kategorier"
-          help-text="Velg alle kategoriene some egner seg til produktet."
-          display-field="displayName"
-          value-field="id"
-          :options="categories"
-          required
-          multiple
-        />
-      </CollapsableSection>
-      <CollapsableSection title="Kommersielt">
-        <div class="space-y-5">
-          <Checkbox
-            id="id_can_be_purchased_online"
-            v-model="reactiveProduct.canBePurchasedOnline"
-            label="Kan kjøpes på nett"
-            help-text="Kunder kan legge inn bestilling på produktet, og få prouktet sendt hjem."
-          />
-          <Checkbox
-            id="id_can_be_picked_up"
-            v-model="reactiveProduct.canBePickedUp"
-            label="Kan hentes i butikk"
-            help-text="Kunder kan legge inn klikk og hent ordre."
-          />
-          <Checkbox
-            id="id_display_price_to_customer"
-            v-model="reactiveProduct.displayPriceToCustomer"
-            label="Vis pris til kunde"
-            help-text="Prisen på produktet er tilgjengelig i nettbutikken."
-          />
-          <Select
-            id="id_unit"
-            v-model="reactiveProduct.unit"
-            label="Enhet"
-            required
-            :error="$parseApiError('supplier', error)"
-            @input="clearError"
-          >
-            <option>Stk</option>
-            <option>m2</option>
-          </Select>
-          <Input
-            id="id_vat_rate"
-            v-model="reactiveProduct.vatRate"
-            label="MVA sats"
-            required
-            help-text="Prosentvis sats for MVA i desimalform. E.g. 0.25 for 25%."
-            :error="$parseApiError('vatRate', error)"
-            @input="clearError"
-          />
-          <Input
-            id="id_search_keywords"
-            v-model="reactiveProduct.searchKeywords"
-            label="Søkeord"
-            help-text="Separer ord med mellomrom. Navn, leverandør og materiale er allerede inkludert."
-            :error="$parseApiError('searchKeywords', error)"
-            @input="clearError"
-          />
-        </div>
-      </CollapsableSection>
-      <CollapsableSection title="Atributter">
-        <div class="space-y-5">
-          <MultiSelect
-            id="id_colors"
-            label="Farger"
-            help-text="Velg alle fargene some egner seg til produktet."
-            display-field="name"
-            value-field="id"
-            :options="colors"
-            required
-            multiple
-          />
-          <MultiSelect
-            id="id_shapes"
-            label="Fasonger"
-            help-text="Velg alle fasongene some egner seg til produktet."
-            display-field="name"
-            value-field="id"
-            :options="shapes"
-            required
-            multiple
-          />
-          <MultiSelect
-            id="id_materials"
-            label="Materialer"
-            help-text="Velg alle materialene some egner seg til produktet."
-            display-field="name"
-            value-field="value"
-            :options="materials"
-            multiple
-          />
-          <MultiSelect
-            id="id_rooms"
-            label="Rom"
-            help-text="Velg alle rommene some egner seg til produktet."
-            display-field="name"
-            value-field="value"
-            :options="rooms"
-            multiple
-          />
-          <Input
-            id="id_absorption"
-            v-model="reactiveProduct.absorption"
-            label="Absorberingsevne"
-            help-text="Gjelder kun fliser. Flisens absorberingsvene. Verdi i hele prosent - e.g. 0.5 for 0.5%"
-            :error="$parseApiError('absorption', error)"
-            @input="clearError"
-          />
-          <Checkbox
-            id="id_available_in_special_sizes"
-            v-model="reactiveProduct.availableInSpecialSizes"
-            label="Tilgjengelig i spesialstørrelser"
-            help-text="Prouktets størrelse kan tilpasses etter kundens behov."
-          />
-        </div>
-      </CollapsableSection>
-      <CollapsableSection title="Bilder">
-        <FileUploadInput
-          type="image"
-          multiple
-          allow-set-primary
-          :files="createdImages"
-          @upload="(images) => handleImageUpload(images)"
-        />
-      </CollapsableSection>
+          </template>
+        </FormBuilder>
+        <FormBuilder as="div" :form="productImageForm" />
+      </form>
       <CollapsableSection title="Filer">
         <FormProductFileBlock @update="(files) => (createdFiles = files)" />
       </CollapsableSection>
@@ -310,7 +350,9 @@ const humanReadableSupplier = computed(() =>
       <template #actions>
         <div class="grid grid-cols-5 gap-5">
           <Button variant="secondary" class="col-span-1">Avbryt</Button>
-          <Button variant="primary" class="col-span-4">Legg til produkt</Button>
+          <Button variant="primary" class="col-span-4" @click="handleSubmit">
+            Legg til produkt
+          </Button>
         </div>
       </template>
     </ModalSlideOver>

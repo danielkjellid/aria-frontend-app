@@ -22,7 +22,7 @@ interface FileUploadInputProps {
    * Field error as string.
    */
   error?: string
-  files: File[]
+  files?: File[]
 }
 
 const props = defineProps<FileUploadInputProps>()

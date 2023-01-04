@@ -56,14 +56,14 @@ const internalEndpoints = {
     list: () => '/v1/internal/products/',
 
     colors: {
-      list: () => '/v1/internal/products/colors/',
+      list: () => '/v1/internal/product-attributes/colors/',
     },
     shapes: {
-      list: () => '/v1/internal/products/shapes/',
+      list: () => '/v1/internal/product-attributes/shapes/',
     },
     variants: {
-      list: () => '/v1/internal/products/variants/',
-      create: () => '/v1/internal/products/variants/create/',
+      list: () => '/v1/internal/product-attributes/variants/',
+      create: () => '/v1/internal/product-attributes/variants/create/',
     },
   },
 

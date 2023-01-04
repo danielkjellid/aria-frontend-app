@@ -21,7 +21,7 @@ interface MultiSelectProps {
   /**
    * The value of the input itself, usually set by v-model.
    */
-  modelValue?: string
+  modelValue?: any
   /**
    * Field error as string.
    */
@@ -120,7 +120,7 @@ const filteredMappedOptions = computed(() =>
  ** State: selection **
  **********************/
 
-const selected = ref([])
+const selected = ref([props.modelValue])
 
 // Map back selected value to the original options array sent through props.
 const mappedSelected = computed(() =>
@@ -149,7 +149,10 @@ const handleSelect = (val: any) => {
 watch(
   () => mappedSelected,
   (newValue, _oldValue) => {
-    emits('select', newValue.value)
+    emits(
+      'select',
+      newValue.value.map((val) => val[props.valueField])
+    )
   },
   { deep: true }
 )

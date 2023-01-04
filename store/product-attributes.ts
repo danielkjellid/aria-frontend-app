@@ -1,7 +1,6 @@
 import {
   ColorListInternalOutput,
   ShapeListInternalOutput,
-  SizeListInternalOutput,
   VariantListInternalOutput,
 } from '~~/@types'
 
@@ -11,7 +10,6 @@ import { internalUrls } from '~~/endpoints'
 const useProductAttributesStore = defineStore('productAttributes', {
   state: () => ({
     variants: [] as VariantListInternalOutput[],
-    sizes: [] as SizeListInternalOutput[],
     colors: [] as ColorListInternalOutput[],
     shapes: [] as ShapeListInternalOutput[],
   }),

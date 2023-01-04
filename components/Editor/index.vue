@@ -2,12 +2,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { OutputBlockData, OutputData } from '@editorjs/editorjs'
 import edjsHTML from 'editorjs-html'
+import { Editor } from '~~/.nuxt/components'
 
 /***********
  ** Props **
  ***********/
 
-interface EditorProps {
+export interface EditorProps {
+  /**
+   * Sets the label itself.
+   */
+  id: string
   /**
    * Sets the label itself.
    */
@@ -48,13 +53,7 @@ interface EditorProps {
   /**
    * The value of the editor itself, usually set by v-model.
    */
-  modelValue?: OutputData
-  /**
-   * Output of v-model value. Blocks is OutputBlockData[], array is an array containing
-   * the different html elements, e.g. ['<p>Text</p>', <p>More text</p>], and string is
-   * the array concatenated, e.g. '<p>Text</p><br /><p>More text</p>'.
-   */
-  output?: 'blocks' | 'array' | 'string'
+  modelValue?: string
 }
 
 const props = defineProps<EditorProps>()
@@ -65,7 +64,6 @@ const props = defineProps<EditorProps>()
 
 const readonly = computed(() => (props.readonly ? props.readonly : false))
 const renderAsInput = computed(() => (props.renderAsInput ? props.renderAsInput : false))
-const output = computed(() => (props.output ? props.output : 'blocks'))
 
 /***********
  ** Emits **
@@ -92,7 +90,6 @@ const parseOutputToHTMLArray = (data: OutputData) => {
 const parseOutputToHTMLString = (data: OutputData) => {
   const parsedData = edjsParser.parse(data)
   const parsedDataWithBreak = [].concat(...parsedData.map((d) => [d, '<br />'])).slice(0, -1)
-
   return parsedDataWithBreak.join('')
 }
 
@@ -120,18 +117,18 @@ onMounted(async () => {
           inlineToolbar: true,
         },
       },
-      onChange: (api, _event) => {
-        api.saver.save().then(async (data: OutputData) => {
-          if (output.value === 'blocks') {
-            await emits('update:modelValue', data.blocks)
-          } else if (output.value === 'array') {
-            await emits('update:modelValue', parseOutputToHTMLArray(data))
-          } else if (output.value === 'string') {
-            await emits('update:modelValue', parseOutputToHTMLString(data))
-          }
-        })
+      onReady: async () => {
+        await editor.blocks.renderFromHTML(props.modelValue)
       },
-      data: props.modelValue,
+      onChange: async (api, _event) => {
+        if (editor.isReady) {
+          await console.log('now changed', _event)
+          api.saver.save().then(async (data: OutputData) => {
+            await emits('update:modelValue', parseOutputToHTMLString(data))
+          })
+        }
+      },
+      data: undefined,
     })
   }
 })
@@ -140,7 +137,7 @@ onMounted(async () => {
   <ClientOnly>
     <FormElementBase
       v-if="renderAsInput"
-      id="editor"
+      :id="id"
       :label="label"
       :hidden-label="hiddenLabel"
       :error="error"
