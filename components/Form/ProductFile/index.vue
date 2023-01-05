@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ProductFile } from './types'
 import useNotificationsStore from '~~/store/notifications'
+import form from './form'
 
 interface FormProductFileProps {
   active: boolean
@@ -15,14 +16,8 @@ defineProps<FormProductFileProps>()
 
 const notificationsStore = useNotificationsStore()
 
-const reactiveProductFile = reactive({
-  name: null,
-  file: null,
-})
-
-const productFileFiles = computed(() =>
-  reactiveProductFile.file ? [reactiveProductFile.file] : []
-)
+const productFileDefaultValues = { name: null, file: null }
+const productFile = ref({ ...productFileDefaultValues })
 
 interface FormProductFileEmits {
   (e: 'close'): void
@@ -35,57 +30,61 @@ const onClose = () => {
   emits('close')
 }
 
-const handleFileUpload = (files: File[]) => {
-  const [file] = files
-  reactiveProductFile.file = file
-}
-
 const handleSubmitAndClose = () => {
-  emits('submit', reactiveProductFile)
+  emits('submit', productFile.value)
   notificationsStore.create({
     type: 'success',
     title: 'Filen ble lagt til!',
     text: 'Filen ble lagt til, og blir lagret samtidig som produktet.',
   })
+  productFile.value = { ...productFileDefaultValues }
   onClose()
 }
 
 const handleSubmitAndAddNew = () => {
-  emits('submit', reactiveProductFile)
+  emits('submit', productFile.value)
   notificationsStore.create({
     type: 'success',
     title: 'Filen ble lagt til!',
     text: 'Filen ble lagt til, og blir lagret samtidig som produktet.',
   })
-  reactiveProductFile.name = null
-  reactiveProductFile.file = null
+  productFile.value = { ...productFileDefaultValues }
 }
 </script>
 
 <template>
-  <form enctype="multipart/form-data" @submit.prevent>
-    <ModalSlideOver title="Legg til ny fil" :active="active" :is-nested="isNested" @close="onClose">
-      <CollapsableSection title="Generelt">
-        <Input id="id_name" v-model="reactiveProductFile.name" label="Navn" required />
-      </CollapsableSection>
-      <CollapsableSection title="Fil">
-        <FileUploadInput
-          type="file"
-          :files="productFileFiles"
-          @upload="(files) => handleFileUpload(files)"
-        />
-      </CollapsableSection>
-      <template #actions>
-        <div class="grid grid-cols-5 gap-5">
-          <Button variant="secondary" class="col-span-1">Avbryt</Button>
-          <Button variant="primary" class="col-span-2" type="submit" @click="handleSubmitAndClose">
-            Lagre og gå tilbake
-          </Button>
-          <Button variant="primary" class="col-span-2" type="submit" @click="handleSubmitAndAddNew">
-            Lagre og legg til ny
-          </Button>
-        </div>
-      </template>
-    </ModalSlideOver>
-  </form>
+  <div>
+    <form enctype="multipart/form-data" @submit.prevent>
+      <ModalSlideOver
+        title="Legg til ny fil"
+        :active="active"
+        :is-nested="isNested"
+        @close="onClose"
+      >
+        {{ productFile }}
+        <FormBuilder :form="form" @edit="(formData) => (productFile = formData)" />
+        <template #actions>
+          <div class="grid grid-cols-5 gap-5">
+            <Button variant="secondary" class="col-span-1">Avbryt</Button>
+            <Button
+              variant="primary"
+              class="col-span-2"
+              type="submit"
+              @click="handleSubmitAndClose"
+            >
+              Lagre og gå tilbake
+            </Button>
+            <Button
+              variant="primary"
+              class="col-span-2"
+              type="submit"
+              @click="handleSubmitAndAddNew"
+            >
+              Lagre og legg til ny
+            </Button>
+          </div>
+        </template>
+      </ModalSlideOver>
+    </form>
+  </div>
 </template>

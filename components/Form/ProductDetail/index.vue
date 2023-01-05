@@ -16,7 +16,7 @@ const attributesStore = useProductAttributesStore()
 const suppliersStore = useSuppliersStore()
 const categoriesStore = useCategoriesStore()
 
-const props = defineProps<FormProductDetailProps>()
+defineProps<FormProductDetailProps>()
 
 const product = ref()
 
@@ -81,7 +81,7 @@ const productForm: BuilderBlock[] = [
     name: 'Generelt',
     blocks: [
       {
-        type: 'text',
+        type: 'textInput',
         label: 'Navn',
         initialValue: 'TEst',
         remoteProperty: 'name',
@@ -184,7 +184,7 @@ const productForm: BuilderBlock[] = [
         },
       },
       {
-        type: 'text',
+        type: 'textInput',
         label: 'MVA Sats',
         remoteProperty: 'vatRate',
         required: true,
@@ -194,7 +194,7 @@ const productForm: BuilderBlock[] = [
         },
       },
       {
-        type: 'text',
+        type: 'textInput',
         label: 'Søkeord',
         remoteProperty: 'searchKeywords',
         meta: {
@@ -258,7 +258,7 @@ const productForm: BuilderBlock[] = [
         },
       },
       {
-        type: 'text',
+        type: 'textInput',
         label: 'Absorberingsevne',
         remoteProperty: 'absorption',
         meta: {
@@ -315,12 +315,12 @@ const t = {
 <template>
   <div>
     <ModalSlideOver title="Legg til nytt produkt" :active="active" @close="onClose">
-      {{ product }}
       <form>
         <FormBuilder
-          as="div"
           :form="productForm"
           :initial-values-from-obj="t"
+          :error="error"
+          @clear-error="clearError"
           @edit="(formData) => (product = formData)"
         >
           <template #slug="{ formObject }">

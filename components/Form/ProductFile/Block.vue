@@ -14,6 +14,10 @@ const addNewFileData = (fileData: ProductFile) => {
   filesData.value.push(fileData)
 }
 
+const deleteFile = (fileData: ProductFile) => {
+  filesData.value = [...filesData.value.filter((fd) => fd !== fileData)]
+}
+
 watch(
   () => filesData.value,
   (newValue, _oldValue) => {
@@ -31,7 +35,7 @@ watch(
           :key="fd.name"
           :name="fd.name"
           :file="fd.file"
-          @delete="null"
+          @delete="deleteFile(fd)"
         />
       </FileUploadUploadedBlock>
       <div>

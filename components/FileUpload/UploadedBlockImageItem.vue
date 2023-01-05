@@ -48,7 +48,7 @@ const deleteFile = (file: File) => {
           >
             <HeartIcon class="w-4 h-4 text-white" />
           </div>
-          <img :src="createPreviewSrc(file)" alt="" class="h-14 w-20 rounded-md" />
+          <img :src="createPreviewSrc(file)" alt="" class="h-14 object-cover w-20 rounded-md" />
         </div>
         <div class="flex flex-col space-y-2">
           <Text variant="body2" class="font-medium">{{ name ? name : file.name }}</Text>

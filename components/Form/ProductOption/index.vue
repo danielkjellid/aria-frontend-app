@@ -2,13 +2,16 @@
 import useProductAttributesStore from '~~/store/product-attributes'
 import useNotificationsStore from '~~/store/notifications'
 import { ProductOption } from './types'
+import { FormBlock } from '../types'
+import { ProductStatusEnum } from '~~/@types'
+import { ComputedRef } from 'vue'
 
 const attributesStore = useProductAttributesStore()
 const notificationsStore = useNotificationsStore()
 
 interface FormProductOptionProps {
   active: boolean
-  existingOption?: ProductOption
+  existingProductOption?: ProductOption
   /**
    * Render the black overlay transparent. Useful if you have multiple overlapping
    * slide overs.
@@ -16,29 +19,33 @@ interface FormProductOptionProps {
   isNested?: boolean
 }
 
-const props = defineProps<FormProductOptionProps>()
+defineProps<FormProductOptionProps>()
 
 const variants = await attributesStore.getVariantsInternal()
 const variantFormActive = ref<boolean>(false)
 
 const statuses = useProductStatus()
 
-const reactiveOption = reactive({
+const productOptionDefaultValues = {
+  price: null,
+  variantId: null,
   status: '3',
-  price: 0,
   size: {
     height: null,
     width: null,
     depth: null,
     circumference: null,
   },
-  variantId: null,
-})
+}
+const productOption = ref({ ...productOptionDefaultValues })
 
 const disableCircumference = computed(
-  () => !!reactiveOption.size.height || !!reactiveOption.size.width || !!reactiveOption.size.depth
+  () =>
+    !!productOption.value.size.height ||
+    !!productOption.value.size.width ||
+    !!productOption.value.size.depth
 )
-const disableHeightWidthDepth = computed(() => !!reactiveOption.size.circumference)
+const disableHeightWidthDepth = computed(() => !!productOption.value.size.circumference)
 
 interface FormProductOptionEmits {
   (e: 'close'): void
@@ -50,20 +57,15 @@ const onClose = () => {
 }
 
 const resetForm = () => {
-  reactiveOption.status = '3'
-  reactiveOption.price = 0
-  reactiveOption.variantId = null
-
-  reactiveOption.size.height = null
-  reactiveOption.size.width = null
-  reactiveOption.size.depth = null
-  reactiveOption.size.circumference = null
+  productOption.value = { ...productOptionDefaultValues }
 }
 
 const emits = defineEmits<FormProductOptionEmits>()
 
+const selectedVariantId = computed(() => productOption.value.variantId)
+
 const handleSubmit = () => {
-  emits('submit', { ...reactiveOption, size: { ...reactiveOption.size } })
+  emits('submit', { ...productOption.value, size: { ...productOption.value.size } })
   notificationsStore.create({
     type: 'success',
     title: 'Alternativ lagt til!',
@@ -74,6 +76,7 @@ const handleSubmit = () => {
 const handleSubmitAndClose = () => {
   handleSubmit()
   emits('close')
+  resetForm()
 }
 
 const handleSubmitAndAddNew = () => {
@@ -81,25 +84,87 @@ const handleSubmitAndAddNew = () => {
   resetForm()
 }
 
-watch(
-  () => props.active,
-  (newValue, _oldValue) => {
-    if (newValue === true) {
-      if (props.existingOption) {
-        reactiveOption.status = props.existingOption.status
-        reactiveOption.price = props.existingOption.price
-        reactiveOption.variantId = props.existingOption.variantId
+const productOptionGeneralForm: ComputedRef<FormBlock[]> = computed(() => [
+  {
+    name: 'Generelt',
+    blocks: [
+      {
+        type: 'select',
+        label: 'Status',
+        remoteProperty: 'status',
+        options: statuses,
+        initialValue: ProductStatusEnum.Available.toString(),
+        meta: { optionNameProperty: 'name', optionValueProperty: 'value' },
+      },
+      {
+        type: 'numberInput',
+        label: 'Pris',
+        remoteProperty: 'price',
+        meta: { helpText: 'Prisen for dette alternativet.' },
+      },
+    ],
+  },
+])
 
-        reactiveOption.size.height = props.existingOption.size.height
-        reactiveOption.size.width = props.existingOption.size.width
-        reactiveOption.size.depth = props.existingOption.size.depth
-        reactiveOption.size.circumference = props.existingOption.size.circumference
-      } else {
-        resetForm()
-      }
-    }
-  }
-)
+const productOptionSizeForm: ComputedRef<FormBlock[]> = computed(() => [
+  {
+    name: 'Størrelse',
+    columns: 3,
+    remoteProperty: 'size',
+    blocks: [
+      {
+        type: 'numberInput',
+        label: 'Bredde i cm',
+        remoteProperty: 'width',
+        meta: { disabled: disableHeightWidthDepth.value },
+      },
+      {
+        type: 'numberInput',
+        label: 'Høyde i cm',
+        remoteProperty: 'height',
+        meta: { disabled: disableHeightWidthDepth.value },
+      },
+      {
+        type: 'numberInput',
+        label: 'Dybde i cm',
+        remoteProperty: 'depth',
+        meta: { disabled: disableHeightWidthDepth.value },
+      },
+      {
+        type: 'numberInput',
+        label: 'Omkrets i cm',
+        remoteProperty: 'circumference',
+        meta: {
+          colSpan: 3,
+          disabled: disableCircumference.value,
+          helpText:
+            'Omkrets kan brukes dersom alternativet har en sfærisk form fremfor en kvadratisk en. Feltet kan ikke benyttes når de andre størrelsesfeltene er fylt ut.',
+        },
+      },
+    ],
+  },
+])
+
+const productOptionVariantForm: ComputedRef<FormBlock[]> = computed(() => [
+  {
+    name: 'Variant',
+    blocks: [
+      {
+        type: 'listBoxFilterNumber',
+        label: 'Variant',
+        remoteProperty: 'variantId',
+        initialValue: selectedVariantId.value,
+        options: variants,
+        meta: { optionNameProperty: 'name', optionValueProperty: 'id' },
+      },
+    ],
+  },
+])
+
+const closeVariantFormAndPrepopulateId = (variantId: number | undefined) => {
+  variantFormActive.value = false
+  productOption.value.variantId = variantId
+}
 </script>
 
 <template>
@@ -111,73 +176,22 @@ watch(
         :is-nested="isNested"
         @close="onClose"
       >
-        <CollapsableSection title="Generelt">
-          <div class="space-y-5">
-            <Select id="id_status" v-model="reactiveOption.status" label="Status">
-              <option
-                v-for="(value, key) in statuses"
-                :key="key"
-                :value="value"
-                :selected="value.toString() === reactiveOption.status"
-              >
-                {{ key }}
-              </option>
-            </Select>
-            <Input
-              id="id_gross_price"
-              v-model.number="reactiveOption.price"
-              label="Pris"
-              type="number"
-              help-text="Prisen for dette alternativet."
-            />
-          </div>
-        </CollapsableSection>
-        <CollapsableSection title="Størrelse">
-          <div class="space-y-5">
-            <div class="grid grid-cols-3 gap-5">
-              <Input
-                id="id_size_width"
-                v-model="reactiveOption.size.width"
-                label="Bredde i cm"
-                type="number"
-                :disabled="disableHeightWidthDepth"
-              />
-              <Input
-                id="id_size_height"
-                v-model="reactiveOption.size.height"
-                label="Høyde i cm"
-                type="number"
-                :disabled="disableHeightWidthDepth"
-              />
-              <Input
-                id="id_size_height"
-                v-model="reactiveOption.size.depth"
-                label="Dybde i cm"
-                type="number"
-                :disabled="disableHeightWidthDepth"
-              />
-            </div>
-            <Input
-              id="id_size_height"
-              v-model="reactiveOption.size.circumference"
-              label="Omkrets i cm"
-              type="number"
-              help-text="Omkrets kan brukes dersom alternativet har en sfærisk form fremfor en kvadratisk en. Feltet kan ikke benyttes når de andre størrelsesfeltene er fylt ut."
-              :disabled="disableCircumference"
-            />
-          </div>
-        </CollapsableSection>
-        <CollapsableSection title="Variant">
-          <div class="space-y-5">
-            <ListBoxFilter
-              id="id_variant"
-              v-model.number="reactiveOption.variantId"
-              label="Variant"
-              value-field="id"
-              display-field="name"
-              :options="variants"
-            />
-            <div v-if="!reactiveOption.variantId">
+        {{ productOption }}
+        <FormBuilder
+          :form="productOptionGeneralForm"
+          :initial-values-from-obj="existingProductOption"
+          @edit="(formData) => (productOption = formData)"
+        />
+        <FormBuilder
+          :form="productOptionSizeForm"
+          @edit="(formData) => (productOption['size'] = formData)"
+        />
+        <FormBuilder
+          :form="productOptionVariantForm"
+          @edit="(formData) => (productOption.variantId = formData.variantId)"
+        >
+          <template #variantId>
+            <div v-if="!productOption.variantId">
               <Button variant="secondary" fluid @click="variantFormActive = true">
                 Legg til ny variant
               </Button>
@@ -186,8 +200,8 @@ watch(
                 ny en.
               </p>
             </div>
-          </div>
-        </CollapsableSection>
+          </template>
+        </FormBuilder>
         <template #actions>
           <div class="md:grid-cols-5 grid grid-cols-2 gap-5">
             <Button
@@ -218,6 +232,10 @@ watch(
       </ModalSlideOver>
     </form>
 
-    <FormVariant :active="variantFormActive" is-nested @close="variantFormActive = false" />
+    <FormVariantDetail
+      :active="variantFormActive"
+      is-nested
+      @close="closeVariantFormAndPrepopulateId"
+    />
   </div>
 </template>

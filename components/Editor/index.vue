@@ -122,8 +122,7 @@ onMounted(async () => {
       },
       onChange: async (api, _event) => {
         if (editor.isReady) {
-          await console.log('now changed', _event)
-          api.saver.save().then(async (data: OutputData) => {
+          await api.saver.save().then(async (data: OutputData) => {
             await emits('update:modelValue', parseOutputToHTMLString(data))
           })
         }

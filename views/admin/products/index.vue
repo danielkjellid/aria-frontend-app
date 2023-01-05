@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PagedProductInternalListOutput } from '~~/@types/'
+import { PagedProductListInternalOutput } from '~~/@types/'
 import { internalUrls } from '~~/endpoints'
 
 import useProductAttributesStore from '~~/store/product-attributes'
@@ -24,12 +24,12 @@ definePageMeta({
   layout: false,
 })
 
-const data = ref<PagedProductInternalListOutput>(null)
+const data = ref<PagedProductListInternalOutput>(null)
 const dataLoaded = computed(() => !!data.value)
 const productData = computed(() => (data.value && data.value.data ? data.value.data : []))
 
 const fetchProducts = async (url: string, noBase = false) => {
-  data.value = await performGet<PagedProductInternalListOutput>(url, {}, noBase)
+  data.value = await performGet<PagedProductListInternalOutput>(url, {}, noBase)
 }
 
 fetchProducts(internalUrls.products.list(), false)

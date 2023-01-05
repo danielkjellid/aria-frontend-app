@@ -2,49 +2,17 @@
 /* eslint-disable vue/no-v-for-template-key */
 
 import { ApiError } from '~~/@types'
-
-export interface BlockMeta {
-  optionNameProperty?: string
-  optionValueProperty?: string
-  optionInitialValue?: string
-  allowMultiple?: boolean
-  allowSetPrimaryImage?: boolean
-  displayWordCount?: boolean
-  hiddenLabel?: boolean
-  disabled?: boolean
-  helpText?: string
-  placeholder?: string
-}
-
-export interface Block {
-  type: 'text' | 'number' | 'checkbox' | 'select' | 'multiselect' | 'editor' | 'action' | 'image' | 'file'
-  label: string
-  remoteProperty: string // Remote property must match whatever the api endpoint expects the value to be named.
-  required?: boolean
-  initialValue?: any | any[]
-  
-  options?: any[]
-  
-  meta?: BlockMeta
-}
-
-export interface BuilderBlock {
-  name: string
-  blocks: Block[]
-}
+import { FormBlock } from './types'
 
 interface FormBuilderProps {
-  as?: string
   initialValuesFromObj?: Object
-  form: BuilderBlock[]
+  form: FormBlock[]
   error?: ApiError
 }
 
 const props = defineProps<FormBuilderProps>()
 
-const elem = computed(() => props.as ? props.as : 'form')
-
-const blocksToFlatObject = (form: BuilderBlock[]) => {
+const blocksToFlatObject = (form: FormBlock[]) => {
   const flatObj = {}
 
   form.forEach((section) =>
@@ -53,13 +21,13 @@ const blocksToFlatObject = (form: BuilderBlock[]) => {
       if (props.initialValuesFromObj) {
         Object.entries(props.initialValuesFromObj).forEach(([key, value]) => {
           if (block.remoteProperty === key) {
-            flatObj[block.remoteProperty] = value
-          }
+              flatObj[block.remoteProperty] = value
+            }
         })
       } else if (block.initialValue) {
-        flatObj[block.remoteProperty] = block.initialValue
+          flatObj[block.remoteProperty] = block.initialValue
       } else if (block.type === 'checkbox') {
-        flatObj[block.remoteProperty] = false
+          flatObj[block.remoteProperty] = false
       } else {
         flatObj[block.remoteProperty] = null
       }
@@ -72,7 +40,7 @@ const blocksToFlatObject = (form: BuilderBlock[]) => {
 const formObject = reactive(blocksToFlatObject(props.form))
 
 interface FormBuilderEmits {
-  (e: 'edit', val: Object): void
+  (e: 'edit', val: any): void
   (e: 'clearError'): void
 }
 
@@ -82,8 +50,14 @@ const test = () => {
   console.log(formObject)
 }
 
-const handleFileUpload = (formProperty: string, files: File[]) => {
-  formObject[formProperty] = [...files]
+const handleFileUpload = (formProperty: string, files: File[], allowMultiple = false) => {
+  if (allowMultiple) {
+    formObject[formProperty] = [...files]
+    return
+  }
+
+  const [file] = files
+  formObject[formProperty] = file
 }
 
 const notifyPossibleErrors = () => {
@@ -105,26 +79,25 @@ notifyPossibleErrors()
 
 // Watch for changes to formObject, and emit state whenever there are changes.
 watch(() => formObject, (newValue, _oldValue) => {
-  console.log(newValue)
   emits('edit', newValue)
 }, {deep: true})
 
 // We also want to populate state on form load.
 onMounted(() => {
-  console.log(formObject)
   emits('edit', formObject)
 })
 </script>
 
 <template>
-  <component :is="elem">
+  <div>
     <CollapsableSection v-for="section in form" :key="section.name" :title="section.name">
-      <div class="space-y-5">
+      <div :class="section.columns ? `grid grid-cols-${section.columns} gap-5` : 'space-y-5'">
         <template v-for="block in section.blocks" :key="block.remoteProperty">
-          <template v-if="block.type === 'text'">
+          <template v-if="block.type === 'textInput'">
             <Input
               :id="`id-${block.remoteProperty}`"
               v-model="formObject[block.remoteProperty]"
+              :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`"
               type="text"
               :label="block.label"
               :hidden-label="block.meta && block.meta.hiddenLabel"
@@ -136,11 +109,13 @@ onMounted(() => {
               :error="$parseApiError(block.remoteProperty, error)"
               @input="clearError"
             />
+            <slot :name="block.remoteProperty" :form-object="formObject" />
           </template>
-          <template v-if="block.type === 'number'">
+          <template v-if="block.type === 'numberInput'">
             <Input
               :id="`id-${block.remoteProperty}`"
               v-model.number="formObject[block.remoteProperty]"
+              :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`"
               type="number"
               :label="block.label"
               :hidden-label="block.meta && block.meta.hiddenLabel"
@@ -152,6 +127,7 @@ onMounted(() => {
               :error="$parseApiError(block.remoteProperty, error)"
               @input="clearError"
             />
+            <slot :name="block.remoteProperty" :form-object="formObject" />
           </template>
           <template v-if="block.type === 'action'">
             <div class="flex space-x-3">
@@ -159,6 +135,7 @@ onMounted(() => {
                 <Input
                   :id="`id-${block.remoteProperty}`"
                   v-model="formObject[block.remoteProperty]"
+                  :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`"
                   type="text"
                   :label="block.label"
                   :hidden-label="block.meta && block.meta.hiddenLabel"
@@ -180,6 +157,7 @@ onMounted(() => {
             <Select
               :id="`id-${block.remoteProperty}`"
               v-model="formObject[block.remoteProperty]"
+              :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`"
               :label="block.label"
               :hidden-label="block.meta && block.meta.hiddenLabel"
               :help-text="block.meta && block.meta.helpText"
@@ -207,11 +185,13 @@ onMounted(() => {
                   }}
               </option>
             </Select>
+            <slot :name="block.remoteProperty" :form-object="formObject" />
           </template>
           <template v-if="block.type === 'multiselect'">
             <MultiSelect 
               :id="`id-${block.remoteProperty}`" 
               v-model="formObject[block.remoteProperty]"
+              :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`"
               :label="block.label"
               :hidden-label="block.meta && block.meta.hiddenLabel"
               :help-text="block.meta && block.meta.helpText"
@@ -222,12 +202,45 @@ onMounted(() => {
               :options="block.options"
               @select="(val) => formObject[block.remoteProperty] = val"
             />
+            <slot :name="block.remoteProperty" :form-object="formObject" />
           </template> 
+          <template v-if="block.type === 'listBoxFilter'">
+            <ListBoxFilter 
+              :id="`id-${block.remoteProperty}`"
+              v-model="formObject[block.remoteProperty]"
+              :label="block.label"
+              :hidden-label="block.meta && block.meta.hiddenLabel"
+              :help-text="block.meta && block.meta.helpText"
+              :display-field="block.meta && block.meta.optionNameProperty"
+              :placeholder="block.meta && block.meta.placeholder"
+              :value-field="block.meta && block.meta.optionValueProperty" 
+              :options="block.options"
+              :required="block.required"
+              :error="$parseApiError(block.remoteProperty, error)"
+            />
+            <slot :name="block.remoteProperty" :form-object="formObject" />
+          </template>
+          <template v-if="block.type === 'listBoxFilterNumber'">
+            <ListBoxFilter 
+              :id="`id-${block.remoteProperty}`"
+              v-model.number="formObject[block.remoteProperty]"
+              :label="block.label"
+              :hidden-label="block.meta && block.meta.hiddenLabel"
+              :help-text="block.meta && block.meta.helpText"
+              :display-field="block.meta && block.meta.optionNameProperty"
+              :placeholder="block.meta && block.meta.placeholder"
+              :value-field="block.meta && block.meta.optionValueProperty" 
+              :options="block.options"
+              :required="block.required"
+              :error="$parseApiError(block.remoteProperty, error)"
+            />
+            <slot :name="block.remoteProperty" :form-object="formObject" />
+          </template>
           <template v-if="block.type === 'editor'">
-            {{block.remoteProperty}}: {{  formObject[block.remoteProperty] }}
             <Editor
               :id="`id-${block.remoteProperty}`"
               v-model="formObject[block.remoteProperty]"
+              :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`"
               render-as-input
               :label="block.label"
               :hidden-label="block.meta && block.meta.hiddenLabel"
@@ -238,11 +251,13 @@ onMounted(() => {
               :display-word-count="block.meta && block.meta.displayWordCount"
               :error="$parseApiError(block.remoteProperty, error)"
             />
+            <slot :name="block.remoteProperty" :form-object="formObject" />
           </template>
           <template v-if="block.type === 'checkbox'">
             <Checkbox 
-              :id="`id-${block.remoteProperty}`" 
+              :id="`id-${block.remoteProperty}`"
               v-model="formObject[block.remoteProperty]"
+              :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`" 
               :label="block.label" 
               :hidden-label="block.meta && block.meta.hiddenLabel"
               :help-text="block.meta && block.meta.helpText" 
@@ -252,24 +267,28 @@ onMounted(() => {
             <FileUploadInput
               :id="`id-${block.remoteProperty}`"
               type="image"
+              :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`"
               :multiple="block.meta && block.meta.allowMultiple"
               :allow-set-primary="block.meta && block.meta.allowSetPrimaryImage"
-              :files="formObject[block.remoteProperty]"
-              @upload="(images) => handleFileUpload(block.remoteProperty, images)"
+              :files="Array.isArray(formObject[block.remoteProperty]) ? formObject[block.remoteProperty] : [formObject[block.remoteProperty]]"
+              @upload="(images) => handleFileUpload(block.remoteProperty, images, (block.meta && block.meta.allowMultiple))"
             />
+            <slot :name="block.remoteProperty" :form-object="formObject" />
           </template>
           <template v-if="block.type === 'file'">
             <FileUploadInput 
               :id="`id-${block.remoteProperty}`"
               type="file"
+              :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`"
               :multiple="block.meta && block.meta.allowMultiple"
-              :files="formObject[block.remoteProperty]"
-              @upload="(files) => handleFileUpload(block.remoteProperty, files)"
+              :files="Array.isArray(formObject[block.remoteProperty]) ? formObject[block.remoteProperty] : [formObject[block.remoteProperty]]"
+              @upload="(files) => handleFileUpload(block.remoteProperty, files, (block.meta && block.meta.allowMultiple))"
             />
+            <slot :name="block.remoteProperty" :form-object="formObject" />
           </template>
         </template>
       </div>
     </CollapsableSection>
     <button type="button" @click="test">test</button>
-  </component>
+  </div>
 </template>

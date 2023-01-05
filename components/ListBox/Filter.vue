@@ -128,7 +128,20 @@ watch(
   (newValue, _oldValue) => {
     if (newValue === null) {
       filterQuery.value = ''
-      selected.val = null
+      selected.value = null
+    }
+
+    filterQuery.value = mappedOptions.value.find((option) => option.value === newValue).display
+    selected.value = newValue
+  }
+)
+
+watch(
+  () => filterQuery.value,
+  (newValue, oldValue) => {
+    if (newValue === '' && oldValue !== '') {
+      selected.value = null
+      emits('update:modelValue', null)
     }
   }
 )

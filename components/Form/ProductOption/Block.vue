@@ -20,7 +20,7 @@ const addNewOption = (val: ProductOption) => {
 const duplicatedOption = ref<ProductOption>(null)
 
 const setDuplicatedOption = (option: ProductOption) => {
-  duplicatedOption.value = option
+  duplicatedOption.value = { ...option, size: { ...option.size } }
   formActive.value = true
   notificationsStore.create({
     type: 'success',
@@ -83,7 +83,7 @@ watch(
     </div>
     <FormProductOption
       :active="formActive"
-      :existing-option="duplicatedOption"
+      :existing-product-option="duplicatedOption"
       is-nested
       @close="formActive = false"
       @submit="(option) => addNewOption(option)"

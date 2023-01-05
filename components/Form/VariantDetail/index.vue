@@ -4,6 +4,8 @@ import { ButtonProps } from '~~/components/Button/index.vue'
 import useProductAttributesStore from '~~/store/product-attributes'
 import useNotificationsStore from '~~/store/notifications'
 import { internalUrls } from '~~/endpoints'
+import form from './form'
+import checkObjectEquality from '~~/utils/checkObjectEquality'
 
 /***********
  ** Props **
@@ -26,7 +28,7 @@ defineProps<FormProductOptionVariantProps>()
  ***********/
 
 interface FormProductOptionVariantEmits {
-  (e: 'close'): void
+  (e: 'close', variantId: number | undefined): void
 }
 
 const emits = defineEmits<FormProductOptionVariantEmits>()
@@ -63,25 +65,21 @@ const buildForm = () => {
   // When appending to form data, it converts available types to string,
   // even undefined or null. Therefore we need to explicitly check if
   // the field has any value before appending it to make error flow good.
-  if (reactiveVariant.name) {
-    formData.append('name', reactiveVariant.name)
+  if (variant.value.name) {
+    formData.append('name', variant.value.name)
   }
-  if (reactiveVariant.thumbnail) {
-    formData.append('file', reactiveVariant.thumbnail)
+  if (variant.value.file) {
+    formData.append('file', variant.value.file)
   }
 
-  formData.append('is_standard', JSON.stringify(reactiveVariant.isStandard))
+  formData.append('is_standard', JSON.stringify(variant.value.isStandard))
 
   return formData
 }
 
 // Reset all fields in the form.
 const resetForm = () => {
-  reactiveVariant.name = undefined
-  reactiveVariant.isStandard = false
-  reactiveVariant.thumbnail = undefined
-
-  uploadedFiles.value = []
+  variant.value = { ...defaultVariantValues }
 
   submitAndCloseFormSubmissionState.value = 'initial'
   submitAndAddNewFormSubmissionState.value = 'initial'
@@ -93,27 +91,14 @@ const resetForm = () => {
 
 const submitAndCloseFormSubmissionState = ref<ButtonProps['loadingState']>('initial')
 const submitAndAddNewFormSubmissionState = ref<ButtonProps['loadingState']>('initial')
+const formCanBeSubmitted = computed(() => !checkObjectEquality(variant.value, defaultVariantValues))
 
-const reactiveVariant = reactive({
-  name: undefined,
-  isStandard: false,
-  thumbnail: undefined,
-})
-
-const uploadedFiles = ref([])
+const defaultVariantValues = { name: null, isStandard: false, file: null }
+const variant = ref({ ...defaultVariantValues })
 
 /*********************
  ** State: handlers **
  *********************/
-
-const handleFileUpload = (files: File[]) => {
-  const [file] = files
-
-  error.value = null
-  uploadedFiles.value = files
-  // @ts-ignore
-  reactiveVariant.thumbnail = file
-}
 
 const handleSubmitAndClose = async () => {
   submitAndCloseFormSubmissionState.value = 'loading'
@@ -136,7 +121,7 @@ const handleSubmitAndClose = async () => {
 
     submitAndCloseFormSubmissionState.value = 'success'
 
-    emits('close')
+    emits('close', createdVariant.id)
 
     resetForm()
   } catch (e) {
@@ -152,43 +137,8 @@ const handleSubmitAndClose = async () => {
   }
 }
 
-const handleSubmitAndAddNew = async () => {
-  submitAndAddNewFormSubmissionState.value = 'loading'
-
-  const payload = buildForm()
-
-  try {
-    const createdVariant = await performPost<VariantCreateInternalOutput>(
-      internalUrls.products.variants.create(),
-      payload
-    )
-
-    submitAndAddNewFormSubmissionState.value = 'success'
-
-    attributesStore.addVariantToInternalState(createdVariant)
-
-    notificationsStore.create({
-      type: 'success',
-      title: 'Variant opprettet!',
-      text: 'Varianten ble opprettet.',
-    })
-
-    resetForm()
-  } catch (e) {
-    error.value = e.data
-
-    notificationsStore.create({
-      type: 'danger',
-      title: 'Noe gikk galt!',
-      text: error.value.message,
-    })
-
-    submitAndAddNewFormSubmissionState.value = 'error'
-  }
-}
-
 const onClose = () => {
-  emits('close')
+  emits('close', undefined)
 }
 </script>
 
@@ -200,56 +150,24 @@ const onClose = () => {
       :is-nested="isNested"
       @close="onClose"
     >
-      <CollapsableSection title="Generelt">
-        <div class="space-y-5">
-          <Input
-            id="id_variant_name"
-            v-model="reactiveVariant.name"
-            label="Navn"
-            required
-            :error="$parseApiError('name', error)"
-            @input="clearError"
-          />
-          <Checkbox
-            id="id_variant_is_standard"
-            v-model="reactiveVariant.isStandard"
-            label="Er standard variant"
-            help-text="Standard varianter er en variant som ofte er planlagt å tilknyttes en mengde alternativer. Kan f.eks. være en typisk farge eller finish som tilbys på en større del av et leverandørsortiment."
-          />
-        </div>
-      </CollapsableSection>
-      <CollapsableSection title="Bilde">
-        <FileUploadInput
-          type="image"
-          :files="uploadedFiles"
-          :error="$parseApiError('file', error)"
-          @upload="(files) => handleFileUpload(files)"
-        />
-      </CollapsableSection>
+      {{ variant }}
+      <FormBuilder
+        :form="form"
+        :error="error"
+        @edit="(formData) => (variant = formData)"
+        @clear-error="clearError"
+      />
       <template #actions>
-        <div class="md:grid-cols-5 grid grid-cols-2 gap-5">
-          <Button
-            variant="secondary"
-            class="md:col-span-1 md:order-1 order-2 col-span-2"
-            @click="onClose"
-          >
-            Avbryt
-          </Button>
+        <div class="md:grid-cols-5 grid grid-cols-3 gap-5">
+          <Button variant="secondary" class="col-span-1" @click="onClose"> Avbryt </Button>
           <Button
             variant="primary"
-            class="md:col-span-2 md:order-2 col-span-1"
+            class="md:col-span-4 col-span-2"
             type="submit"
+            :disabled="!formCanBeSubmitted"
             @click="handleSubmitAndClose"
           >
             Lagre og gå tilbake
-          </Button>
-          <Button
-            variant="primary"
-            class="md:col-span-2 md:order-2 col-span-1"
-            type="submit"
-            @click="handleSubmitAndAddNew"
-          >
-            Lagre og legg til ny
           </Button>
         </div>
       </template>
