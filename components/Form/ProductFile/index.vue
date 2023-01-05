@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { ProductFile } from './types'
 import useNotificationsStore from '~~/store/notifications'
-import form from './form'
+import { productFileForm } from './forms'
+
+/***********
+ ** Props **
+ ***********/
 
 interface FormProductFileProps {
   active: boolean
@@ -14,10 +18,9 @@ interface FormProductFileProps {
 
 defineProps<FormProductFileProps>()
 
-const notificationsStore = useNotificationsStore()
-
-const productFileDefaultValues = { name: null, file: null }
-const productFile = ref({ ...productFileDefaultValues })
+/***********
+ ** Emits **
+ ***********/
 
 interface FormProductFileEmits {
   (e: 'close'): void
@@ -26,9 +29,21 @@ interface FormProductFileEmits {
 
 const emits = defineEmits<FormProductFileEmits>()
 
-const onClose = () => {
-  emits('close')
-}
+/***********
+ ** Store **
+ ***********/
+const notificationsStore = useNotificationsStore()
+
+/***********
+ ** State **
+ ***********/
+
+const productFileDefaultValues = { name: null, file: null }
+const productFile = ref({ ...productFileDefaultValues })
+
+/*********************
+ ** State: handlers **
+ *********************/
 
 const handleSubmitAndClose = () => {
   emits('submit', productFile.value)
@@ -50,6 +65,10 @@ const handleSubmitAndAddNew = () => {
   })
   productFile.value = { ...productFileDefaultValues }
 }
+
+const onClose = () => {
+  emits('close')
+}
 </script>
 
 <template>
@@ -62,7 +81,7 @@ const handleSubmitAndAddNew = () => {
         @close="onClose"
       >
         {{ productFile }}
-        <FormBuilder :form="form" @edit="(formData) => (productFile = formData)" />
+        <FormBuilder :form="productFileForm" @edit="(formData) => (productFile = formData)" />
         <template #actions>
           <div class="grid grid-cols-5 gap-5">
             <Button variant="secondary" class="col-span-1">Avbryt</Button>

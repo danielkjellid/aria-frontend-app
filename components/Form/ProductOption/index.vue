@@ -3,11 +3,12 @@ import useProductAttributesStore from '~~/store/product-attributes'
 import useNotificationsStore from '~~/store/notifications'
 import { ProductOption } from './types'
 import { FormBlock } from '../types'
-import { ProductStatusEnum } from '~~/@types'
 import { ComputedRef } from 'vue'
+import { productOptionGeneralForm, productOptionSizeForm, productOptionVariantForm } from './forms'
 
-const attributesStore = useProductAttributesStore()
-const notificationsStore = useNotificationsStore()
+/***********
+ ** Props **
+ ***********/
 
 interface FormProductOptionProps {
   active: boolean
@@ -21,10 +22,27 @@ interface FormProductOptionProps {
 
 defineProps<FormProductOptionProps>()
 
-const variants = await attributesStore.getVariantsInternal()
-const variantFormActive = ref<boolean>(false)
+/***********
+ ** Emits **
+ ***********/
 
-const statuses = useProductStatus()
+interface FormProductOptionEmits {
+  (e: 'close'): void
+  (e: 'submit', val: any): void
+}
+
+const emits = defineEmits<FormProductOptionEmits>()
+
+/***********
+ ** Store **
+ ***********/
+
+const attributesStore = useProductAttributesStore()
+const notificationsStore = useNotificationsStore()
+
+/***********
+ ** State **
+ ***********/
 
 const productOptionDefaultValues = {
   price: null,
@@ -38,6 +56,9 @@ const productOptionDefaultValues = {
   },
 }
 const productOption = ref({ ...productOptionDefaultValues })
+const variants = await attributesStore.getVariantsInternal()
+const variantFormActive = ref<boolean>(false)
+const statuses = useProductStatus()
 
 const disableCircumference = computed(
   () =>
@@ -46,23 +67,17 @@ const disableCircumference = computed(
     !!productOption.value.size.depth
 )
 const disableHeightWidthDepth = computed(() => !!productOption.value.size.circumference)
+const selectedVariantId = computed(() => productOption.value.variantId)
 
-interface FormProductOptionEmits {
-  (e: 'close'): void
-  (e: 'submit', val: any): void
-}
+const { resetForm, canBeSubmitted } = useFormState(productOption, productOptionDefaultValues)
+
+/*********************
+ ** State: handlers **
+ *********************/
 
 const onClose = () => {
   emits('close')
 }
-
-const resetForm = () => {
-  productOption.value = { ...productOptionDefaultValues }
-}
-
-const emits = defineEmits<FormProductOptionEmits>()
-
-const selectedVariantId = computed(() => productOption.value.variantId)
 
 const handleSubmit = () => {
   emits('submit', { ...productOption.value, size: { ...productOption.value.size } })
@@ -84,87 +99,24 @@ const handleSubmitAndAddNew = () => {
   resetForm()
 }
 
-const productOptionGeneralForm: ComputedRef<FormBlock[]> = computed(() => [
-  {
-    name: 'Generelt',
-    blocks: [
-      {
-        type: 'select',
-        label: 'Status',
-        remoteProperty: 'status',
-        options: statuses,
-        initialValue: ProductStatusEnum.Available.toString(),
-        meta: { optionNameProperty: 'name', optionValueProperty: 'value' },
-      },
-      {
-        type: 'numberInput',
-        label: 'Pris',
-        remoteProperty: 'price',
-        meta: { helpText: 'Prisen for dette alternativet.' },
-      },
-    ],
-  },
-])
-
-const productOptionSizeForm: ComputedRef<FormBlock[]> = computed(() => [
-  {
-    name: 'Størrelse',
-    columns: 3,
-    remoteProperty: 'size',
-    blocks: [
-      {
-        type: 'numberInput',
-        label: 'Bredde i cm',
-        remoteProperty: 'width',
-        meta: { disabled: disableHeightWidthDepth.value },
-      },
-      {
-        type: 'numberInput',
-        label: 'Høyde i cm',
-        remoteProperty: 'height',
-        meta: { disabled: disableHeightWidthDepth.value },
-      },
-      {
-        type: 'numberInput',
-        label: 'Dybde i cm',
-        remoteProperty: 'depth',
-        meta: { disabled: disableHeightWidthDepth.value },
-      },
-      {
-        type: 'numberInput',
-        label: 'Omkrets i cm',
-        remoteProperty: 'circumference',
-        meta: {
-          colSpan: 3,
-          disabled: disableCircumference.value,
-          helpText:
-            'Omkrets kan brukes dersom alternativet har en sfærisk form fremfor en kvadratisk en. Feltet kan ikke benyttes når de andre størrelsesfeltene er fylt ut.',
-        },
-      },
-    ],
-  },
-])
-
-const productOptionVariantForm: ComputedRef<FormBlock[]> = computed(() => [
-  {
-    name: 'Variant',
-    blocks: [
-      {
-        type: 'listBoxFilterNumber',
-        label: 'Variant',
-        remoteProperty: 'variantId',
-        initialValue: selectedVariantId.value,
-        options: variants,
-        meta: { optionNameProperty: 'name', optionValueProperty: 'id' },
-      },
-    ],
-  },
-])
-
-const closeVariantFormAndPrepopulateId = (variantId: number | undefined) => {
+const handleCloseVariantFormAndPrePopulateId = (variantId: number | undefined) => {
   variantFormActive.value = false
   productOption.value.variantId = variantId
 }
+
+/***********
+ ** Forms **
+ ***********/
+
+const generalForm: ComputedRef<FormBlock[]> = computed(() => productOptionGeneralForm(statuses))
+
+const sizeForm: ComputedRef<FormBlock[]> = computed(() =>
+  productOptionSizeForm(disableHeightWidthDepth.value, disableCircumference.value)
+)
+
+const variantForm: ComputedRef<FormBlock[]> = computed(() =>
+  productOptionVariantForm(selectedVariantId.value, variants)
+)
 </script>
 
 <template>
@@ -178,16 +130,13 @@ const closeVariantFormAndPrepopulateId = (variantId: number | undefined) => {
       >
         {{ productOption }}
         <FormBuilder
-          :form="productOptionGeneralForm"
+          :form="generalForm"
           :initial-values-from-obj="existingProductOption"
           @edit="(formData) => (productOption = formData)"
         />
+        <FormBuilder :form="sizeForm" @edit="(formData) => (productOption['size'] = formData)" />
         <FormBuilder
-          :form="productOptionSizeForm"
-          @edit="(formData) => (productOption['size'] = formData)"
-        />
-        <FormBuilder
-          :form="productOptionVariantForm"
+          :form="variantForm"
           @edit="(formData) => (productOption.variantId = formData.variantId)"
         >
           <template #variantId>
@@ -215,6 +164,7 @@ const closeVariantFormAndPrepopulateId = (variantId: number | undefined) => {
               variant="primary"
               class="md:col-span-2 md:order-2 col-span-1"
               type="submit"
+              :disabled="!canBeSubmitted"
               @click="handleSubmitAndClose"
             >
               Lagre og gå tilbake
@@ -223,6 +173,7 @@ const closeVariantFormAndPrepopulateId = (variantId: number | undefined) => {
               variant="primary"
               class="md:col-span-2 md:order-2 col-span-1"
               type="submit"
+              :disabled="!canBeSubmitted"
               @click="handleSubmitAndAddNew"
             >
               Lagre og legg til ny
@@ -235,7 +186,7 @@ const closeVariantFormAndPrepopulateId = (variantId: number | undefined) => {
     <FormVariantDetail
       :active="variantFormActive"
       is-nested
-      @close="closeVariantFormAndPrepopulateId"
+      @close="handleCloseVariantFormAndPrePopulateId"
     />
   </div>
 </template>

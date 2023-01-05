@@ -11,4 +11,5 @@ const productFileForm: FormBlock[] = [
   },
 ]
 
-export default productFileForm
+// eslint-disable-next-line import/prefer-default-export
+export { productFileForm }

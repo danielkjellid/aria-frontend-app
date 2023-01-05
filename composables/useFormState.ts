@@ -7,35 +7,48 @@ interface FormState {
 }
 
 const useFormState = (formData: Ref<any>, formDataDefaultValues: any) => {
-  // submission state
+  /**********************
+   ** Submission state **
+   **********************/
+
   const submissionState = ref<FormState['loadingState']>('initial')
   const setSubmissionState = (state: FormState['loadingState']) => {
     submissionState.value = state
   }
   const canBeSubmitted = computed(
     () =>
-      submissionState.value !== 'loading' && !checkObjectEquality(formData, formDataDefaultValues)
+      submissionState.value !== 'loading' &&
+      !checkObjectEquality(formData.value, formDataDefaultValues)
   )
 
-  // error state
-  const error = ref<ApiError | null>(null)
-  const setError = (e: ApiError) => {
-    error.value = e
+  /*****************
+   ** Error state **
+   *****************/
+
+  const formError = ref<ApiError | null>(null)
+  const setFormError = (e: ApiError) => {
+    formError.value = e
   }
-  const clearError = () => {
-    if (error.value) {
-      error.value = null
+  const clearFormError = () => {
+    if (formError.value) {
+      formError.value = null
       submissionState.value = 'initial'
     }
   }
 
-  // reset form util
+  /*********************
+   ** Reset form util **
+   *********************/
+
   const resetForm = () => {
     // eslint-disable-next-line no-param-reassign
     formData.value = { ...formDataDefaultValues }
   }
 
-  // buildMultipartForm
+  /*******************************
+   ** Build multipart form util **
+   *******************************/
+
   const buildMultipartForm = () => {
     const fd = new FormData()
 
@@ -46,8 +59,10 @@ const useFormState = (formData: Ref<any>, formDataDefaultValues: any) => {
       if (value !== undefined && value !== null) {
         if (value instanceof File) {
           fd.append(key, value)
-        } else {
+        } else if (typeof value === 'boolean') {
           fd.append(key, JSON.stringify(value))
+        } else {
+          fd.append(key, value.toString())
         }
       }
     })
@@ -59,9 +74,9 @@ const useFormState = (formData: Ref<any>, formDataDefaultValues: any) => {
     submissionState,
     setSubmissionState,
     canBeSubmitted,
-    error,
-    setError,
-    clearError,
+    formError,
+    setFormError,
+    clearFormError,
     resetForm,
     buildMultipartForm,
   }

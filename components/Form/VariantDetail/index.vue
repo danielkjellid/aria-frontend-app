@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { VariantCreateInternalOutput, ApiError } from '~~/@types'
-import { ButtonProps } from '~~/components/Button/index.vue'
+import { VariantCreateInternalOutput } from '~~/@types'
 import useProductAttributesStore from '~~/store/product-attributes'
 import useNotificationsStore from '~~/store/notifications'
 import { internalUrls } from '~~/endpoints'
-import form from './form'
-import checkObjectEquality from '~~/utils/checkObjectEquality'
+import { variantForm } from './forms'
 
 /***********
  ** Props **
@@ -40,70 +38,32 @@ const emits = defineEmits<FormProductOptionVariantEmits>()
 const attributesStore = useProductAttributesStore()
 const notificationsStore = useNotificationsStore()
 
-/************
- ** Errors **
- ************/
-
-const error = ref<ApiError | null>(null)
-
-const clearError = () => {
-  if (error.value) {
-    error.value = null
-    submitAndCloseFormSubmissionState.value = 'initial'
-    submitAndAddNewFormSubmissionState.value = 'initial'
-  }
-}
-
-/*************
- ** Helpers **
- *************/
-
-// Build form data for payload, using multipart as payload type.
-const buildForm = () => {
-  const formData = new FormData()
-
-  // When appending to form data, it converts available types to string,
-  // even undefined or null. Therefore we need to explicitly check if
-  // the field has any value before appending it to make error flow good.
-  if (variant.value.name) {
-    formData.append('name', variant.value.name)
-  }
-  if (variant.value.file) {
-    formData.append('file', variant.value.file)
-  }
-
-  formData.append('is_standard', JSON.stringify(variant.value.isStandard))
-
-  return formData
-}
-
-// Reset all fields in the form.
-const resetForm = () => {
-  variant.value = { ...defaultVariantValues }
-
-  submitAndCloseFormSubmissionState.value = 'initial'
-  submitAndAddNewFormSubmissionState.value = 'initial'
-}
-
 /***********
  ** State **
  ***********/
 
-const submitAndCloseFormSubmissionState = ref<ButtonProps['loadingState']>('initial')
-const submitAndAddNewFormSubmissionState = ref<ButtonProps['loadingState']>('initial')
-const formCanBeSubmitted = computed(() => !checkObjectEquality(variant.value, defaultVariantValues))
-
-const defaultVariantValues = { name: null, isStandard: false, file: null }
+const defaultVariantValues = { name: null, is_standard: false, file: null }
 const variant = ref({ ...defaultVariantValues })
+
+const {
+  formError,
+  clearFormError,
+  setFormError,
+  canBeSubmitted,
+  buildMultipartForm,
+  submissionState,
+  setSubmissionState,
+  resetForm,
+} = useFormState(variant, defaultVariantValues)
 
 /*********************
  ** State: handlers **
  *********************/
 
 const handleSubmitAndClose = async () => {
-  submitAndCloseFormSubmissionState.value = 'loading'
+  setSubmissionState('loading')
 
-  const payload = buildForm()
+  const payload = buildMultipartForm()
 
   try {
     const createdVariant = await performPost<VariantCreateInternalOutput>(
@@ -119,21 +79,19 @@ const handleSubmitAndClose = async () => {
       text: 'Varianten ble opprettet.',
     })
 
-    submitAndCloseFormSubmissionState.value = 'success'
-
+    setSubmissionState('success')
     emits('close', createdVariant.id)
-
     resetForm()
   } catch (e) {
-    error.value = e.data
+    setFormError(e.data)
 
     notificationsStore.create({
       type: 'danger',
       title: 'Noe gikk galt!',
-      text: error.value.message,
+      text: formError.value.message,
     })
 
-    submitAndCloseFormSubmissionState.value = 'error'
+    setSubmissionState('error')
   }
 }
 
@@ -152,19 +110,20 @@ const onClose = () => {
     >
       {{ variant }}
       <FormBuilder
-        :form="form"
-        :error="error"
+        :form="variantForm"
+        :error="formError"
         @edit="(formData) => (variant = formData)"
-        @clear-error="clearError"
+        @clear-error="clearFormError"
       />
       <template #actions>
         <div class="md:grid-cols-5 grid grid-cols-3 gap-5">
-          <Button variant="secondary" class="col-span-1" @click="onClose"> Avbryt </Button>
+          <Button variant="secondary" class="col-span-1" @click="onClose">Avbryt</Button>
           <Button
             variant="primary"
             class="md:col-span-4 col-span-2"
             type="submit"
-            :disabled="!formCanBeSubmitted"
+            :disabled="!canBeSubmitted"
+            :loading-state="submissionState"
             @click="handleSubmitAndClose"
           >
             Lagre og gå tilbake
