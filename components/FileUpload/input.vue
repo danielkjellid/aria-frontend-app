@@ -3,6 +3,23 @@ import { DocumentPlusIcon, PhotoIcon } from '@heroicons/vue/24/outline'
 
 interface FileUploadInputProps {
   /**
+   * Sets the label itself.
+   */
+  id: string
+  /**
+   * Sets the label itself.
+   */
+  label?: string
+  /**
+   * Sets the label to screen reader only.
+   */
+  hiddenLabel?: boolean
+  /**
+   * Designates if the field is required or not. Note, this is purely aesthetic,
+   * validation still has to be performed outside this component.
+   */
+  required?: boolean
+  /**
    * Determines aesthetic changes such as icons and text used.
    */
   type?: 'file' | 'image'
@@ -82,57 +99,68 @@ watch(
 </script>
 
 <template>
-  <div
-    class="max-w-xl"
-    @dragover.prevent
-    @drop.prevent="dragging = false"
-    @dragenter="dragging = true"
-    @dragend="dragging = false"
-    @dragleave="dragging = false"
-  >
-    <label
-      class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent h-36 hover:border-brand-800 hover:border-solid flex justify-center w-full bg-white border-2 rounded-lg appearance-none cursor-pointer"
-      :class="
-        dragging
-          ? 'border-brand-800 border-solid'
-          : error
-          ? 'border-red-300 border-dashed'
-          : 'border-gray-200 border-dashed'
-      "
-      @drop.prevent="(e) => onDropUpload(e)"
+  <div>
+    <FormElementBase
+      :id="id"
+      :label="label"
+      :hidden-label="hiddenLabel"
+      :error="error"
+      :required="required"
+      :help-text="helpText"
+      :word-count="null"
+      v-bind="$attrs"
     >
       <div
-        class="flex flex-col items-center justify-center w-full px-4 space-y-4 pointer-events-none"
+        class="max-w-xl"
+        @dragover.prevent
+        @drop.prevent="dragging = false"
+        @dragenter="dragging = true"
+        @dragend="dragging = false"
+        @dragleave="dragging = false"
       >
-        <PhotoIcon
-          v-if="type === 'image'"
-          class="w-5 h-5"
-          :class="error && !dragging ? 'text-red-400' : 'text-gray-800'"
-        />
-        <DocumentPlusIcon
-          v-if="type === 'file'"
-          class="w-5 h-5"
-          :class="error && !dragging ? 'text-red-400' : 'text-gray-800'"
-        />
-        <span
-          class="text-sm font-normal"
-          :class="error && !dragging ? 'text-red-500' : 'text-gray-800'"
+        <label
+          class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent h-36 hover:border-brand-800 hover:border-solid flex justify-center w-full bg-white border-2 rounded-lg appearance-none cursor-pointer"
+          :class="
+            dragging
+              ? 'border-brand-800 border-solid'
+              : error
+              ? 'border-red-300 border-dashed'
+              : 'border-gray-200 border-dashed'
+          "
+          @drop.prevent="(e) => onDropUpload(e)"
         >
-          Slipp {{ type === 'file' ? 'filer' : 'bilder' }} her, eller klikk for å bla gjennom lokale
-          filer
-        </span>
+          <div
+            class="flex flex-col items-center justify-center w-full px-4 space-y-4 pointer-events-none"
+          >
+            <PhotoIcon
+              v-if="type === 'image'"
+              class="w-5 h-5"
+              :class="error && !dragging ? 'text-red-400' : 'text-gray-500'"
+            />
+            <DocumentPlusIcon
+              v-if="type === 'file'"
+              class="w-5 h-5"
+              :class="error && !dragging ? 'text-red-400' : 'text-gray-500'"
+            />
+            <span
+              class="text-sm font-normal"
+              :class="error && !dragging ? 'text-red-500' : 'text-gray-500'"
+            >
+              Slipp {{ type === 'file' ? 'filer' : 'bilder' }} her, eller klikk for å bla gjennom
+              lokale filer
+            </span>
+          </div>
+          <input
+            type="file"
+            name="file_upload"
+            :multiple="multiple"
+            class="hidden"
+            @change="(e) => onFileUpload(e)"
+          />
+        </label>
       </div>
-      <input
-        type="file"
-        name="file_upload"
-        :multiple="multiple"
-        class="hidden"
-        @change="(e) => onFileUpload(e)"
-      />
-    </label>
-    <p v-if="helpText" class="mt-2 text-sm font-light text-gray-500">{{ helpText }}</p>
-    <p v-if="error" class="relative mt-1 text-sm text-red-600">{{ error }}</p>
-    <FileUploadUploadedBlock class="mt-5">
+    </FormElementBase>
+    <FileUploadUploadedBlock v-if="files.length" class="mt-5">
       <div v-for="(file, index) in files" :key="index">
         <FileUploadUploadedBlockImageItem
           v-if="type === 'image'"

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import useProductAttributesStore from '~~/store/product-attributes'
 import useSuppliersStore from '~~/store/suppliers'
+import useNotificationsStore from '~~/store/notifications'
 import useCategoriesStore from '~~/store/categories'
+import { ProductCreateInternalOutput } from '~~/@types'
 import slugify from '~~/utils/slugify'
 import { FormBlock } from '../types'
 import { ComputedRef } from 'vue'
 import { productDetailImageForm, productDetailForm } from './forms'
+import { internalUrls } from '~~/endpoints'
 
 /***********
  ** Props **
@@ -35,6 +38,7 @@ const emits = defineEmits<FormProductDetailEmits>()
 const attributesStore = useProductAttributesStore()
 const categoriesStore = useCategoriesStore()
 const suppliersStore = useSuppliersStore()
+const notificationsStore = useNotificationsStore()
 
 /***********
  ** State **
@@ -42,19 +46,19 @@ const suppliersStore = useSuppliersStore()
 
 const productDefaultValues = {
   name: null,
-  supplier: null,
+  supplierId: null,
   status: '3',
   description: null,
   slug: null,
-  categories: [],
+  categoryIds: [],
   canBePurchasedOnline: false,
   canBePickedUp: false,
-  displayPriceToCustomer: false,
-  unit: 'stk',
+  displayPrice: false,
+  unit: 2,
   vatRate: '0.25',
   searchKeywords: null,
-  colors: [],
-  shapes: [],
+  colorIds: [],
+  shapeIds: [],
   materials: [],
   rooms: [],
   absorption: null,
@@ -63,6 +67,7 @@ const productDefaultValues = {
 const product = ref({ ...productDefaultValues })
 const productFiles = ref([])
 const productOptions = ref([])
+const productImages = ref([])
 
 const statuses = useProductStatus()
 
@@ -91,8 +96,14 @@ const rooms = [
   { name: 'Uterom', value: 'uterom' },
 ]
 
-const { submissionState, setSubmissionState, formError, clearFormError, setFormError } =
-  useFormState(product, productDefaultValues)
+const {
+  submissionState: productFormSubmissionState,
+  setSubmissionState: setProductFormSubmissionState,
+  formError: productFormError,
+  clearFormError: clearProductFormError,
+  setFormError: setProductFormError,
+  buildMultipartForm: productBuildMultipartForm,
+} = useFormState(product, productDefaultValues)
 
 /*********************
  ** State: handlers **
@@ -106,10 +117,36 @@ const humanReadableSupplier = (supplierId: string) =>
   suppliers.find((supplier) => supplier.id === parseInt(supplierId, 10)).name
 
 const handleSubmit = async () => {
-  setSubmissionState('loading')
+  setProductFormSubmissionState('loading')
   await console.log(product)
-  setFormError({ message: 'Testing', extra: { name: 'Yoooo' } })
-  setSubmissionState('error')
+  setProductFormError({ message: 'Testing', extra: { name: 'Yoooo' } })
+  setProductFormSubmissionState('error')
+
+  console.log(product.value)
+  console.log(productFiles.value)
+  console.log(productOptions.value)
+  console.log(productImages.value)
+
+  const productPayload = productBuildMultipartForm()
+
+  console.log(...productPayload)
+
+  try {
+    await performPost<ProductCreateInternalOutput>(
+      internalUrls.products.create(),
+      productPayload
+    ).then((productOutput) => {
+      console.log(productOutput)
+    })
+  } catch (e) {
+    setProductFormError(e.data)
+    notificationsStore.create({
+      type: 'danger',
+      title: 'Noe gikk galt!',
+      text: productFormError.value.message,
+    })
+    setProductFormSubmissionState('error')
+  }
 }
 
 /***********
@@ -127,8 +164,8 @@ const productForm: ComputedRef<FormBlock[]> = computed(() =>
       <form>
         <FormBuilder
           :form="productForm"
-          :error="formError"
-          @clear-error="clearFormError"
+          :error="productFormError"
+          @clear-error="clearProductFormError"
           @edit="(formData) => (product = formData)"
         >
           <template #slug="{ formObject }">
@@ -136,10 +173,10 @@ const productForm: ComputedRef<FormBlock[]> = computed(() =>
               type="button"
               variant="secondary"
               align-self="bottom"
-              :disabled="!formObject['name'] || !formObject['supplier']"
+              :disabled="!formObject['name'] || !formObject['supplierId']"
               @click="
                 formObject['slug'] = slugify(`
-                  ${humanReadableSupplier(formObject['supplier'])}
+                  ${humanReadableSupplier(formObject['supplierId'])}
                   ${formObject['name']}`)
               "
             >
@@ -147,7 +184,7 @@ const productForm: ComputedRef<FormBlock[]> = computed(() =>
             </Button>
           </template>
         </FormBuilder>
-        <FormBuilder as="div" :form="productDetailImageForm" />
+        <FormBuilder :form="productDetailImageForm" />
       </form>
       <CollapsableSection title="Filer">
         <FormProductFileBlock @update="(files) => (productFiles = files)" />
@@ -161,7 +198,7 @@ const productForm: ComputedRef<FormBlock[]> = computed(() =>
           <Button
             variant="primary"
             class="col-span-4"
-            :loading-state="submissionState"
+            :loading-state="productFormSubmissionState"
             @click="handleSubmit"
           >
             Legg til produkt

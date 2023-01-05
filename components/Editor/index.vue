@@ -118,7 +118,9 @@ onMounted(async () => {
         },
       },
       onReady: async () => {
-        await editor.blocks.renderFromHTML(props.modelValue)
+        if (props.modelValue) {
+          await editor.blocks.renderFromHTML(props.modelValue)
+        }
       },
       onChange: async (api, _event) => {
         if (editor.isReady) {
@@ -143,6 +145,7 @@ onMounted(async () => {
       :required="required"
       :help-text="helpText"
       :word-count="null"
+      v-bind="$attrs"
     >
       <div
         id="editor"

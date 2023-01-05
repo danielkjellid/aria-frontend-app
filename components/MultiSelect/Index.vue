@@ -120,7 +120,7 @@ const filteredMappedOptions = computed(() =>
  ** State: selection **
  **********************/
 
-const selected = ref(Array.from(props.modelValue))
+const selected = ref(props.modelValue ? Array.from(props.modelValue) : [])
 
 // Map back selected value to the original options array sent through props.
 const mappedSelected = computed(() =>

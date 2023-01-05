@@ -68,7 +68,6 @@ const productOptionSizeForm = (
 ]
 
 const productOptionVariantForm = (
-  selectedVariantId: number,
   variants: Pick<VariantListInternalOutput, 'id' | 'name'>[]
 ): FormBlock[] => [
   {
@@ -78,9 +77,11 @@ const productOptionVariantForm = (
         type: 'listBoxFilterNumber',
         label: 'Variant',
         remoteProperty: 'variantId',
-        initialValue: selectedVariantId,
         options: variants,
-        meta: { optionNameProperty: 'name', optionValueProperty: 'id' },
+        meta: {
+          optionNameProperty: 'name',
+          optionValueProperty: 'id',
+        },
       },
     ],
   },

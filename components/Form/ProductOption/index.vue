@@ -67,7 +67,6 @@ const disableCircumference = computed(
     !!productOption.value.size.depth
 )
 const disableHeightWidthDepth = computed(() => !!productOption.value.size.circumference)
-const selectedVariantId = computed(() => productOption.value.variantId)
 
 const { resetForm, canBeSubmitted } = useFormState(productOption, productOptionDefaultValues)
 
@@ -99,11 +98,6 @@ const handleSubmitAndAddNew = () => {
   resetForm()
 }
 
-const handleCloseVariantFormAndPrePopulateId = (variantId: number | undefined) => {
-  variantFormActive.value = false
-  productOption.value.variantId = variantId
-}
-
 /***********
  ** Forms **
  ***********/
@@ -114,9 +108,7 @@ const sizeForm: ComputedRef<FormBlock[]> = computed(() =>
   productOptionSizeForm(disableHeightWidthDepth.value, disableCircumference.value)
 )
 
-const variantForm: ComputedRef<FormBlock[]> = computed(() =>
-  productOptionVariantForm(selectedVariantId.value, variants)
-)
+const variantForm: ComputedRef<FormBlock[]> = computed(() => productOptionVariantForm(variants))
 </script>
 
 <template>
@@ -183,10 +175,6 @@ const variantForm: ComputedRef<FormBlock[]> = computed(() =>
       </ModalSlideOver>
     </form>
 
-    <FormVariantDetail
-      :active="variantFormActive"
-      is-nested
-      @close="handleCloseVariantFormAndPrePopulateId"
-    />
+    <FormVariantDetail :active="variantFormActive" is-nested @close="variantFormActive = false" />
   </div>
 </template>

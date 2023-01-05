@@ -51,6 +51,7 @@ const test = () => {
 }
 
 const handleFileUpload = (formProperty: string, files: File[], allowMultiple = false) => {
+  emits('clearError')
   if (allowMultiple) {
     formObject[formProperty] = [...files]
     return
@@ -79,6 +80,7 @@ notifyPossibleErrors()
 
 // Watch for changes to formObject, and emit state whenever there are changes.
 watch(() => formObject, (newValue, _oldValue) => {
+  emits('clearError')
   emits('edit', newValue)
 }, {deep: true})
 
@@ -221,6 +223,7 @@ onMounted(() => {
             <slot :name="block.remoteProperty" :form-object="formObject" />
           </template>
           <template v-if="block.type === 'listBoxFilterNumber'">
+            p: {{ formObject[block.remoteProperty] }}
             <ListBoxFilter 
               :id="`id-${block.remoteProperty}`"
               v-model.number="formObject[block.remoteProperty]"
@@ -268,9 +271,14 @@ onMounted(() => {
               :id="`id-${block.remoteProperty}`"
               type="image"
               :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`"
+              :label="block.label"
+              :hidden-label="block.meta && block.meta.hiddenLabel"
+              :help-text="block.meta && block.meta.helpText"
+              :required="block.required"
               :multiple="block.meta && block.meta.allowMultiple"
               :allow-set-primary="block.meta && block.meta.allowSetPrimaryImage"
-              :files="Array.isArray(formObject[block.remoteProperty]) ? formObject[block.remoteProperty] : [formObject[block.remoteProperty]]"
+              :files="Array.isArray(formObject[block.remoteProperty]) ? formObject[block.remoteProperty] : formObject[block.remoteProperty] !== null ? [formObject[block.remoteProperty]] : []"
+              :error="$parseApiError(block.remoteProperty, error)"
               @upload="(images) => handleFileUpload(block.remoteProperty, images, (block.meta && block.meta.allowMultiple))"
             />
             <slot :name="block.remoteProperty" :form-object="formObject" />
@@ -280,8 +288,13 @@ onMounted(() => {
               :id="`id-${block.remoteProperty}`"
               type="file"
               :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`"
+              :label="block.label"
+              :hidden-label="block.meta && block.meta.hiddenLabel"
+              :help-text="block.meta && block.meta.helpText"
+              :required="block.required"
               :multiple="block.meta && block.meta.allowMultiple"
-              :files="Array.isArray(formObject[block.remoteProperty]) ? formObject[block.remoteProperty] : [formObject[block.remoteProperty]]"
+              :files="Array.isArray(formObject[block.remoteProperty]) ? formObject[block.remoteProperty] : formObject[block.remoteProperty] !== null ? [formObject[block.remoteProperty]] : []"
+              :error="$parseApiError(block.remoteProperty, error)"
               @upload="(files) => handleFileUpload(block.remoteProperty, files, (block.meta && block.meta.allowMultiple))"
             />
             <slot :name="block.remoteProperty" :form-object="formObject" />

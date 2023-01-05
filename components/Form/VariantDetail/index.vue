@@ -42,7 +42,7 @@ const notificationsStore = useNotificationsStore()
  ** State **
  ***********/
 
-const defaultVariantValues = { name: null, is_standard: false, file: null }
+const defaultVariantValues = { name: null, isStandard: false, file: null }
 const variant = ref({ ...defaultVariantValues })
 
 const {

@@ -35,7 +35,7 @@ const productDetailForm = (
       {
         type: 'select',
         label: 'Leverandør',
-        remoteProperty: 'supplier',
+        remoteProperty: 'supplierId',
         required: true,
         options: suppliers,
         meta: {
@@ -53,16 +53,26 @@ const productDetailForm = (
         meta: { optionNameProperty: 'name', optionValueProperty: 'value' },
       },
       {
+        type: 'action',
+        label: 'Slug',
+        remoteProperty: 'slug',
+        required: true,
+      },
+      {
         type: 'editor',
         label: 'Beskrivelse',
         remoteProperty: 'description',
         required: true,
       },
       {
-        type: 'action',
-        label: 'Slug',
-        remoteProperty: 'slug',
+        type: 'image',
+        label: 'Thumbnail',
+        remoteProperty: 'thumbnail',
         required: true,
+        meta: {
+          helpText:
+            'Thumbnail er en mindre representasjon av et produkt, og er bildet som vises i oversikt- og listesammenhenger. Bildet bør være 380x575px.',
+        },
       },
     ],
   },
@@ -72,9 +82,8 @@ const productDetailForm = (
       {
         type: 'multiselect',
         label: 'Kategorier',
-        remoteProperty: 'categories',
+        remoteProperty: 'categoryIds',
         required: true,
-        // initialValue: [20, 22],
         options: categories,
         meta: {
           optionNameProperty: 'displayName',
@@ -107,7 +116,7 @@ const productDetailForm = (
       {
         type: 'checkbox',
         label: 'Vis pris til kunde',
-        remoteProperty: 'displayPriceToCustomer',
+        remoteProperty: 'displayPrice',
         meta: {
           helpText: 'Prisen på produktet er tilgjengelig i nettbutikken.',
         },
@@ -117,10 +126,10 @@ const productDetailForm = (
         label: 'Enhet',
         remoteProperty: 'unit',
         required: true,
-        initialValue: 'stk',
+        initialValue: 2,
         options: [
-          { name: 'Stk', value: 'stk' },
-          { name: 'm2', value: 'm2' },
+          { name: 'Stk', value: 2 },
+          { name: 'm2', value: 1 },
         ],
         meta: {
           optionNameProperty: 'name',
@@ -154,7 +163,7 @@ const productDetailForm = (
       {
         type: 'multiselect',
         label: 'Farger',
-        remoteProperty: 'colors',
+        remoteProperty: 'colorIds',
         required: true,
         options: colors,
         meta: {
@@ -167,7 +176,7 @@ const productDetailForm = (
       {
         type: 'multiselect',
         label: 'Fasonger',
-        remoteProperty: 'shapes',
+        remoteProperty: 'shapeIds',
         required: true,
         options: shapes,
         meta: {
@@ -228,7 +237,12 @@ const productDetailImageForm: FormBlock[] = [
         type: 'image',
         label: 'Bilder',
         remoteProperty: 'images',
-        meta: { hiddenLabel: true, allowMultiple: true, allowSetPrimaryImage: true },
+        meta: {
+          hiddenLabel: true,
+          allowMultiple: true,
+          allowSetPrimaryImage: true,
+          helpText: 'Du kan laste opp flere bilder samtidig. Bildene bør være rundt 1920x1080px.',
+        },
       },
     ],
   },

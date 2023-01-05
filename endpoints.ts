@@ -54,6 +54,7 @@ const internalEndpoints = {
 
   products: {
     list: () => '/v1/internal/products/',
+    create: () => '/v1/internal/products/create/',
 
     colors: {
       list: () => '/v1/internal/product-attributes/colors/',
