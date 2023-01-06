@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { DocumentPlusIcon, PhotoIcon } from '@heroicons/vue/24/outline'
+import { FileType } from './types'
 
 interface FileUploadInputProps {
   /**
@@ -39,7 +40,7 @@ interface FileUploadInputProps {
    * Field error as string.
    */
   error?: string
-  files?: File[]
+  files?: FileType[]
 }
 
 const props = defineProps<FileUploadInputProps>()
@@ -50,13 +51,20 @@ const dragging = ref<boolean>(false)
 const filesUploaded = ref(props.files ? [...props.files] : [])
 
 const uploadFiles = (files: FileList) => {
+  const constructFiles = []
+  Array.from(files).forEach((f) => constructFiles.push({ file: f }))
+
+  console.log(constructFiles)
+
   if (props.multiple) {
-    filesUploaded.value = [...filesUploaded.value, ...files]
+    filesUploaded.value = [...filesUploaded.value, ...constructFiles]
   } else if (files.length > 1) {
-    filesUploaded.value = [files[0]]
+    filesUploaded.value = [constructFiles[0]]
   } else {
-    filesUploaded.value = [...files]
+    filesUploaded.value = [...constructFiles]
   }
+
+  emits('upload', filesUploaded.value)
 }
 
 const onFileUpload = (e: any) => {
@@ -67,35 +75,52 @@ const onDropUpload = (e: any) => {
   uploadFiles(e.dataTransfer.files)
 }
 
-const deleteFile = (file: File) => {
-  filesUploaded.value = [...filesUploaded.value.filter((f) => f !== file)]
+const deleteFile = (fileType: FileType) => {
+  filesUploaded.value = [...filesUploaded.value.filter((f) => f.file !== fileType.file)]
+  emits('upload', [...filesUploaded.value])
 }
 
-const setAsPrimary = (file: any) => {
-  const index = filesUploaded.value.findIndex((f) => f === file)
+const setAsPrimary = (fileType: FileType) => {
+  const index = filesUploaded.value.findIndex((f) => f.file === fileType.file)
+
+  // Remove isMainImage from other candidate(s).
+  filesUploaded.value.forEach((ft, i) => {
+    if (ft.isMainImage) {
+      filesUploaded.value[i] = { ...ft, isMainImage: false }
+    }
+  })
 
   if (index !== -1) {
-    filesUploaded.value.splice(index, 1)
-    filesUploaded.value.unshift(file)
-    emits('upload', filesUploaded.value)
+    filesUploaded.value[index] = { ...fileType, isMainImage: true }
   } else {
-    filesUploaded.value.unshift(file)
-    emits('upload', filesUploaded.value)
+    filesUploaded.value.push({ ...fileType, isMainImage: true })
   }
+  emits('upload', filesUploaded.value)
+}
+
+const removeAsPrimary = (fileType: FileType) => {
+  const index = filesUploaded.value.findIndex((f) => f.file === fileType.file)
+  filesUploaded.value[index] = { ...fileType, isMainImage: false }
+  emits('upload', filesUploaded.value)
+}
+
+const setAsApplyFilter = (fileType: FileType) => {
+  const index = filesUploaded.value.findIndex((f) => f.file === fileType.file)
+  filesUploaded.value[index] = { ...fileType, applyFilter: true }
+  emits('upload', filesUploaded.value)
+}
+
+const removeAsApplyFilter = (fileType: FileType) => {
+  const index = filesUploaded.value.findIndex((f) => f.file === fileType.file)
+  filesUploaded.value[index] = { ...fileType, applyFilter: false }
+  emits('upload', filesUploaded.value)
 }
 
 interface FileUploadInputBaseEmits {
-  (e: 'upload', val: any[]): void
+  (e: 'upload', val: FileType[]): void
 }
 
 const emits = defineEmits<FileUploadInputBaseEmits>()
-
-watch(
-  () => filesUploaded.value,
-  (newValue, _oldValue) => {
-    emits('upload', newValue)
-  }
-)
 </script>
 
 <template>
@@ -111,6 +136,7 @@ watch(
       v-bind="$attrs"
     >
       <div
+        v-show="multiple || (!multiple && !filesUploaded.length)"
         class="max-w-xl"
         @dragover.prevent
         @drop.prevent="dragging = false"
@@ -160,17 +186,26 @@ watch(
         </label>
       </div>
     </FormElementBase>
+    {{ files }}
     <FileUploadUploadedBlock v-if="files.length" class="mt-5">
-      <div v-for="(file, index) in files" :key="index">
+      <div v-for="(fileType, index) in files" :key="index">
         <FileUploadUploadedBlockImageItem
           v-if="type === 'image'"
-          :file="file"
-          :selected="file === files[0] && files.length > 1"
+          :file="fileType.file"
+          :is-primary-image="fileType.isMainImage"
+          :has-applied-filter="fileType.applyFilter"
           :allow-set-primary="allowSetPrimary"
-          @set-primary="setAsPrimary(file)"
-          @delete="deleteFile(file)"
+          @set-primary="setAsPrimary(fileType)"
+          @remove-primary="removeAsPrimary(fileType)"
+          @add-filter="setAsApplyFilter(fileType)"
+          @remove-filter="removeAsApplyFilter(fileType)"
+          @delete="deleteFile(fileType)"
         />
-        <FileUploadUploadedBlockFileItem v-else :file="file" @delete="deleteFile(file)" />
+        <FileUploadUploadedBlockFileItem
+          v-else
+          :file="fileType.file"
+          @delete="deleteFile(fileType)"
+        />
       </div>
     </FileUploadUploadedBlock>
   </div>

@@ -187,6 +187,7 @@ watch(
             {{ mappedSelect[displayField] }}
           </Tag>
           <input
+            :id="id"
             v-model="filterQuery"
             type="text"
             class="focus:outline-none focus:border-transparent focus:ring-transparent grow w-20 h-5 px-0 py-2 border-transparent"

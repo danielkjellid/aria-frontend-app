@@ -3,6 +3,7 @@
 
 import { ApiError } from '~~/@types'
 import { FormBlock } from './types'
+import { FileType } from '../FileUpload/types';
 
 interface FormBuilderProps {
   initialValuesFromObj?: Object
@@ -50,7 +51,7 @@ const test = () => {
   console.log(formObject)
 }
 
-const handleFileUpload = (formProperty: string, files: File[], allowMultiple = false) => {
+const handleFileUpload = (formProperty: string, files: FileType[], allowMultiple = false) => {
   emits('clearError')
   if (allowMultiple) {
     formObject[formProperty] = [...files]
@@ -224,7 +225,6 @@ onMounted(() => {
             <slot :name="block.remoteProperty" :form-object="formObject" />
           </template>
           <template v-if="block.type === 'listBoxFilterNumber'">
-            p: {{ formObject[block.remoteProperty] }}
             <ListBoxFilter 
               :id="`id-${block.remoteProperty}`"
               v-model.number="formObject[block.remoteProperty]"

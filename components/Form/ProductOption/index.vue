@@ -124,7 +124,6 @@ const variantForm: ComputedRef<FormBlock[]> = computed(() => productOptionVarian
         :is-nested="isNested"
         @close="onClose"
       >
-        {{ formKey }}
         <div :key="formKey">
           <FormBuilder
             :form="generalForm"

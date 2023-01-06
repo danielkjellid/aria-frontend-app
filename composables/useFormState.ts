@@ -7,7 +7,9 @@ interface FormState {
   loadingState: 'initial' | 'loading' | 'error' | 'success'
 }
 
-const useFormState = (formData: Ref<any>, formDataDefaultValues: any) => {
+const useFormState = (formData: Ref<any> | Ref<any[]>, formDataDefaultValues: any | any[]) => {
+  const isArray = Array.isArray(formData.value)
+
   /**********************
    ** Submission state **
    **********************/
@@ -19,7 +21,9 @@ const useFormState = (formData: Ref<any>, formDataDefaultValues: any) => {
   const canBeSubmitted = computed(
     () =>
       submissionState.value !== 'loading' &&
-      !checkObjectEquality(formData.value, formDataDefaultValues)
+      (isArray
+        ? JSON.stringify(formData.value) === JSON.stringify(formDataDefaultValues)
+        : !checkObjectEquality(formData.value, formDataDefaultValues))
   )
 
   /*****************
@@ -45,21 +49,21 @@ const useFormState = (formData: Ref<any>, formDataDefaultValues: any) => {
 
   const resetForm = () => {
     // eslint-disable-next-line no-param-reassign
-    formData.value = { ...formDataDefaultValues }
-    formKey.value = Date.now().toString()
+    formData.value = isArray ? [...formDataDefaultValues] : { ...formDataDefaultValues }
+    setTimeout(() => {
+      formKey.value = Date.now().toString()
+    }, 100)
   }
 
   /*******************************
    ** Build multipart form util **
    *******************************/
 
-  const buildMultipartForm = () => {
-    const fd = new FormData()
-
+  const buildMultipartFormFromObject = (fd: FormData, data: any) => {
     // When appending to form data, it converts available types to string,
     // even undefined or null. Therefore we need to explicitly check if
     // the field has any value before appending it to make error flow good.
-    Object.entries(formData.value).forEach(([key, value]) => {
+    Object.entries(data).forEach(([key, value]) => {
       // Multipart form data does not run through the parser in the backend,
       // so we need to decamelize values here.
       const decamelizedKey = humps.decamelize(key)
@@ -82,6 +86,22 @@ const useFormState = (formData: Ref<any>, formDataDefaultValues: any) => {
         }
       }
     })
+  }
+
+  const buildMultipartFormFromArray = (fd: FormData, data: any[]) => {
+    data.forEach((d) => buildMultipartFormFromObject(fd, d))
+  }
+
+  const buildMultipartForm = () => {
+    const fd = new FormData()
+
+    if (isArray) {
+      buildMultipartFormFromArray(fd, formData.value)
+    } else {
+      buildMultipartFormFromObject(fd, formData.value)
+    }
+
+    console.log('f', ...fd)
 
     return fd
   }

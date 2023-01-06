@@ -19,6 +19,7 @@ const productOptionGeneralForm = (statuses: Status[]): FormBlock[] => [
         type: 'numberInput',
         label: 'Pris',
         remoteProperty: 'grossPrice',
+        required: true,
         meta: { helpText: 'Prisen for dette alternativet.' },
       },
     ],
