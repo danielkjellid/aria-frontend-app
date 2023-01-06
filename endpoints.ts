@@ -55,9 +55,19 @@ const internalEndpoints = {
   products: {
     list: () => '/v1/internal/products/',
     create: () => '/v1/internal/products/create/',
+    createOptionsInBulk: (productId: number) =>
+      `/v1/internal/products/${productId}/options/bulk-create/`,
+  },
 
+  productAttributes: {
     colors: {
       list: () => '/v1/internal/product-attributes/colors/',
+    },
+    materials: {
+      list: () => '/v1/internal/product-attributes/materials/',
+    },
+    rooms: {
+      list: () => '/v1/internal/product-attributes/rooms/',
     },
     shapes: {
       list: () => '/v1/internal/product-attributes/shapes/',

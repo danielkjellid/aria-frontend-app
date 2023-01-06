@@ -189,11 +189,11 @@ const productDetailForm = (
       {
         type: 'multiselect',
         label: 'Materialer',
-        remoteProperty: 'materials',
+        remoteProperty: 'materialIds',
         options: materials,
         meta: {
           optionNameProperty: 'name',
-          optionValueProperty: 'value',
+          optionValueProperty: 'id',
           allowMultiple: true,
           helpText: 'Velg alle materialene some egner seg til produktet.',
         },
@@ -201,11 +201,11 @@ const productDetailForm = (
       {
         type: 'multiselect',
         label: 'Rom',
-        remoteProperty: 'rooms',
+        remoteProperty: 'roomIds',
         options: rooms,
         meta: {
           optionNameProperty: 'name',
-          optionValueProperty: 'value',
+          optionValueProperty: 'id',
           allowMultiple: true,
           helpText: 'Velg alle rommene some egner seg til produktet.',
         },

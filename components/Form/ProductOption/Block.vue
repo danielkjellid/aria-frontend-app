@@ -15,6 +15,7 @@ const options = ref<ProductOption[]>([])
 const addNewOption = (val: ProductOption) => {
   options.value.push(val)
   duplicatedOption.value = null
+  emits('update', [...options.value])
 }
 
 const duplicatedOption = ref<ProductOption>(null)
@@ -31,19 +32,13 @@ const setDuplicatedOption = (option: ProductOption) => {
 
 const deleteOption = (option: ProductOption) => {
   options.value = [...options.value.filter((o) => o !== option)]
+  emits('update', [...options.value])
   notificationsStore.create({
     type: 'success',
     title: 'Alternativ slettet!',
     text: 'Alternativet ble fjernet, og vil ikke bli opprettet med produktet.',
   })
 }
-
-watch(
-  () => options.value,
-  (newValue, _oldValue) => {
-    emits('update', newValue)
-  }
-)
 </script>
 
 <template>
@@ -57,7 +52,7 @@ watch(
           :highlight="options.indexOf(option) + 1"
         >
           <template #default>
-            {{ $formatPrice(option.price) }} kr &#8226; {{ $getStatusName(option.status) }}
+            {{ $formatPrice(option.grossPrice) }} kr &#8226; {{ $getStatusName(option.status) }}
           </template>
           <template #actions>
             <ActionMenuSection>
@@ -83,7 +78,6 @@ watch(
     </div>
     <FormProductOption
       :active="formActive"
-      :existing-product-option="duplicatedOption"
       is-nested
       @close="formActive = false"
       @submit="(option) => addNewOption(option)"

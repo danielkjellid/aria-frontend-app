@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { OutputBlockData, OutputData } from '@editorjs/editorjs'
 import edjsHTML from 'editorjs-html'
-import { Editor } from '~~/.nuxt/components'
 
 /***********
  ** Props **
@@ -81,12 +80,6 @@ const emits = defineEmits<EditorEmits>()
 
 const edjsParser = edjsHTML()
 
-const parseOutputToHTMLArray = (data: OutputData) => {
-  const parsedData = edjsParser.parse(data)
-
-  return parsedData
-}
-
 const parseOutputToHTMLString = (data: OutputData) => {
   const parsedData = edjsParser.parse(data)
   const parsedDataWithBreak = [].concat(...parsedData.map((d) => [d, '<br />'])).slice(0, -1)
@@ -149,10 +142,13 @@ onMounted(async () => {
     >
       <div
         id="editor"
-        class="w-full min-h-full overflow-y-auto text-sm focus:outline-none mt-1 focus:ring-2 h-40 border px-3 py-0.5 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent block leading-5 border-gray-200 rounded-md"
-        :class="{
-          'cursor-not-allowed': readonly,
-        }"
+        class="w-full min-h-full overflow-y-auto text-sm focus:outline-none focus:ring-brand-800 mt-1 focus:ring-2 h-40 border px-3 py-0.5 focus:ring-offset-2 focus:border-transparent block leading-5 rounded-md"
+        :class="[
+          {
+            'cursor-not-allowed': readonly,
+          },
+          error ? 'border-red-300 text-red-900' : 'border-gray-200',
+        ]"
       />
     </FormElementBase>
     <div v-else>

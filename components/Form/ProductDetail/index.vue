@@ -3,7 +3,11 @@ import useProductAttributesStore from '~~/store/product-attributes'
 import useSuppliersStore from '~~/store/suppliers'
 import useNotificationsStore from '~~/store/notifications'
 import useCategoriesStore from '~~/store/categories'
-import { ProductCreateInternalOutput } from '~~/@types'
+import {
+  ProductCreateInternalOutput,
+  ProductOptionCreateInBulkInternalInput,
+  ProductOptionCreateInBulkInternalOutput,
+} from '~~/@types'
 import slugify from '~~/utils/slugify'
 import { FormBlock } from '../types'
 import { ComputedRef } from 'vue'
@@ -72,29 +76,11 @@ const productImages = ref([])
 const statuses = useProductStatus()
 
 const colors = await attributesStore.getColorsInternal()
+const materials = await attributesStore.getMaterialsInternal()
+const rooms = await attributesStore.getRoomsInternal()
 const shapes = await attributesStore.getShapesInternal()
 const categories = await categoriesStore.getCategoriesInternal()
 const suppliers = await suppliersStore.getSuppliersInternal()
-
-// Materials and Rooms are temporary as they will be migrated to proper DB instances
-// at some point. For now, they need to be kept in sync with the enum backend.
-const materials = [
-  { name: 'Kompisitt', value: 'kompositt' },
-  { name: 'DADOkvarts', value: 'dado kvarts' },
-  { name: 'Rustfritt stål', value: 'rustfritt stål' },
-  { name: 'Pusset stål', value: 'pusset stål' },
-  { name: 'Metall', value: 'metall' },
-  { name: 'Tre', value: 'tre' },
-  { name: 'Laminat', value: 'laminat' },
-  { name: 'Glass', value: 'glass' },
-  { name: 'Marmor', value: 'marmor' },
-]
-const rooms = [
-  { name: 'Bad', value: 'badrom' },
-  { name: 'Kjøkken', value: 'kjøkken' },
-  { name: 'Stue, gang og oppholdsrom', value: 'stue gang oppholdsrom' },
-  { name: 'Uterom', value: 'uterom' },
-]
 
 const {
   submissionState: productFormSubmissionState,
@@ -119,8 +105,6 @@ const humanReadableSupplier = (supplierId: string) =>
 const handleSubmit = async () => {
   setProductFormSubmissionState('loading')
   await console.log(product)
-  setProductFormError({ message: 'Testing', extra: { name: 'Yoooo' } })
-  setProductFormSubmissionState('error')
 
   console.log(product.value)
   console.log(productFiles.value)
@@ -135,8 +119,21 @@ const handleSubmit = async () => {
     await performPost<ProductCreateInternalOutput>(
       internalUrls.products.create(),
       productPayload
-    ).then((productOutput) => {
-      console.log(productOutput)
+    ).then(async (productOutput) => {
+      // Once product is created, create associated options in bulk.
+      if (productOptions.value && productOptions.value.length) {
+        const optionsPayload: ProductOptionCreateInBulkInternalInput[] = [...productOptions.value]
+        await performPost<ProductOptionCreateInBulkInternalOutput[]>(
+          internalUrls.products.createOptionsInBulk(productOutput.id),
+          optionsPayload
+        ).catch((err) => {
+          notificationsStore.create({
+            type: 'danger',
+            title: 'Noe gikk galt!',
+            text: err.data.message,
+          })
+        })
+      }
     })
   } catch (e) {
     setProductFormError(e.data)
@@ -172,7 +169,6 @@ const productForm: ComputedRef<FormBlock[]> = computed(() =>
             <Button
               type="button"
               variant="secondary"
-              align-self="bottom"
               :disabled="!formObject['name'] || !formObject['supplierId']"
               @click="
                 formObject['slug'] = slugify(`
@@ -190,6 +186,7 @@ const productForm: ComputedRef<FormBlock[]> = computed(() =>
         <FormProductFileBlock @update="(files) => (productFiles = files)" />
       </CollapsableSection>
       <CollapsableSection title="Alternativer">
+        {{ productOptions }}
         <FormProductOptionBlock @update="(options) => (productOptions = options)" />
       </CollapsableSection>
       <template #actions>

@@ -1,5 +1,7 @@
 import {
   ColorListInternalOutput,
+  MaterialListInternalOutput,
+  RoomListInternalOutput,
   ShapeListInternalOutput,
   VariantListInternalOutput,
 } from '~~/@types'
@@ -9,9 +11,11 @@ import { internalUrls } from '~~/endpoints'
 
 const useProductAttributesStore = defineStore('productAttributes', {
   state: () => ({
-    variants: [] as VariantListInternalOutput[],
     colors: [] as ColorListInternalOutput[],
+    materials: [] as MaterialListInternalOutput[],
+    rooms: [] as RoomListInternalOutput[],
     shapes: [] as ShapeListInternalOutput[],
+    variants: [] as VariantListInternalOutput[],
   }),
   actions: {
     /************
@@ -19,21 +23,53 @@ const useProductAttributesStore = defineStore('productAttributes', {
      ************/
 
     async fetchColorsInternal() {
-      try {
-        this.colors = await performGet<ColorListInternalOutput[]>(
-          internalUrls.products.colors.list()
-        )
-      } catch (error) {
-        console.log(error)
-      }
+      this.colors = await performGet<ColorListInternalOutput[]>(
+        internalUrls.productAttributes.colors.list()
+      )
     },
     async getColorsInternal() {
       if (!this.colors || !this.colors.length) {
-        await this.fetchColors()
+        await this.fetchColorsInternal()
         return this.colors
       }
 
       return this.colors
+    },
+
+    /***************
+     ** Materials **
+     ***************/
+
+    async fetchMaterialsInternal() {
+      this.materials = await performGet<MaterialListInternalOutput[]>(
+        internalUrls.productAttributes.materials.list()
+      )
+    },
+    async getMaterialsInternal() {
+      if (!this.materials || !this.materials.length) {
+        await this.fetchMaterialsInternal()
+        return this.materials
+      }
+
+      return this.materials
+    },
+
+    /***********
+     ** Rooms **
+     ***********/
+
+    async fetchRoomsInternal() {
+      this.rooms = await performGet<RoomListInternalOutput[]>(
+        internalUrls.productAttributes.rooms.list()
+      )
+    },
+    async getRoomsInternal() {
+      if (!this.rooms || !this.rooms.length) {
+        await this.fetchRoomsInternal()
+        return this.rooms
+      }
+
+      return this.rooms
     },
 
     /************
@@ -41,17 +77,13 @@ const useProductAttributesStore = defineStore('productAttributes', {
      ************/
 
     async fetchShapesInternal() {
-      try {
-        this.shapes = await performGet<ShapeListInternalOutput[]>(
-          internalUrls.products.shapes.list()
-        )
-      } catch (error) {
-        console.log(error)
-      }
+      this.shapes = await performGet<ShapeListInternalOutput[]>(
+        internalUrls.productAttributes.shapes.list()
+      )
     },
     async getShapesInternal() {
       if (!this.shapes || !this.shapes.length) {
-        await this.fetchShapes()
+        await this.fetchShapesInternal()
         return this.shapes
       }
 
@@ -63,13 +95,9 @@ const useProductAttributesStore = defineStore('productAttributes', {
      **************/
 
     async fetchVariantsInternal() {
-      try {
-        this.variants = await performGet<VariantListInternalOutput[]>(
-          internalUrls.products.variants.list()
-        )
-      } catch (error) {
-        console.log(error)
-      }
+      this.variants = await performGet<VariantListInternalOutput[]>(
+        internalUrls.productAttributes.variants.list()
+      )
     },
     addVariantToInternalState(variant: VariantListInternalOutput) {
       this.variants.unshift(variant)
@@ -77,7 +105,7 @@ const useProductAttributesStore = defineStore('productAttributes', {
     },
     async getVariantsInternal() {
       if (!this.variants || !this.variants.length) {
-        await this.fetchVariants()
+        await this.fetchVariantsInternal()
         return this.variants
       }
 

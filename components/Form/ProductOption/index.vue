@@ -45,7 +45,7 @@ const notificationsStore = useNotificationsStore()
  ***********/
 
 const productOptionDefaultValues = {
-  price: null,
+  grossPrice: null,
   variantId: null,
   status: '3',
   size: {
@@ -55,6 +55,7 @@ const productOptionDefaultValues = {
     circumference: null,
   },
 }
+
 const productOption = ref({ ...productOptionDefaultValues })
 const variants = await attributesStore.getVariantsInternal()
 const variantFormActive = ref<boolean>(false)
@@ -68,7 +69,10 @@ const disableCircumference = computed(
 )
 const disableHeightWidthDepth = computed(() => !!productOption.value.size.circumference)
 
-const { resetForm, canBeSubmitted } = useFormState(productOption, productOptionDefaultValues)
+const { resetForm, formKey, canBeSubmitted } = useFormState(
+  productOption,
+  productOptionDefaultValues
+)
 
 /*********************
  ** State: handlers **
@@ -120,29 +124,31 @@ const variantForm: ComputedRef<FormBlock[]> = computed(() => productOptionVarian
         :is-nested="isNested"
         @close="onClose"
       >
-        {{ productOption }}
-        <FormBuilder
-          :form="generalForm"
-          :initial-values-from-obj="existingProductOption"
-          @edit="(formData) => (productOption = formData)"
-        />
-        <FormBuilder :form="sizeForm" @edit="(formData) => (productOption['size'] = formData)" />
-        <FormBuilder
-          :form="variantForm"
-          @edit="(formData) => (productOption.variantId = formData.variantId)"
-        >
-          <template #variantId>
-            <div v-if="!productOption.variantId">
-              <Button variant="secondary" fluid @click="variantFormActive = true">
-                Legg til ny variant
-              </Button>
-              <p class="mt-3 text-sm font-light text-gray-500">
-                Dersom varianten du ønsker å legge til ikke allerede eksisterer kan du opprette en
-                ny en.
-              </p>
-            </div>
-          </template>
-        </FormBuilder>
+        {{ formKey }}
+        <div :key="formKey">
+          <FormBuilder
+            :form="generalForm"
+            :initial-values-from-obj="existingProductOption"
+            @edit="(formData) => (productOption = formData)"
+          />
+          <FormBuilder :form="sizeForm" @edit="(formData) => (productOption['size'] = formData)" />
+          <FormBuilder
+            :form="variantForm"
+            @edit="(formData) => (productOption.variantId = formData.variantId)"
+          >
+            <template #variantId>
+              <div v-if="!productOption.variantId">
+                <Button variant="secondary" fluid @click="variantFormActive = true">
+                  Legg til ny variant
+                </Button>
+                <p class="mt-3 text-sm font-light text-gray-500">
+                  Dersom varianten du ønsker å legge til ikke allerede eksisterer kan du opprette en
+                  ny en.
+                </p>
+              </div>
+            </template>
+          </FormBuilder>
+        </div>
         <template #actions>
           <div class="md:grid-cols-5 grid grid-cols-2 gap-5">
             <Button

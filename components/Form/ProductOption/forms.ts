@@ -18,7 +18,7 @@ const productOptionGeneralForm = (statuses: Status[]): FormBlock[] => [
       {
         type: 'numberInput',
         label: 'Pris',
-        remoteProperty: 'price',
+        remoteProperty: 'grossPrice',
         meta: { helpText: 'Prisen for dette alternativet.' },
       },
     ],

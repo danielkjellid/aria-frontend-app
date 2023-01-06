@@ -132,27 +132,28 @@ onMounted(() => {
             <slot :name="block.remoteProperty" :form-object="formObject" />
           </template>
           <template v-if="block.type === 'action'">
-            <div class="flex space-x-3">
-              <div class="w-full">
-                <Input
-                  :id="`id-${block.remoteProperty}`"
-                  v-model="formObject[block.remoteProperty]"
-                  :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`"
-                  type="text"
-                  :label="block.label"
-                  :hidden-label="block.meta && block.meta.hiddenLabel"
-                  :help-text="block.meta && block.meta.helpText"
-                  :placeholder="block.meta && block.meta.placeholder"
-                  :required="block.required"
-                  :disabled="block.meta && block.meta.disabled"
-                  :display-word-count="block.meta && block.meta.displayWordCount"
-                  :error="$parseApiError(block.remoteProperty, error)"
-                  @input="clearError"
-                />
+            <div class="flex justify-between w-full space-x-3" :class="$parseApiError(block.remoteProperty, error) ? 'items-center' : 'items-end'">
+              <Input
+                :id="`id-${block.remoteProperty}`"
+                v-model="formObject[block.remoteProperty]"
+                class="w-full"
+                :class="block.meta && block.meta.colSpan && `col-span-${block.meta.colSpan}`"
+                type="text"
+                :label="block.label"
+                :hidden-label="block.meta && block.meta.hiddenLabel"
+                :help-text="block.meta && block.meta.helpText"
+                :placeholder="block.meta && block.meta.placeholder"
+                :required="block.required"
+                :disabled="block.meta && block.meta.disabled"
+                :display-word-count="block.meta && block.meta.displayWordCount"
+                :error="$parseApiError(block.remoteProperty, error)"
+                @input="clearError"
+              />
+              <div class="h-full mt-1">
+                <slot :name="block.remoteProperty" :form-object="formObject">
+                  <p class="text-sm">Slot <pre>{{ block.remoteProperty }}</pre> unused.</p>
+                </slot>
               </div>
-              <slot :name="block.remoteProperty" :form-object="formObject">
-                <p class="text-sm">Slot <pre>{{ block.remoteProperty }}</pre> unused.</p>
-              </slot>
             </div>
           </template>
           <template v-if="block.type === 'select'">

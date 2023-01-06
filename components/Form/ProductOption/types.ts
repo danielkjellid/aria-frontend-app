@@ -7,7 +7,7 @@ interface ProductOptionSize {
 
 export interface ProductOption {
   status: string
-  price: number
+  grossPrice: number
   size: ProductOptionSize
   variantId: number
 }

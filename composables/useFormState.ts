@@ -41,9 +41,12 @@ const useFormState = (formData: Ref<any>, formDataDefaultValues: any) => {
    ** Reset form util **
    *********************/
 
+  const formKey = ref<string>(Date.now().toString())
+
   const resetForm = () => {
     // eslint-disable-next-line no-param-reassign
     formData.value = { ...formDataDefaultValues }
+    formKey.value = Date.now().toString()
   }
 
   /*******************************
@@ -61,7 +64,7 @@ const useFormState = (formData: Ref<any>, formDataDefaultValues: any) => {
       // so we need to decamelize values here.
       const decamelizedKey = humps.decamelize(key)
 
-      if (value !== undefined && value !== null) {
+      if (value !== undefined && value !== null && value !== '') {
         if (Array.isArray(value)) {
           value.forEach((val) => {
             if (val instanceof File) {
@@ -90,6 +93,7 @@ const useFormState = (formData: Ref<any>, formDataDefaultValues: any) => {
     formError,
     setFormError,
     clearFormError,
+    formKey,
     resetForm,
     buildMultipartForm,
   }
