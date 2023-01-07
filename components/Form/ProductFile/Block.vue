@@ -12,18 +12,13 @@ const filesData = ref<ProductFile[]>([])
 
 const addNewFileData = (fileData: ProductFile) => {
   filesData.value.push(fileData)
+  emits('update', filesData.value)
 }
 
 const deleteFile = (fileData: ProductFile) => {
   filesData.value = [...filesData.value.filter((fd) => fd !== fileData)]
+  emits('update', filesData.value)
 }
-
-watch(
-  () => filesData.value,
-  (newValue, _oldValue) => {
-    emits('update', newValue)
-  }
-)
 </script>
 
 <template>

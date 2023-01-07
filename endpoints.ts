@@ -57,6 +57,8 @@ const internalEndpoints = {
     create: () => '/v1/internal/products/create/',
     createOptionsInBulk: (productId: number) =>
       `/v1/internal/products/${productId}/options/bulk-create/`,
+    createImage: (productId: number) => `/v1/internal/products/${productId}/images/create/`,
+    createFile: (productId: number) => `/v1/internal/products/${productId}/files/create/`,
   },
 
   productAttributes: {

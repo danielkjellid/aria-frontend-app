@@ -5,8 +5,9 @@ import useNotificationsStore from '~~/store/notifications'
 import useCategoriesStore from '~~/store/categories'
 import {
   ProductCreateInternalOutput,
-  ProductOptionCreateInBulkInternalInput,
   ProductOptionCreateInBulkInternalOutput,
+  ProductImageCreateInternalOutput,
+  ProductFileCreateInternalOutput,
 } from '~~/@types'
 import slugify from '~~/utils/slugify'
 import { FormBlock } from '../types'
@@ -15,6 +16,7 @@ import { productDetailImageForm, productDetailForm } from './forms'
 import { internalUrls } from '~~/endpoints'
 import { ProductOption } from '../ProductOption/types'
 import { ProductImage } from './types'
+import { ProductFile } from '../ProductFile/types'
 
 /***********
  ** Props **
@@ -71,7 +73,7 @@ const productDefaultValues = {
   availableInSpecialSizes: false,
 }
 const product = ref({ ...productDefaultValues })
-const productFiles = ref([])
+const productFiles = ref<ProductFile[]>([])
 const productOptions = ref<ProductOption[]>([])
 const productImages = ref<ProductImage[]>([])
 
@@ -92,11 +94,6 @@ const {
   setFormError: setProductFormError,
   buildMultipartForm: productBuildMultipartForm,
 } = useFormState(product, productDefaultValues)
-
-const { buildMultipartForm: productImageBuildMultipartForm, canBeSubmitted: ccc } = useFormState(
-  productImages,
-  []
-)
 
 /*********************
  ** State: handlers **
@@ -126,7 +123,7 @@ const handleSubmit = async () => {
     .then(async (productOutput) => {
       // Once product is created, create associated options in bulk.
       if (productOptions.value && productOptions.value.length) {
-        const optionsPayload: ProductOptionCreateInBulkInternalInput[] = [...productOptions.value]
+        const optionsPayload = [...productOptions.value]
         await performPost<ProductOptionCreateInBulkInternalOutput[]>(
           internalUrls.products.createOptionsInBulk(productOutput.id),
           optionsPayload
@@ -135,10 +132,52 @@ const handleSubmit = async () => {
           notificationsStore.create({
             type: 'danger',
             title: 'Noe gikk galt!',
-            text: 'Kunne ikke opprette alternativer, venligst last inn siden på nytt og prøv igjen.',
+            text: 'Kunne ikke opprette alternativer, vennligst last inn siden på nytt og prøv igjen.',
           })
         })
         setProductFormSubmissionState('error')
+      }
+
+      // Once product is created, create associated images one by one.
+      // TODO: this probably has to check existing images to make sure we don't recreate existing
+      // images. This also goes for deleting.
+      if (productImages.value && productImages.value.length) {
+        productImages.value.forEach(async (imageObj) => {
+          const payload = useBuildMultipartForm(imageObj)
+
+          await performPost<ProductImageCreateInternalOutput>(
+            internalUrls.products.createImage(productOutput.id),
+            payload
+          ).catch((err) => {
+            console.log(err.data.message)
+            notificationsStore.create({
+              type: 'danger',
+              title: 'Noe gikk galt!',
+              text: 'Kunne ikke opprette bilder, vennligst last inn siden på nytt og prøv igjen.',
+            })
+          })
+        })
+      }
+
+      // Once product is created, create associated files one by one.
+      // TODO: this probably has to check existing files to make sure we don't recreate existing
+      // files. This also goes for deleting.
+      if (productFiles.value && productFiles.value.length) {
+        productFiles.value.forEach(async (fileObj) => {
+          const payload = useBuildMultipartForm(fileObj)
+
+          await performPost<ProductFileCreateInternalOutput>(
+            internalUrls.products.createFile(1104),
+            payload
+          ).catch((err) => {
+            console.log(err.data.message)
+            notificationsStore.create({
+              type: 'danger',
+              title: 'Noe gikk galt!',
+              text: 'Kunne ikke opprette filer, vennligst last inn siden på nytt og prøv igjen.',
+            })
+          })
+        })
       }
     })
     .catch((err) => {
@@ -151,19 +190,6 @@ const handleSubmit = async () => {
       setProductFormSubmissionState('error')
     })
 }
-
-const testSubmitImage = async () => {
-  const payload = await productImageBuildMultipartForm()
-  console.log('fired')
-  console.log(...payload)
-}
-
-watch(
-  () => productImages.value,
-  (n, _o) => {
-    console.log(n)
-  }
-)
 
 const handleProductImageUpload = (data: { images: ProductImage[] }) => {
   productImages.value = [
@@ -211,14 +237,10 @@ const productForm: ComputedRef<FormBlock[]> = computed(() =>
             </Button>
           </template>
         </FormBuilder>
-        {{ ccc }}
-        <br />
-        {{ productImages }}
         <FormBuilder
           :form="productDetailImageForm"
           @edit="(formData) => handleProductImageUpload(formData)"
         />
-        <button type="button" @click="testSubmitImage">Test submit image</button>
       </form>
       <CollapsableSection title="Filer">
         <FormProductFileBlock @update="(files) => (productFiles = files)" />

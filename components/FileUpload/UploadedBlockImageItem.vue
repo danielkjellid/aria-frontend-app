@@ -8,6 +8,8 @@ interface FileUploadUploadedBlockImageItemProps {
   file: File
   isPrimaryImage?: boolean
   hasAppliedFilter?: boolean
+  allowSetPrimary?: boolean
+  allowSetFilter?: boolean
 }
 
 defineProps<FileUploadUploadedBlockImageItemProps>()
@@ -84,22 +86,37 @@ const deleteFile = () => {
       <ActionMenu alignment="right">
         <EllipsisHorizontalIcon class="w-5 h-5 text-gray-800" />
         <template #items>
-          <ActionMenuSection>
-            <ActionMenuItem v-if="!isPrimaryImage" as="button" type="button" @click="setAsPrimary">
+          <ActionMenuSection v-if="allowSetFilter || allowSetPrimary">
+            <ActionMenuItem
+              v-if="allowSetPrimary && !isPrimaryImage"
+              as="button"
+              type="button"
+              @click="setAsPrimary"
+            >
               Sett som forsidebilde
             </ActionMenuItem>
             <ActionMenuItem
-              v-if="isPrimaryImage"
+              v-if="allowSetPrimary && isPrimaryImage"
               as="button"
               type="button"
               @click="removeAsPrimary"
             >
               Fjern forsidebilde
             </ActionMenuItem>
-            <ActionMenuItem v-if="!hasAppliedFilter" as="button" type="button" @click="applyFilter">
+            <ActionMenuItem
+              v-if="allowSetFilter && !hasAppliedFilter"
+              as="button"
+              type="button"
+              @click="applyFilter"
+            >
               Legg til filter
             </ActionMenuItem>
-            <ActionMenuItem v-if="hasAppliedFilter" as="button" type="button" @click="removeFilter">
+            <ActionMenuItem
+              v-if="allowSetFilter && hasAppliedFilter"
+              as="button"
+              type="button"
+              @click="removeFilter"
+            >
               Fjern filter
             </ActionMenuItem>
           </ActionMenuSection>

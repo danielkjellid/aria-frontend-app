@@ -59,7 +59,7 @@ const handleFileUpload = (formProperty: string, files: FileType[], allowMultiple
   }
 
   const [file] = files
-  formObject[formProperty] = file
+  formObject[formProperty] = file || []
 }
 
 const notifyPossibleErrors = () => {
@@ -278,6 +278,7 @@ onMounted(() => {
               :required="block.required"
               :multiple="block.meta && block.meta.allowMultiple"
               :allow-set-primary="block.meta && block.meta.allowSetPrimaryImage"
+              :allow-set-filter="block.meta && block.meta.allowSetFilterImage"
               :files="Array.isArray(formObject[block.remoteProperty]) ? formObject[block.remoteProperty] : formObject[block.remoteProperty] !== null ? [formObject[block.remoteProperty]] : []"
               :error="$parseApiError(block.remoteProperty, error)"
               @upload="(images) => handleFileUpload(block.remoteProperty, images, (block.meta && block.meta.allowMultiple))"
@@ -294,6 +295,8 @@ onMounted(() => {
               :help-text="block.meta && block.meta.helpText"
               :required="block.required"
               :multiple="block.meta && block.meta.allowMultiple"
+              :allow-set-primary="false"
+              :allow-set-filter="false"
               :files="Array.isArray(formObject[block.remoteProperty]) ? formObject[block.remoteProperty] : formObject[block.remoteProperty] !== null ? [formObject[block.remoteProperty]] : []"
               :error="$parseApiError(block.remoteProperty, error)"
               @upload="(files) => handleFileUpload(block.remoteProperty, files, (block.meta && block.meta.allowMultiple))"

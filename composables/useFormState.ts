@@ -1,14 +1,14 @@
 import { ApiError } from '~~/@types/'
 import { Ref } from 'vue'
 import checkObjectEquality from '~~/utils/checkObjectEquality'
-import humps from 'humps'
+import { useBuildMultipartForm } from './useBuildMultipartForm'
 
 interface FormState {
   loadingState: 'initial' | 'loading' | 'error' | 'success'
 }
 
 const useFormState = (formData: Ref<any> | Ref<any[]>, formDataDefaultValues: any | any[]) => {
-  const isArray = Array.isArray(formData.value)
+  const isArray = Array.isArray(formData)
 
   /**********************
    ** Submission state **
@@ -59,52 +59,7 @@ const useFormState = (formData: Ref<any> | Ref<any[]>, formDataDefaultValues: an
    ** Build multipart form util **
    *******************************/
 
-  const buildMultipartFormFromObject = (fd: FormData, data: any) => {
-    // When appending to form data, it converts available types to string,
-    // even undefined or null. Therefore we need to explicitly check if
-    // the field has any value before appending it to make error flow good.
-    Object.entries(data).forEach(([key, value]) => {
-      // Multipart form data does not run through the parser in the backend,
-      // so we need to decamelize values here.
-      const decamelizedKey = humps.decamelize(key)
-
-      if (value !== undefined && value !== null && value !== '') {
-        if (Array.isArray(value)) {
-          value.forEach((val) => {
-            if (val instanceof File) {
-              fd.append(`${decamelizedKey}[]`, val)
-            } else {
-              fd.append(decamelizedKey, JSON.stringify(val))
-            }
-          })
-        } else if (value instanceof File) {
-          fd.append(decamelizedKey, value)
-        } else if (typeof value === 'boolean') {
-          fd.append(decamelizedKey, JSON.stringify(value))
-        } else {
-          fd.append(decamelizedKey, value.toString())
-        }
-      }
-    })
-  }
-
-  const buildMultipartFormFromArray = (fd: FormData, data: any[]) => {
-    data.forEach((d) => buildMultipartFormFromObject(fd, d))
-  }
-
-  const buildMultipartForm = () => {
-    const fd = new FormData()
-
-    if (isArray) {
-      buildMultipartFormFromArray(fd, formData.value)
-    } else {
-      buildMultipartFormFromObject(fd, formData.value)
-    }
-
-    console.log('f', ...fd)
-
-    return fd
-  }
+  const buildMultipartForm = () => useBuildMultipartForm(formData.value)
 
   return {
     submissionState,

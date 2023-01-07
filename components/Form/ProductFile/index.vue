@@ -41,6 +41,8 @@ const notificationsStore = useNotificationsStore()
 const productFileDefaultValues = { name: null, file: null }
 const productFile = ref({ ...productFileDefaultValues })
 
+const { resetForm, formKey, canBeSubmitted } = useFormState(productFile, productFileDefaultValues)
+
 /*********************
  ** State: handlers **
  *********************/
@@ -52,7 +54,7 @@ const handleSubmitAndClose = () => {
     title: 'Filen ble lagt til!',
     text: 'Filen ble lagt til, og blir lagret samtidig som produktet.',
   })
-  productFile.value = { ...productFileDefaultValues }
+  resetForm()
   onClose()
 }
 
@@ -63,7 +65,7 @@ const handleSubmitAndAddNew = () => {
     title: 'Filen ble lagt til!',
     text: 'Filen ble lagt til, og blir lagret samtidig som produktet.',
   })
-  productFile.value = { ...productFileDefaultValues }
+  resetForm()
 }
 
 const onClose = () => {
@@ -80,14 +82,19 @@ const onClose = () => {
         :is-nested="isNested"
         @close="onClose"
       >
-        {{ productFile }}
-        <FormBuilder :form="productFileForm" @edit="(formData) => (productFile = formData)" />
+        <div :key="formKey">
+          <FormBuilder
+            :form="productFileForm"
+            @edit="(formData) => (productFile = { ...formData, file: formData.file.file })"
+          />
+        </div>
         <template #actions>
           <div class="grid grid-cols-5 gap-5">
-            <Button variant="secondary" class="col-span-1">Avbryt</Button>
+            <Button variant="secondary" class="col-span-1" @click="onClose">Avbryt</Button>
             <Button
               variant="primary"
               class="col-span-2"
+              :disabled="!canBeSubmitted"
               type="submit"
               @click="handleSubmitAndClose"
             >
@@ -96,6 +103,7 @@ const onClose = () => {
             <Button
               variant="primary"
               class="col-span-2"
+              :disabled="!canBeSubmitted"
               type="submit"
               @click="handleSubmitAndAddNew"
             >

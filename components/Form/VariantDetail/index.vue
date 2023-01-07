@@ -67,7 +67,7 @@ const handleSubmitAndClose = async () => {
 
   try {
     const createdVariant = await performPost<VariantCreateInternalOutput>(
-      internalUrls.products.variants.create(),
+      internalUrls.productAttributes.variants.create(),
       payload
     )
 

@@ -4,6 +4,7 @@ export interface BlockMeta {
   optionInitialValue?: string
   allowMultiple?: boolean
   allowSetPrimaryImage?: boolean
+  allowSetFilterImage?: boolean
   displayWordCount?: boolean
   hiddenLabel?: boolean
   disabled?: boolean

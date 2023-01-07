@@ -37,6 +37,10 @@ interface FileUploadInputProps {
    */
   allowSetPrimary?: boolean
   /**
+   * Allow to set the a filter per image of image type input.
+   */
+  allowSetFilter?: boolean
+  /**
    * Field error as string.
    */
   error?: string
@@ -53,8 +57,6 @@ const filesUploaded = ref(props.files ? [...props.files] : [])
 const uploadFiles = (files: FileList) => {
   const constructFiles = []
   Array.from(files).forEach((f) => constructFiles.push({ file: f }))
-
-  console.log(constructFiles)
 
   if (props.multiple) {
     filesUploaded.value = [...filesUploaded.value, ...constructFiles]
@@ -186,7 +188,6 @@ const emits = defineEmits<FileUploadInputBaseEmits>()
         </label>
       </div>
     </FormElementBase>
-    {{ files }}
     <FileUploadUploadedBlock v-if="files.length" class="mt-5">
       <div v-for="(fileType, index) in files" :key="index">
         <FileUploadUploadedBlockImageItem
@@ -195,6 +196,7 @@ const emits = defineEmits<FileUploadInputBaseEmits>()
           :is-primary-image="fileType.isMainImage"
           :has-applied-filter="fileType.applyFilter"
           :allow-set-primary="allowSetPrimary"
+          :allow-set-filter="allowSetFilter"
           @set-primary="setAsPrimary(fileType)"
           @remove-primary="removeAsPrimary(fileType)"
           @add-filter="setAsApplyFilter(fileType)"

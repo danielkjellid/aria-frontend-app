@@ -241,6 +241,7 @@ const productDetailImageForm: FormBlock[] = [
           hiddenLabel: true,
           allowMultiple: true,
           allowSetPrimaryImage: true,
+          allowSetFilterImage: true,
           helpText: 'Du kan laste opp flere bilder samtidig. Bildene bør være rundt 1920x1080px.',
         },
       },
