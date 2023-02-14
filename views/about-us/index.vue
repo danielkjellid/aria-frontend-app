@@ -86,7 +86,7 @@ fetchSupplierList()
             <Text variant="title3" class="mb-4">Om oss</Text>
             <div class="max-w-prose text-sm text-gray-800">
               <Text variant="body2">
-                Flishuset og Kjøkkenhuset ble etablert i 1995 og har drevet to ulike selskaper under
+                Flishuset og Kjøkkenhuset ble etablert i 1993 og har drevet to ulike selskaper under
                 samme tak frem til 2018, hvor selskapene da ble slått sammen og driver nå under
                 navnet FK-JKE Design (Flishuset Kjøkkenhuset JKE Design). Vi samarbeider med
                 spennende leverandører fra hele verden innenfor flis, badrom og kjøkken.
