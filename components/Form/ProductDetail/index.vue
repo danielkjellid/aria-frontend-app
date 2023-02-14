@@ -143,7 +143,18 @@ const handleSubmit = async () => {
       // images. This also goes for deleting.
       if (productImages.value && productImages.value.length) {
         productImages.value.forEach(async (imageObj) => {
-          const payload = useBuildMultipartForm(imageObj)
+          // All expected properties must be sent in the payload, as not fields is optional in
+          // multipart/form.
+          const sanitizedImageObj = {
+            ...imageObj,
+            applyFilter: Object.hasOwnProperty.call(imageObj, 'applyFilter')
+              ? imageObj.applyFilter
+              : false,
+            isMainImage: Object.hasOwnProperty.call(imageObj, 'isMainImage')
+              ? imageObj.applyFilter
+              : false,
+          }
+          const payload = useBuildMultipartForm(sanitizedImageObj)
 
           await performPost<ProductImageCreateInternalOutput>(
             internalUrls.products.createImage(productOutput.id),

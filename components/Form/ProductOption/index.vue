@@ -5,6 +5,7 @@ import { ProductOption } from './types'
 import { FormBlock } from '../types'
 import { ComputedRef } from 'vue'
 import { productOptionGeneralForm, productOptionSizeForm, productOptionVariantForm } from './forms'
+import { FormOutput } from '~~/@types'
 
 /***********
  ** Props **
@@ -102,6 +103,15 @@ const handleSubmitAndAddNew = () => {
   resetForm()
 }
 
+const form = ref<FormOutput>()
+
+const getForm = async () => {
+  form.value = await performGet<FormOutput>('/v1/forms/products/options/bulk-create/')
+  console.log(form.value)
+}
+
+getForm()
+
 /***********
  ** Forms **
  ***********/
@@ -148,6 +158,38 @@ const variantForm: ComputedRef<FormBlock[]> = computed(() => productOptionVarian
             </template>
           </FormBuilder>
         </div>
+        <br />
+        <hr />
+        <br />
+        <button type="button" @click="getForm">Refetch form</button>
+        <FormBuilder2
+          v-if="form"
+          :form="form"
+          :options="{
+            variantId: {
+              nameProperty: 'name',
+              valueProperty: 'id',
+              options: variants,
+            },
+            testProp: {
+              nameProperty: 'name',
+              valueProperty: 'id',
+              options: variants,
+            },
+          }"
+        >
+          <template #variantId>
+            <div v-if="!productOption.variantId">
+              <Button variant="secondary" fluid @click="variantFormActive = true">
+                Legg til ny variant
+              </Button>
+              <p class="mt-3 text-sm font-light text-gray-500">
+                Dersom varianten du ønsker å legge til ikke allerede eksisterer kan du opprette en
+                ny en.
+              </p>
+            </div>
+          </template>
+        </FormBuilder2>
         <template #actions>
           <div class="md:grid-cols-5 grid grid-cols-2 gap-5">
             <Button
