@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ExclamationCircleIcon } from '@heroicons/vue/24/outline'
+import { ExclamationCircleIcon } from '@heroicons/vue/20/solid'
 
 /***********
  ** Props **
@@ -22,6 +22,16 @@ interface SelectProps {
    * Field error as string.
    */
   error?: string
+  /**
+   * Designates if the field is required or not. Note, this is purely aesthetic,
+   * validation still has to be performed outside this component.
+   */
+  required?: boolean
+  /**
+   * Additional help text bellow the select.
+   */
+  helpText?: string
+  initialOption?: string
 }
 
 const props = defineProps<SelectProps>()
@@ -47,14 +57,15 @@ defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <div>
-    <label
-      :for="id"
-      :class="{ 'sr-only': hiddenLabel, 'mb-1': label, 'text-red-600': error }"
-      class="block text-sm font-semibold leading-5 text-gray-700"
-    >
-      {{ label }}
-    </label>
+  <FormElementBase
+    :id="id"
+    :label="label"
+    :hidden-label="hiddenLabel"
+    :error="error"
+    :required="required"
+    :help-text="helpText"
+    :word-count="null"
+  >
     <div class="relative rounded-md">
       <div
         v-if="existingIcon"
@@ -72,6 +83,7 @@ defineEmits(['update:modelValue'])
         class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 focus:border-transparent block w-full text-sm leading-5 border-gray-200 rounded-md"
         @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
       >
+        <option v-if="initialOption" selected disabled value="">{{ initialOption }}</option>
         <slot />
       </select>
       <div
@@ -82,6 +94,5 @@ defineEmits(['update:modelValue'])
         <ExclamationCircleIcon class="z-10 w-5 h-5 text-red-500" />
       </div>
     </div>
-    <p v-if="error" class="mt-1 text-sm text-red-600">{{ error }}</p>
-  </div>
+  </FormElementBase>
 </template>

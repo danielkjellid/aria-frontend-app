@@ -59,6 +59,8 @@ const useUsersStore = defineStore('users', {
       const accessToken = process.client ? localStorage.getItem('accessToken') : null
 
       if (refreshToken && accessToken) {
+        defaultHeaders.Authorization = `Bearer ${accessToken}`
+
         try {
           this.currentUser = await performGet<UserRequestOutput>(publicUrls.users.requestUser())
           return this.currentUser
@@ -71,7 +73,12 @@ const useUsersStore = defineStore('users', {
     },
   },
   getters: {
-    currentUserLoggedIn: (state) => Object.keys(state.currentUser).length > 0,
+    currentUserLoggedIn(state): boolean {
+      return Object.keys(state.currentUser).length > 0
+    },
+    currentUserIsStaff(state): boolean {
+      return this.currentUserLoggedIn ? state.currentUser.isStaff : false
+    },
   },
 })
 

@@ -11,7 +11,7 @@ const elem = computed(() => (props.as ? props.as : resolveComponent('NuxtLink'))
 <template>
   <component
     :is="elem"
-    class="hover:text-brand-800 hover:bg-gray-100 group flex items-center px-4 py-2 text-sm text-gray-700"
+    class="hover:text-brand-800 hover:bg-gray-100 group flex items-center w-full px-4 py-2 space-x-5 text-sm text-gray-700"
   >
     <slot />
   </component>

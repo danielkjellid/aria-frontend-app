@@ -47,11 +47,8 @@ const elem = props.as ? props.as : 'p'
     :is="elem"
     v-bind="$attrs"
     :class="[
-      color ? color : 'text-gray-800',
+      color && !muted ? color : muted ? 'text-gray-500' : 'text-gray-800',
       prose ? 'max-w-prose' : 'max-w-full',
-      {
-        'text-gray-500': muted,
-      },
       {
         'text-3xl font-extrabold': variant === 'title1',
         'text-3xl font-medium': variant === 'title2',

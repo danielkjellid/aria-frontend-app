@@ -62,9 +62,9 @@ onMounted(() => {
     </Transition>
     <div
       v-if="isDevEnvironment"
-      class="dev-env-warning fixed bottom-0 left-0 right-0 z-50 py-1 text-center"
+      class="dev-env-warning fixed bottom-0 left-0 right-0 z-10 py-1 text-center"
     >
-      <span class="z-50 text-sm font-semibold text-yellow-900">Development environment</span>
+      <span class="text-sm font-semibold text-yellow-900">Development environment</span>
     </div>
   </div>
 </template>

@@ -22,7 +22,7 @@ interface InputProps {
   /**
    * The value of the input itself, usually set by v-model.
    */
-  modelValue?: string
+  modelValue?: string | number
   /**
    * Type of input: https://www.w3schools.com/html/html_form_input_types.asp.
    */
@@ -35,6 +35,20 @@ interface InputProps {
    * Removes borders and most styling.
    */
   plain?: boolean
+  /**
+   * Designates if the field is required or not. Note, this is purely aesthetic,
+   * validation still has to be performed outside this component.
+   */
+  required?: boolean
+  /**
+   * Additional help text bellow the input.
+   */
+  helpText?: string
+  /**
+   * Display the work count adjacent to the label.
+   */
+  displayWordCount?: boolean
+  disabled?: boolean
 }
 
 const props = defineProps<InputProps>()
@@ -46,18 +60,22 @@ const existingIcon = computed(() => !!slots.default)
 const hiddenLabel = computed(() => (props.hiddenLabel ? props.hiddenLabel : false))
 const type = computed(() => (props.type ? props.type : 'text'))
 const plain = computed(() => (props.plain ? props.plain : false))
+
 defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <div>
-    <label
-      :for="id"
-      :class="{ 'sr-only': hiddenLabel, 'mb-1': label, 'text-red-600': error }"
-      class="block text-sm font-semibold leading-5 text-gray-700"
-    >
-      {{ label }}
-    </label>
+  <FormElementBase
+    :id="id"
+    :label="label"
+    :hidden-label="hiddenLabel"
+    :error="error"
+    :required="required"
+    :help-text="helpText"
+    :word-count="
+      displayWordCount && modelValue && typeof modelValue === 'string' ? modelValue.length : null
+    "
+  >
     <div class="relative rounded-md">
       <div
         v-if="existingIcon"
@@ -67,16 +85,24 @@ defineEmits(['update:modelValue'])
       </div>
       <input
         :id="id"
+        v-bind="$attrs"
         :value="modelValue"
-        :class="{
-          'pl-10': existingIcon,
-          'pr-10 border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red':
-            error,
-          'border-0 focus:ring-transparent': plain,
-        }"
+        :class="[
+          disabled
+            ? 'focus:outline-none focus:ring-0 border-gray-200 bg-gray-50 cursor-not-allowed'
+            : 'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent border-gray-200',
+          {
+            'pl-10': existingIcon,
+            'pr-10 border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red':
+              error,
+            'border-0 focus:ring-transparent': plain,
+          },
+        ]"
+        :aria-disabled="disabled"
+        :disabled="disabled"
         :placeholder="placeholder"
         :type="type"
-        class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 focus:border-transparent block w-full text-sm leading-5 border-gray-200 rounded-md"
+        class="block w-full text-sm leading-5 border rounded-md"
         @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
       />
       <div
@@ -86,6 +112,5 @@ defineEmits(['update:modelValue'])
         <ExclamationCircleIcon class="w-5 h-5 text-red-500" />
       </div>
     </div>
-    <p v-if="error" class="relative mt-1 text-sm text-red-600">{{ error }}</p>
-  </div>
+  </FormElementBase>
 </template>

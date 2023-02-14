@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import auth2560x1440 from '~~/assets/images/auth_2560x1440.jpeg'
-import auth1920x1080 from '~~/assets/images/auth_1920x1080.jpeg'
 import useUsersStore from '~~/store/users'
 import useNotificationsStore from '~~/store/notifications'
 
@@ -105,10 +104,7 @@ watch(
     </Head>
     <main class="h-screen">
       <div
-        :style="`background-image: image-set(
-            url(${auth1920x1080}) 1x,
-            url(${auth2560x1440}) 2x
-          );`"
+        :style="`background-image: url(${auth2560x1440});`"
         class="bg-center bg-no-repeat bg-cover"
       >
         <div class="md:bg-transparent bg-white">

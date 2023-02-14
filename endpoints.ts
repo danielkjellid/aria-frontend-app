@@ -47,6 +47,42 @@ const publicEndpoints = {
   },
 }
 
-const internalEndpoints = {}
+const internalEndpoints = {
+  categories: {
+    list: () => '/v1/internal/categories/',
+  },
+
+  products: {
+    list: () => '/v1/internal/products/',
+    create: () => '/v1/internal/products/create/',
+    createOptionsInBulk: (productId: number) =>
+      `/v1/internal/products/${productId}/options/bulk-create/`,
+    createImage: (productId: number) => `/v1/internal/products/${productId}/images/create/`,
+    createFile: (productId: number) => `/v1/internal/products/${productId}/files/create/`,
+  },
+
+  productAttributes: {
+    colors: {
+      list: () => '/v1/internal/product-attributes/colors/',
+    },
+    materials: {
+      list: () => '/v1/internal/product-attributes/materials/',
+    },
+    rooms: {
+      list: () => '/v1/internal/product-attributes/rooms/',
+    },
+    shapes: {
+      list: () => '/v1/internal/product-attributes/shapes/',
+    },
+    variants: {
+      list: () => '/v1/internal/product-attributes/variants/',
+      create: () => '/v1/internal/product-attributes/variants/create/',
+    },
+  },
+
+  suppliers: {
+    list: () => '/v1/internal/suppliers/',
+  },
+}
 
 export { publicEndpoints as publicUrls, internalEndpoints as internalUrls }
