@@ -4,17 +4,17 @@ on: push
 
 jobs:
   build:
-    uses: danielkjellid/github-actions/.github/workflows/node.yaml@local-actions
+    uses: danielkjellid/github-actions/.github/workflows/node.yaml@main
     with:
       cmd: npm run build:production
 
   prettier:
-    uses: danielkjellid/github-actions/.github/workflows/node.yaml@local-actions
+    uses: danielkjellid/github-actions/.github/workflows/node.yaml@main
     with:
       cmd: npm run prettier:check
 
   eslint:
-    uses: danielkjellid/github-actions/.github/workflows/node.yaml@local-actions
+    uses: danielkjellid/github-actions/.github/workflows/node.yaml@main
     with:
       cmd: npm run eslint:check
 
