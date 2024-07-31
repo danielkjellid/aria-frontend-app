@@ -14,17 +14,17 @@ services:
       - key: ENVIRONMENT
         value: production
 
-  - type: web
-    region: frankfurt
-    plan: free
-    name: aria-frontend-staging
-    env: node
-    buildCommand: 'npm install && npm run build:staging'
-    startCommand: 'npm start'
-    autoDeploy: false
-    envVars:
-      - fromGroup: Frontend
-      - key: HOST
-        value: 0.0.0.0
-      - key: ENVIRONMENT
-        value: staging
+  # - type: web
+  #   region: frankfurt
+  #   plan: free
+  #   name: aria-frontend-staging
+  #   env: node
+  #   buildCommand: 'npm install && npm run build:staging'
+  #   startCommand: 'npm start'
+  #   autoDeploy: false
+  #   envVars:
+  #     - fromGroup: Frontend
+  #     - key: HOST
+  #       value: 0.0.0.0
+  #     - key: ENVIRONMENT
+  #       value: staging
