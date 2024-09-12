@@ -69,7 +69,7 @@ const generateTypesFromSchema = () => {
     OpenAPI.generate({
       input: convertSpec(JSON.parse(file)),
       output: outputPath,
-      exportCore: false,
+      exportCore: true,
       useOptions: true,
     })
   })

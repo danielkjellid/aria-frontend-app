@@ -28,15 +28,20 @@ const collapsed = ref<boolean>(false)
 <template>
   <section>
     <div
-      class="bg-brand-100 text-brand-900 px-4 py-3 text-sm font-medium rounded-lg cursor-pointer"
+      class="text-brand-900 bg-brand-50 px-4 py-3 text-sm font-medium rounded-lg cursor-pointer"
       :class="{ 'flex items-center justify-between': !disableCollapse }"
       @click="collapsed = !collapsed"
     >
       <h1>{{ title }}</h1>
-      <button v-if="!disableCollapse" type="button" class="hover:text-brand-900 text-brand-600">
+      <IconWrapper
+        v-if="!disableCollapse"
+        as="button"
+        type="button"
+        class="hover:text-brand-900 text-brand-600"
+      >
         <ChevronUpIcon v-if="!collapsed" class="w-5 h-5" />
         <ChevronDownIcon v-else class="w-5 h-5" />
-      </button>
+      </IconWrapper>
     </div>
     <div class="px-4 my-6">
       <Transition

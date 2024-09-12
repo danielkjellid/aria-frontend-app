@@ -1,6 +1,11 @@
 <script setup lang="ts">
 interface ModalBackDropProps {
   active: boolean
+  /**
+   * Render the black overlay transparent. Useful if you have multiple overlapping
+   * modals.
+   */
+  isNested?: boolean
 }
 
 defineProps<ModalBackDropProps>()
@@ -15,8 +20,7 @@ const emit = defineEmits<{ (e: 'close'): void }>()
  ** State handling **
  ********************/
 
-const close = () => {
-  console.log('fired')
+const onClose = () => {
   emit('close')
 }
 </script>
@@ -32,9 +36,10 @@ const close = () => {
   >
     <div
       v-show="active"
-      class="bg-opacity-30 fixed inset-0 z-30 bg-black"
+      class="fixed inset-0 z-30"
+      :class="isNested ? 'bg-transparent' : 'bg-black bg-opacity-30'"
       aria-hidden="true"
-      @click="close"
+      @click="onClose"
     />
   </transition>
 </template>
